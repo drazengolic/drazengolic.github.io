@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Big number implementation in F# - part 1 - Codes &#39;n thoughts</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Drazen Golic" /><meta name="description" content="Some time ago while I was in the college, we&#39;ve got a task for homework to implement a class in C&#43;&#43; that will represent a large positive number. The large number will have a predefined maximum number of digits (i.e. 50), and it should support addition and multiplication operations via operator overloading.
+As someone who is learning a language somewhat different than what he&#39;s used to, I&#39;ve decided to revisit that task and do the same in F#, but with few differences:" /><meta name="keywords" content="Drazen, Golic, Blog, Programming, IT, Tech" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.62.2 with theme even" />
+
+
+<link rel="canonical" href="https://www.drazengolic.com/post/bignum-part1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Big number implementation in F# - part 1" />
+<meta property="og:description" content="Some time ago while I was in the college, we&#39;ve got a task for homework to implement a class in C&#43;&#43; that will represent a large positive number. The large number will have a predefined maximum number of digits (i.e. 50), and it should support addition and multiplication operations via operator overloading.
+As someone who is learning a language somewhat different than what he&#39;s used to, I&#39;ve decided to revisit that task and do the same in F#, but with few differences:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.drazengolic.com/post/bignum-part1/" />
+<meta property="article:published_time" content="2020-01-23T20:43:28+01:00" />
+<meta property="article:modified_time" content="2020-01-23T20:43:28+01:00" />
+<meta itemprop="name" content="Big number implementation in F# - part 1">
+<meta itemprop="description" content="Some time ago while I was in the college, we&#39;ve got a task for homework to implement a class in C&#43;&#43; that will represent a large positive number. The large number will have a predefined maximum number of digits (i.e. 50), and it should support addition and multiplication operations via operator overloading.
+As someone who is learning a language somewhat different than what he&#39;s used to, I&#39;ve decided to revisit that task and do the same in F#, but with few differences:">
+<meta itemprop="datePublished" content="2020-01-23T20:43:28&#43;01:00" />
+<meta itemprop="dateModified" content="2020-01-23T20:43:28&#43;01:00" />
+<meta itemprop="wordCount" content="1303">
+
+
+
+<meta itemprop="keywords" content="fsharp,imperative,math," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Big number implementation in F# - part 1"/>
+<meta name="twitter:description" content="Some time ago while I was in the college, we&#39;ve got a task for homework to implement a class in C&#43;&#43; that will represent a large positive number. The large number will have a predefined maximum number of digits (i.e. 50), and it should support addition and multiplication operations via operator overloading.
+As someone who is learning a language somewhat different than what he&#39;s used to, I&#39;ve decided to revisit that task and do the same in F#, but with few differences:"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Codes &#39;n thoughts</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Codes &#39;n thoughts</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Big number implementation in F# - part 1</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-01-23 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#type-definition">Type definition</a></li>
+    <li><a href="#multiplication">Multiplication</a>
+      <ul>
+        <li><a href="#the-problem">The problem</a></li>
+        <li><a href="#the-code">The code</a></li>
+      </ul>
+    </li>
+    <li><a href="#addition">Addition</a></li>
+    <li><a href="#some-extra-features">Some extra features</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#follow-up">Follow-up</a></li>
+    <li><a href="#addendum">Addendum</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Some time ago while I was in the college, we've got a task for homework to implement a class in C++ that will represent a large positive number. The large number will have a predefined maximum number of digits (i.e. 50), and it should support addition and multiplication operations via operator overloading.</p>
+<p>As someone who is learning a language somewhat different than what he's used to, I've decided to revisit that task and do the same in F#, but with few differences:</p>
+<ol>
+<li>Allow any number of digits, for any instance of that number</li>
+<li>Make both operations as fast as possible</li>
+</ol>
+<h2 id="type-definition">Type definition</h2>
+<p>We'll need to store the big number as a collection of digits, starting with the least significant digit up to the most significant digit. We also want to keep things compact as possible, so we're going to use <code>byte</code> to represent a single digit.</p>
+<p>My original intention was to use <code>list</code> as a collection type, since lists are immutable and don't have a fixed size. But as you will see, arrays are much more suitable for this kind of tasks. So the type begins like this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fsharp" data-lang="fsharp"><span class="k">type</span> <span class="nc">BigNum</span> <span class="o">=</span> <span class="o">|</span> <span class="n">BigNum</span> <span class="k">of</span> <span class="kt">byte</span> <span class="n">array</span> 
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="multiplication">Multiplication</h2>
+<p>Since addition is pretty much straightforward to implement, we'll focus on the fun thing first: multiplication.</p>
+<h3 id="the-problem">The problem</h3>
+<blockquote>
+<p>I remember - when I was doing that homework, and being a lazy person as I am, I went online to see if there were any solutions to &ldquo;borrow&rdquo; from. The only solution I've found was almost literally emulating the manual multiplication by building a large matrix. This was totally unacceptable, so I've finally rolled up my sleeves and went to see if I can do any better.</p>
+</blockquote>
+<p>Let's examine the multiplication process:</p>
+<p><img src="/bignum/multiplication.png" alt="Multiplication"></p>
+<p>Here, all digits are annotated with their index number within an array, starting from 0. <code>i</code> is for the first number, <code>j</code> for the second, and, finally, <code>k</code> is for the result number.</p>
+<p>If we start to calculate the result digit by digit, we would end up with the following formulas:</p>
+<p>k<sub>0</sub> = i<sub>0</sub>∙j<sub>0</sub> mod 10<br />
+C<sub>0</sub> = i<sub>0</sub>∙j<sub>0</sub> / 10</p>
+<p>k<sub>1</sub> = ( i<sub>1</sub>∙j<sub>0</sub> + i<sub>0</sub>∙j<sub>1</sub> + C<sub>0</sub> ) mod 10<br>
+C<sub>1</sub> = ( i<sub>1</sub>∙j<sub>0</sub> + i<sub>0</sub>∙j<sub>1</sub> + C<sub>0</sub> ) / 10</p>
+<p>k<sub>2</sub> = ( i<sub>2</sub>∙j<sub>0</sub> + i<sub>1</sub>∙j<sub>1</sub> + C<sub>1</sub> ) mod 10<br>
+C<sub>2</sub> = ( i<sub>2</sub>∙j<sub>0</sub> + i<sub>1</sub>∙j<sub>1</sub> + C<sub>1</sub> ) / 10</p>
+<p>k<sub>3</sub> = ( i<sub>2</sub>∙j<sub>1</sub> + C<sub>2</sub> ) mod 10<br>
+C<sub>3</sub> = ( i<sub>2</sub>∙j<sub>1</sub> + C<sub>2</sub> ) / 10</p>
+<p>k<sub>4</sub> = C<sub>3</sub></p>
+<p>Or to put it more visually:</p>
+<p><img src="/bignum/visual.png" alt="Iterations"></p>
+<p>k<sub>n</sub> is the result of a modulus division, and C<sub>n</sub> (<em>carry</em>) is the result of a whole number division. If you look at the formulas, there are two patterns to notice here:</p>
+<ul>
+<li>Index <code>i</code> always starts as <code>k</code> and decrements further in expression, unless <code>k</code> goes out of the number's bounds. In that case it defaults to the position of the most significant number</li>
+<li>Index <code>j</code> always starts at 0 and increments further in expression, unless <code>i</code> is out of bounds, in which case <code>j</code> starts with an increment of 1 for every new iteration</li>
+</ul>
+<h3 id="the-code">The code</h3>
+<p>Now let's put our findings into code:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fsharp" data-lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="o">(</span> <span class="o">*</span> <span class="o">)</span> <span class="o">(</span><span class="n">BigNum</span> <span class="n">a</span><span class="o">,</span> <span class="n">BigNum</span> <span class="n">b</span><span class="o">)</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="nv">aLen</span><span class="o">,</span> <span class="n">bLen</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Length</span><span class="o">,</span> <span class="n">b</span><span class="o">.</span><span class="n">Length</span>
+
+    <span class="c1">//Determine result length               
+</span><span class="c1"></span>    <span class="k">let</span> <span class="nv">resultLen</span> <span class="o">=</span> <span class="n">aLen</span> <span class="o">+</span> <span class="n">bLen</span> <span class="o">-</span> <span class="n">1</span> <span class="o">+</span> <span class="o">(</span><span class="o">(</span><span class="nn">Array</span><span class="p">.</span><span class="n">last</span> <span class="n">a</span> <span class="o">+</span> <span class="nn">Array</span><span class="p">.</span><span class="n">last</span> <span class="n">b</span><span class="o">)</span> <span class="o">/</span> <span class="n">10uy</span> <span class="o">|</span><span class="o">&gt;</span> <span class="n">int</span><span class="o">)</span>
+
+    <span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">replicate</span> <span class="n">resultLen</span> <span class="n">0uy</span> 
+    <span class="k">let</span> <span class="nv">mutable</span> <span class="n">carry</span> <span class="o">=</span> <span class="n">0uy</span>
+    <span class="k">let</span> <span class="nv">mutable</span> <span class="n">m</span> <span class="o">=</span> <span class="n">0uy</span>
+                    
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="n">0</span> <span class="o">..</span> <span class="n">aLen</span> <span class="o">-</span> <span class="n">1</span> <span class="k">do</span>
+        <span class="n">m</span> <span class="o">&lt;-</span> <span class="n">carry</span>
+        <span class="n">carry</span> <span class="o">&lt;-</span> <span class="n">0uy</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="n">0</span> <span class="o">..</span> <span class="o">(</span><span class="n">min</span> <span class="n">i</span> <span class="o">(</span><span class="n">bLen</span> <span class="o">-</span> <span class="n">1</span><span class="o">)</span><span class="o">)</span> <span class="k">do</span>
+            <span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="o">]</span> <span class="o">*</span> <span class="n">b</span><span class="o">.</span><span class="o">[</span><span class="n">j</span><span class="o">]</span>
+            <span class="n">m</span> <span class="o">&lt;-</span> <span class="n">x</span> <span class="o">%</span> <span class="n">10uy</span>
+            <span class="n">carry</span> <span class="o">&lt;-</span> <span class="n">carry</span> <span class="o">+</span> <span class="n">x</span> <span class="o">/</span> <span class="n">10uy</span>
+        <span class="n">result</span><span class="o">.</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;-</span> <span class="n">m</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="n">bLen</span> <span class="o">-</span> <span class="n">2</span> <span class="k">downto</span> <span class="n">0</span> <span class="k">do</span>
+        <span class="n">m</span> <span class="o">&lt;-</span> <span class="n">carry</span>
+        <span class="n">carry</span> <span class="o">&lt;-</span> <span class="n">0uy</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="n">0</span> <span class="o">..</span> <span class="n">i</span> <span class="k">do</span>
+            <span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="o">[</span><span class="n">aLen</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="n">1</span><span class="o">]</span> <span class="o">*</span> <span class="n">b</span><span class="o">.</span><span class="o">[</span><span class="n">bLen</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="n">1</span><span class="o">]</span>
+            <span class="n">m</span> <span class="o">&lt;-</span> <span class="n">x</span> <span class="o">%</span> <span class="n">10uy</span>
+            <span class="n">carry</span> <span class="o">&lt;-</span> <span class="n">carry</span> <span class="o">+</span> <span class="n">x</span> <span class="o">/</span> <span class="n">10uy</span>
+        <span class="n">result</span><span class="o">.</span><span class="o">[</span><span class="n">aLen</span> <span class="o">+</span> <span class="n">bLen</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">2</span><span class="o">]</span> <span class="o">&lt;-</span> <span class="n">m</span>
+
+    <span class="k">if</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="n">0uy</span> <span class="k">then</span> <span class="n">result</span><span class="o">.</span><span class="o">[</span><span class="n">resultLen</span> <span class="o">-</span> <span class="n">1</span><span class="o">]</span> <span class="o">&lt;-</span> <span class="n">carry</span>
+    
+    <span class="n">BigNum</span> <span class="n">result</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Pretty imperative code we have here, don't we? Now, if I've tried to do this in more functional style and introduced slicing, <code>rev</code> and <code>fold</code>, abstractions overhead and extra iterations would add up, and therefore the solution wouldn't be &ldquo;as fast as possible&rdquo;. Perhaps utilizing <a href="https://docs.microsoft.com/en-us/dotnet/api/system.span-1?view=netcore-3.1">Span&lt;'T&gt;</a> and some smart composition could bring things on par, but that won't be a matter of this post.</p>
+<p>It's also worth mentioning that before introducing the <code>result</code> array, I've used the loops above within a <a href="https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/arrays#creating-arrays">sequence expression</a> <code>[| ... |]</code> to form the result. Removing the expression, and choosing to mutate elements in the <code>result</code> array trough a loop resulted in a performance increase for somewhere around 30%.</p>
+<p>Now we have completed the multiplication method.</p>
+<h2 id="addition">Addition</h2>
+<p>Let's proceed with addition implementation:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fsharp" data-lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="o">(</span> <span class="o">+</span> <span class="o">)</span> <span class="o">(</span><span class="n">BigNum</span> <span class="n">a</span><span class="o">,</span> <span class="n">BigNum</span> <span class="n">b</span><span class="o">)</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="nv">aLen</span><span class="o">,</span> <span class="n">bLen</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Length</span><span class="o">,</span> <span class="n">b</span><span class="o">.</span><span class="n">Length</span>
+    <span class="k">let</span> <span class="nv">maxLen</span> <span class="o">=</span> <span class="n">max</span> <span class="n">aLen</span> <span class="n">bLen</span>
+    <span class="k">let</span> <span class="nv">minLen</span> <span class="o">=</span> <span class="n">min</span> <span class="n">aLen</span> <span class="n">bLen</span>
+
+    <span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">copy</span> <span class="o">(</span><span class="k">if</span> <span class="n">aLen</span> <span class="o">&gt;</span> <span class="n">bLen</span> <span class="k">then</span> <span class="n">a</span> <span class="k">else</span> <span class="n">b</span><span class="o">)</span>
+    <span class="k">let</span> <span class="nv">mutable</span> <span class="n">carry</span> <span class="o">=</span> <span class="n">0uy</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="n">0</span> <span class="o">..</span> <span class="o">(</span><span class="n">minLen</span> <span class="o">-</span> <span class="n">1</span><span class="o">)</span> <span class="k">do</span>
+        <span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">carry</span>
+        <span class="n">result</span><span class="o">.</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;-</span> <span class="n">x</span> <span class="o">%</span> <span class="n">10uy</span>
+        <span class="n">carry</span> <span class="o">&lt;-</span> <span class="n">x</span> <span class="o">/</span> <span class="n">10uy</span>
+
+    <span class="k">let</span> <span class="nv">mutable</span> <span class="n">i</span> <span class="o">=</span> <span class="n">minLen</span>         
+
+    <span class="k">while</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="n">0uy</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxLen</span> <span class="k">do</span>
+        <span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">carry</span>
+        <span class="n">result</span><span class="o">.</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;-</span> <span class="n">x</span> <span class="o">%</span> <span class="n">10uy</span>
+        <span class="n">carry</span> <span class="o">&lt;-</span> <span class="n">x</span> <span class="o">/</span> <span class="n">10uy</span>
+        <span class="n">i</span> <span class="o">&lt;-</span> <span class="n">i</span> <span class="o">+</span> <span class="n">1</span>
+    
+    <span class="k">if</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="n">0uy</span> <span class="k">then</span>
+        <span class="n">BigNum</span> <span class="o">(</span><span class="nn">Array</span><span class="p">.</span><span class="n">append</span> <span class="n">result</span> <span class="o">[|</span> <span class="n">carry</span> <span class="o">|]</span><span class="o">)</span>
+    <span class="k">else</span>
+        <span class="n">BigNum</span> <span class="n">result</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The code is more or less straightforward, except the fact that the length of the result array isn't easy to estimate without doing the whole addition process. In most cases, the result array will have the same size as the bigger number, but for rest of the cases we'll have to use <code>Array.append</code></p>
+<h2 id="some-extra-features">Some extra features</h2>
+<p>So we can play around more with the type, let's put few more things in there.</p>
+<p>If we want the constructs like <code>List.sum</code> to recognize our type and operators, we'll need these two members in the type:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fsharp" data-lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="n">Zero</span> <span class="o">=</span> <span class="n">BigNum</span> <span class="o">[|</span> <span class="n">0uy</span> <span class="o">|]</span>
+<span class="k">static</span> <span class="k">member</span> <span class="n">One</span>  <span class="o">=</span> <span class="n">BigNum</span> <span class="o">[|</span> <span class="n">1uy</span> <span class="o">|]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>And to get the string representation so that numbers can be printed nicely, let's override <code>ToString()</code> method:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fsharp" data-lang="fsharp"><span class="k">override</span> <span class="n">bn</span><span class="p">.</span><span class="nf">ToString</span><span class="bp">()</span> <span class="o">=</span>
+    <span class="k">match</span> <span class="n">bn</span> <span class="k">with</span>
+    <span class="o">|</span> <span class="n">BigNum</span> <span class="n">a</span> <span class="o">-&gt;</span>
+        <span class="c1">//Fold with StringBuilder
+</span><span class="c1"></span>        <span class="nn">Array</span><span class="p">.</span><span class="n">foldBack</span> 
+            <span class="o">(</span><span class="k">fun</span> <span class="n">d</span> <span class="o">(</span><span class="n">sb</span><span class="o">:</span><span class="n">StringBuilder</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">sb</span><span class="o">.</span><span class="n">Append</span> <span class="o">(</span><span class="n">d</span> <span class="o">|</span><span class="o">&gt;</span> <span class="kt">string</span><span class="o">)</span><span class="o">)</span> <span class="n">a</span> <span class="o">(</span><span class="n">StringBuilder</span><span class="bp">()</span><span class="o">)</span> 
+            <span class="o">|</span><span class="o">&gt;</span> <span class="k">fun</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">ToString</span><span class="bp">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="conclusion">Conclusion</h2>
+<p>And this would be my big number implementation in F#. The whole gist can be found on <a href="https://gist.github.com/drazengolic/830da8d7ba95025327fe4e0da2af2bed">GitHub</a>, which also contains some sample numbers and expressions to be played with.</p>
+<h2 id="follow-up">Follow-up</h2>
+<p>In the next post, I'll take the similar approach and complete the type with subtraction, division, modulus and comparison implementations.</p>
+<h2 id="addendum">Addendum</h2>
+<p>Funnily enough, my very first post about F# contains mostly imperative code. But that's perfectly fine - it is a part of the language. I'm not here to preach any specific paradigm, I always try to tackle problems individually. And the one that solves the problem at hand quickly and efficiently - is the best one. A truly wise man, and one of my favorite people ever, once said: <a href="https://www.youtube.com/watch?v=0yCeduVJW9s">I do not believe in styles anymore</a>. And neither do I.</p>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/fsharp/">fsharp</a>
+          <a href="/tags/imperative/">imperative</a>
+          <a href="/tags/math/">math</a>
+          </div>
+      <nav class="post-nav">
+        
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://ba.linkedin.com/in/drazengolic" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/drazengolic" class="iconfont icon-github" title="github"></a>
+  <a href="https://www.drazengolic.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <p>
+    <small>All articles are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a><a rel="license" href="http://creativecommons.org/licenses/by/4.0/">.</a><br />All source code samples are licensed under MIT Licence.</small>
+    <br /><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
+  </p>
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Drazen Golic</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
