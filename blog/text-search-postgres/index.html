@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Hugo 0.85.0" />
+  <title> Speeding up text pattern searching and sorting in PostgreSQL | Drazen Golic </title>
+  <meta name="description" content="Personal blog">
+  <link rel="stylesheet" href="https://www.drazengolic.com/css/simpleness.css">
+  <link rel="canonical" href="https://www.drazengolic.com/blog/text-search-postgres/">
+  <link rel="alternate" type="application/rss+xml" href="" title="Drazen Golic">
+  
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+  
+</head>
+<body class="container">
+  <nav class="navigation">
+  <div class="nav-left">
+    
+    <div class="nav-item nav-title">
+      <a href="https://www.drazengolic.com/"> Drazen Golic</a>
+    </div>
+    <div class="nav-item nav-menu">
+      
+      <a href="/"> Home</a>
+      
+      <a href="/about/"> About</a>
+      
+    </div>
+  </div>
+  <div class="nav-item nav-right fontawesome">
+    
+    <a href="https://ba.linkedin.com/in/drazengolic" target="_blank">
+      <i title="LinkedIn" class="fab fa-linkedin"></i>
+    </a>
+    
+    
+    
+    <a href="https://github.com/drazengolic" target="_blank">
+      <i title="GitHub" class="fab fa-github"></i>
+    </a>
+    
+    
+    
+    <a href="https://www.drazengolic.com/index.xml" target="_blank">
+      <i title="RSS" class="fas fa-rss"></i>
+    </a>
+    
+  </div>
+</nav>
+
+  
+<article class="post">
+  <header class="post-header">
+    <h1 style="text-align: center;" >Speeding up text pattern searching and sorting in PostgreSQL</h1>
+    <div class="post-metadata">
+    
+      <time datetime="2021-07-16T23:33:12&#43;02:00">July 16, 2021</time> &nbsp; 
+    
+    
+    
+    
+    
+      <i class="far fa-clock"></i>
+      
+      
+      
+      
+        6 min
+      
+      37 s
+      &nbsp;
+    
+    
+    </div>
+  </header>
+
+  
+  <div class="post-toc">
+    <div class="post-toc-title">Contents</div>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#prefixpostfix-search">Prefix/postfix search</a>
+      <ul>
+        <li><a href="#prefix-search">Prefix search</a></li>
+        <li><a href="#caveats">Caveats</a></li>
+        <li><a href="#postfix-search">Postfix search</a></li>
+      </ul>
+    </li>
+    <li><a href="#infix-search">Infix search</a>
+      <ul>
+        <li><a href="#gist-index">GiST index</a></li>
+        <li><a href="#caveats-1">Caveats</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#further-reading">Further reading</a></li>
+  </ul>
+</nav>
+  </div>
+  
+
+  <div class="post-text">
+    <h2 id="introduction">Introduction</h2>
+<p>Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?</p>
+<p>What follows are some of the SQL performance optimization techniques, with accent on avoiding the sort operation as being potentially <a href="https://use-the-index-luke.com/sql/sorting-grouping">expensive operation</a>.</p>
+<p>As an example, we&rsquo;ll be using a sample table that holds data about various music artists:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SQL" data-lang="SQL"><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">table</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> </span>(<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>id<span style="color:#bbb"> </span><span style="color:#007020">integer</span>,<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>name<span style="color:#bbb"> </span><span style="color:#007020">character</span><span style="color:#bbb"> </span><span style="color:#007020">varying</span>(<span style="color:#40a070">255</span>),<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>cover_photo<span style="color:#bbb"> </span><span style="color:#007020">character</span><span style="color:#bbb"> </span><span style="color:#007020">varying</span>(<span style="color:#40a070">255</span>),<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>short_bio<span style="color:#bbb"> </span><span style="color:#007020">text</span>,<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>active<span style="color:#bbb"> </span><span style="color:#007020">boolean</span>,<span style="color:#bbb">
+</span><span style="color:#bbb">    </span>rating<span style="color:#bbb"> </span><span style="color:#007020">bigint</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span>);<span style="color:#bbb">
+</span></code></pre></div><p>While some of the concepts can be reused in different database systems, this article will discuss mostly PostgreSQL and it&rsquo;s features.</p>
+<h2 id="prefixpostfix-search">Prefix/postfix search</h2>
+<p>While searching for text that starts (or ends) in a certain way is not that common, it is worth describing on how to optimize in such cases, since it can be done with standard b-tree indexes.</p>
+<p>Prefix and postfix search use the <code>LIKE</code> operator, with a <code>%</code> sign at the end (prefix), or in front (postfix) of input text to search for. To make the search case-insensitive, you can either use <code>ILIKE</code> operator , or convert both column and input text to either lower or upper case.</p>
+<h3 id="prefix-search">Prefix search</h3>
+<p>Prepared statement for prefix search could look like this:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SQL" data-lang="SQL"><span style="color:#007020;font-weight:bold">prepare</span><span style="color:#bbb"> </span>mas(<span style="color:#007020">text</span>)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">as</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">select</span><span style="color:#bbb"> </span><span style="color:#666">*</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">from</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>name<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">ilike</span><span style="color:#bbb"> </span><span style="">$</span><span style="color:#40a070">1</span><span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">and</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">order</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">by</span><span style="color:#bbb"> </span>rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">limit</span><span style="color:#bbb"> </span><span style="color:#40a070">5</span>;<span style="color:#bbb">
+</span></code></pre></div><p>Running <code>explain</code> on this query shows that whole table needs to be read sequentially, results are then sorted in memory, and then the first 5 results are selected:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#666">=</span>&gt; explain execute mas<span style="color:#666">(</span><span style="color:#4070a0">&#39;the&#39;</span><span style="color:#666">)</span>;
+                                           QUERY PLAN
+------------------------------------------------------------------------------------------------
+ Limit  <span style="color:#666">(</span><span style="color:#bb60d5">cost</span><span style="color:#666">=</span>29890.60..29891.17 <span style="color:#bb60d5">rows</span><span style="color:#666">=</span><span style="color:#40a070">5</span> <span style="color:#bb60d5">width</span><span style="color:#666">=</span>50<span style="color:#666">)</span>
+   -&gt;  Gather Merge  <span style="color:#666">(</span><span style="color:#bb60d5">cost</span><span style="color:#666">=</span>29890.60..34297.28 <span style="color:#bb60d5">rows</span><span style="color:#666">=</span><span style="color:#40a070">38319</span> <span style="color:#bb60d5">width</span><span style="color:#666">=</span>50<span style="color:#666">)</span>
+         Workers Planned: <span style="color:#40a070">1</span>
+         -&gt;  Sort  <span style="color:#666">(</span><span style="color:#bb60d5">cost</span><span style="color:#666">=</span>28890.59..28986.39 <span style="color:#bb60d5">rows</span><span style="color:#666">=</span><span style="color:#40a070">38319</span> <span style="color:#bb60d5">width</span><span style="color:#666">=</span>50<span style="color:#666">)</span>
+               Sort Key: rating DESC
+               -&gt;  Parallel Seq Scan on music_artist  <span style="color:#666">(</span><span style="color:#bb60d5">cost</span><span style="color:#666">=</span>0.00..28254.12 <span style="color:#bb60d5">rows</span><span style="color:#666">=</span><span style="color:#40a070">38319</span> <span style="color:#bb60d5">width</span><span style="color:#666">=</span>50<span style="color:#666">)</span>
+                     Filter: <span style="color:#666">(</span>active AND <span style="color:#666">((</span>name<span style="color:#666">)</span>::text ~~* <span style="color:#4070a0">&#39;the%&#39;</span>::text<span style="color:#666">))</span>
+</code></pre></div><p>Since b-tree index supports prefix search of text (case sensitive), we can create an index that will contain <strong>name</strong> and <strong>rating</strong> columns, with <strong>name</strong> stored in lower case:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">index</span><span style="color:#bbb"> </span>pref_search_idx<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">on</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> </span>(rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span>,<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">lower</span>(name))<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span>;<span style="color:#bbb">
+</span></code></pre></div><p>This index is a partial, function-based index that stores transformed data for all rows that have the <strong>active</strong> column set to <code>true</code>. As we are interested in the most popular results first, we&rsquo;ll use the modifier <code>desc</code> on the <strong>rating</strong> column, and also place it as a first column within the index definition, since the index needs to match the <code>ORDER BY</code> clause as well.</p>
+<p>To update statistics after the new index is created, use <code>analyze music_artist;</code> command.</p>
+<p>Now the query needs to be rewritten so it makes use of the new index by using standard <code>LIKE</code> operator, with the column and the input text transformed to lower case:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SQL" data-lang="SQL"><span style="color:#007020;font-weight:bold">prepare</span><span style="color:#bbb"> </span>mas2(<span style="color:#007020">text</span>)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">as</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">select</span><span style="color:#bbb"> </span><span style="color:#666">*</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">from</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">lower</span>(name)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">like</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">lower</span>(<span style="">$</span><span style="color:#40a070">1</span>)<span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">and</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">order</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">by</span><span style="color:#bbb"> </span>rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">limit</span><span style="color:#bbb"> </span><span style="color:#40a070">5</span>;<span style="color:#bbb">
+</span></code></pre></div><p>Execution plan of the new query now only has an index scan that stops after the first 5 results are retrieved:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#666">=</span>&gt; explain execute mas2<span style="color:#666">(</span><span style="color:#4070a0">&#39;the&#39;</span><span style="color:#666">)</span>;
+                                            QUERY PLAN
+--------------------------------------------------------------------------------------------------
+ Limit  <span style="color:#666">(</span><span style="color:#bb60d5">cost</span><span style="color:#666">=</span>0.43..36.77 <span style="color:#bb60d5">rows</span><span style="color:#666">=</span><span style="color:#40a070">5</span> <span style="color:#bb60d5">width</span><span style="color:#666">=</span>50<span style="color:#666">)</span>
+   -&gt;  Index Scan using pref_search_idx on music_artist  <span style="color:#666">(</span><span style="color:#bb60d5">cost</span><span style="color:#666">=</span>0.43..58586.92 <span style="color:#bb60d5">rows</span><span style="color:#666">=</span><span style="color:#40a070">8061</span> <span style="color:#bb60d5">width</span><span style="color:#666">=</span>50<span style="color:#666">)</span>
+         Filter: <span style="color:#666">(</span>lower<span style="color:#666">((</span>name<span style="color:#666">)</span>::text<span style="color:#666">)</span> ~~ <span style="color:#4070a0">&#39;the%&#39;</span>::text<span style="color:#666">)</span>
+</code></pre></div><p>Response time is now improved from several hundreds of milliseconds down to only a handful of milliseconds (in a test environment with around 1.6M records in the table)!</p>
+<p>As you can see, there is no <code>Sort</code> step in the query execution plan, which means that results are already sorted, and no additional sorting is required.</p>
+<h3 id="caveats">Caveats</h3>
+<p>While the retrieval of popular records will be fast, you could experience significant drop in performance when the search needs to go deeper to find less popular records. If the performance becomes really bad in such cases, it can be further improved by creating a covering index (instead of the previous one) that will include all the columns from the query:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#60a0b0;font-style:italic">-- covering index
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">index</span><span style="color:#bbb"> </span>pref_search_idx<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">on</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> </span>(rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span>,<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">lower</span>(name))<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span>include<span style="color:#bbb"> </span>(id,<span style="color:#bbb"> </span>name,<span style="color:#bbb"> </span>cover_photo,<span style="color:#bbb"> </span>short_bio)<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span>;<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#60a0b0;font-style:italic">-- new query
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">prepare</span><span style="color:#bbb"> </span>mas4(<span style="color:#007020">text</span>)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">as</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">select</span><span style="color:#bbb"> </span>id,<span style="color:#bbb"> </span>name,<span style="color:#bbb"> </span>cover_photo,<span style="color:#bbb"> </span>short_bio,<span style="color:#bbb"> </span>rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">from</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">lower</span>(name)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">like</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">lower</span>(<span style="">$</span><span style="color:#40a070">1</span>)<span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">and</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">order</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">by</span><span style="color:#bbb"> </span>rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">limit</span><span style="color:#bbb"> </span><span style="color:#40a070">5</span>;<span style="color:#bbb">
+</span></code></pre></div><p>Creating a covering index essentially means duplicating lots of columns (or even the whole table), so it could become a pricey solution in terms of disk usage. But the benefit of a covering index is that it keeps all the included data physically close in an order defined by the index, so looking deeper for results would become faster by reading just the index, without the need for random data access on the table heap.</p>
+<h3 id="postfix-search">Postfix search</h3>
+<p>Postfix search consists of simply reversing both the column and the input text, and creating an index with the same transformation functions:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#60a0b0;font-style:italic">-- index
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">index</span><span style="color:#bbb"> </span>pref_search_rev_idx<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">on</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> </span>(rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span>,<span style="color:#bbb"> </span>reverse(<span style="color:#007020;font-weight:bold">lower</span>(name)))<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span>;<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#60a0b0;font-style:italic">-- query
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">prepare</span><span style="color:#bbb"> </span>mas3(<span style="color:#007020">text</span>)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">as</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">select</span><span style="color:#bbb"> </span><span style="color:#666">*</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">from</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>reverse(<span style="color:#007020;font-weight:bold">lower</span>(name))<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">like</span><span style="color:#bbb"> </span>reverse(<span style="color:#007020;font-weight:bold">lower</span>(<span style="">$</span><span style="color:#40a070">1</span>))<span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">and</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">order</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">by</span><span style="color:#bbb"> </span>rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">limit</span><span style="color:#bbb"> </span><span style="color:#40a070">5</span>;<span style="color:#bbb">
+</span></code></pre></div><p>Same execution plan and caveats apply just like for the prefix search.</p>
+<h2 id="infix-search">Infix search</h2>
+<p>This is a more common way of searching, when the input text can be anywhere within a string - the infix search. Infix search is when the input text is surrounded with <code>%</code> signs, for example <code>ILIKE %input text%</code>. How to speed up such query?</p>
+<p>Most common way in PostgreSQL is to use the <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> extension which supports pattern search operators (<code>LIKE</code>, <code>ILIKE</code>, <code>~*</code>), and then create a GIN (or GiST) index over the text column:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#60a0b0;font-style:italic">-- add extension
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span>extension<span style="color:#bbb"> </span>pg_trgm;<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#60a0b0;font-style:italic">-- create GIN index
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">index</span><span style="color:#bbb"> </span>ma_name_gin_idx<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">on</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">using</span><span style="color:#bbb"> </span>gin(name<span style="color:#bbb"> </span>gin_trgm_ops)<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span>;<span style="color:#bbb">
+</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#60a0b0;font-style:italic">-- query
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">prepare</span><span style="color:#bbb"> </span>mas5(<span style="color:#007020">text</span>)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">as</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">select</span><span style="color:#bbb"> </span><span style="color:#666">*</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">from</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>name<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">ilike</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="">$</span><span style="color:#40a070">1</span><span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">and</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">order</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">by</span><span style="color:#bbb"> </span>rating<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">desc</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">limit</span><span style="color:#bbb"> </span><span style="color:#40a070">5</span>;<span style="color:#bbb">
+</span></code></pre></div><p>There is a huge performance gain when doing it this way. With the reasonable amount of data, it should be enough to keep the response time short. But what when it isn&rsquo;t enough? Is there anything else that can be done?</p>
+<p>If you look at the execution plan of the query above, it does involve several steps, including sorting:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#666">=</span>&gt; explain <span style="color:#666">(</span>costs off<span style="color:#666">)</span> execute mas5<span style="color:#666">(</span><span style="color:#4070a0">&#39;the&#39;</span><span style="color:#666">)</span>;
+                                QUERY PLAN
+---------------------------------------------------------------------------
+ Limit
+   -&gt;  Sort
+         Sort Key: rating DESC
+         -&gt;  Bitmap Heap Scan on music_artist
+               Recheck Cond: <span style="color:#666">(((</span>name<span style="color:#666">)</span>::text ~~* <span style="color:#4070a0">&#39;%the%&#39;</span>::text<span style="color:#666">)</span> AND active<span style="color:#666">)</span>
+               -&gt;  Bitmap Index Scan on ma_name_gin_idx
+                     Index Cond: <span style="color:#666">((</span>name<span style="color:#666">)</span>::text ~~* <span style="color:#4070a0">&#39;%the%&#39;</span>::text<span style="color:#666">)</span>
+</code></pre></div><p>Addressing this requires a little bit more of creativity.</p>
+<h3 id="gist-index">GiST index</h3>
+<p>The <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> extension can also use the GiST index for pattern search indexing, even though the GIN is generally recommended as being faster in this particular use-case. GiST is also &ldquo;lossy&rdquo;, which affects performance.</p>
+<p>What is special about GiST index? This index can <a href="https://www.alibabacloud.com/blog/sorting-gist-indexes-by-leveraging-nearest-neighbor-enhancement-in-postgresql-9-1_597005">use</a> the <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">k-nearest neighbours</a> algorithm to sort the results via distance (<code>&lt;-&gt;</code>) operator, whereas GIN index doesn&rsquo;t support sorting at all.</p>
+<p>Since GiST index doesnt support scalar values by default, and <strong>rating</strong> column is a scalar (bigint), firstly we&rsquo;ll need an <a href="https://www.postgresql.org/docs/12/btree-gist.html">extension</a> to enable such support:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span>extension<span style="color:#bbb"> </span>btree_gist;<span style="color:#bbb">
+</span></code></pre></div><p>Now, let&rsquo;s create a GiST index on the table (note: any previously created indexes should be dropped). Order of the columns is not important:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#007020;font-weight:bold">create</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">index</span><span style="color:#bbb"> </span>ma_name_gist_idx<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">on</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">using</span><span style="color:#bbb"> </span>gist(name<span style="color:#bbb"> </span>gist_trgm_ops,<span style="color:#bbb"> </span>rating)<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span>;<span style="color:#bbb">
+</span></code></pre></div><p>A query that will utilize the new index can be written like this:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#007020;font-weight:bold">prepare</span><span style="color:#bbb"> </span>mas6(<span style="color:#007020">text</span>)<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">as</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">select</span><span style="color:#bbb"> </span><span style="color:#666">*</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">from</span><span style="color:#bbb"> </span>music_artist<span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">where</span><span style="color:#bbb"> </span>name<span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">ilike</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="">$</span><span style="color:#40a070">1</span><span style="color:#bbb"> </span><span style="color:#666">||</span><span style="color:#bbb"> </span><span style="color:#4070a0">&#39;%&#39;</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">and</span><span style="color:#bbb"> </span>active<span style="color:#bbb"> </span><span style="color:#666">=</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">true</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">order</span><span style="color:#bbb"> </span><span style="color:#007020;font-weight:bold">by</span><span style="color:#bbb"> </span>rating<span style="color:#bbb"> </span><span style="color:#666">&lt;-&gt;</span><span style="color:#bbb"> </span><span style="color:#40a070">50000</span><span style="color:#bbb"> 
+</span><span style="color:#bbb">  </span><span style="color:#007020;font-weight:bold">limit</span><span style="color:#bbb"> </span><span style="color:#40a070">5</span>;<span style="color:#bbb">
+</span></code></pre></div><p>Explain plan looks far simpler now:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#666">=</span>&gt; explain <span style="color:#666">(</span>costs off<span style="color:#666">)</span> execute mas6<span style="color:#666">(</span><span style="color:#4070a0">&#39;the&#39;</span><span style="color:#666">)</span>;
+                               QUERY PLAN
+-------------------------------------------------------------------------
+ Limit
+   -&gt;  Index Scan using ma_name_gist_idx on music_artist
+         Index Cond: <span style="color:#666">((</span>name<span style="color:#666">)</span>::text ~~* <span style="color:#666">((</span><span style="color:#4070a0">&#39;%&#39;</span>::text <span style="color:#666">||</span> <span style="color:#bb60d5">$1</span><span style="color:#666">)</span> <span style="color:#666">||</span> <span style="color:#4070a0">&#39;%&#39;</span>::text<span style="color:#666">))</span>
+         Order By: <span style="color:#666">(</span>rating &lt;-&gt; <span style="color:#4070a0">&#39;50000&#39;</span>::bigint<span style="color:#666">)</span>
+</code></pre></div><p>Value <strong>50000</strong> here is the value equal or larger than the maximum value of the <strong>rating</strong> column in the table, so that results are retrieved in an descending order. What is important to notice here is that the distance operator <strong><em>needs a constant</em></strong>. If you try to use a subquery instead of value 50000, index-enabled sorting will not trigger, and a <code>Sort</code> operation will show up in the execution plan! This means that you should have this value collected beforehand, if you&rsquo;d like to use the search in this way.</p>
+<blockquote>
+<p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p>
+</blockquote>
+<h3 id="caveats-1">Caveats</h3>
+<p>This way of indexing suffers from the same problem as the prefix/postfix search. Lesser the popularity, bigger the search time. Unfortunately, it&rsquo;s performance cannot be improved further with a covering index. GiST index does support covering, but not all operator classes will trigger the index-only scan. And it seems that it won&rsquo;t trigger in this very use-case.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Whether you will use standard index, GIN or GiST to speed up your search depends on what your goal is, and on how much data do you have. I hope I&rsquo;ve managed to give some insight into pros and cons for each of them when it comes to performance of text pattern searching. However, if a relational database is not up to the task of searching lots of text, perhaps using a specialized tool (i.e. Elastic Search) would be a better option.</p>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>I highly recommend visiting <a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> website by Markus Winand, where you can learn all the power of database indexing and SQL, a much needed skill if your job description includes databases</li>
+<li>If you&rsquo;d like to see more performance tuning examples, I have a GitHub <a href="https://github.com/drazengolic/music-streamer-db">repo</a> where I&rsquo;ve dealt with optimization techniques similar to the ones in this article, and also with some of the data denormalization strategies</li>
+</ul>
+
+  </div>
+
+  <footer class="post-footer">
+    
+
+    
+    <div class="post-tags">
+      <i class="fas fa-tags"></i>
+      
+        <a href="/tags/databases">Databases</a>
+        &nbsp;
+      
+        <a href="/tags/postgresql">PostgreSQL</a>
+        &nbsp;
+      
+        <a href="/tags/performance">Performance</a>
+        &nbsp;
+      
+    </div>
+    
+
+    
+    
+  </footer>
+  
+  <div class="comments">
+  <div class="comments">
+
+
+
+</div>
+  </div>
+</article>
+
+  <div class="foot">
+  
+  
+  &copy; 2021
+  <a href="/"> Drazen Golic </a> &#183;
+  Theme <a href="https://github.com/RainerChiang/simpleness">Simpleness</a> &#183; Powered by <a href="https://gohugo.io/">Hugo</a> &#183;
+  <a href="#"><i class="fas fa-chevron-up"></i></a>
+</div>
+</body>
+  <script src="/js/lazyload.min.js"></script>
+<script>
+  var lazyImage = new LazyLoad({container: document.getElementById('article')});
+</script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+<script>
+    (function() {
+        var $toc = $('#TableOfContents');
+        if ($toc.length > 0) {
+            var $window = $(window);
+
+            function onScroll(){
+                var currentScroll = $window.scrollTop();
+                var h = $('.post-text h1, .post-text h2, .post-text h3, .post-text h4, .post-text h5, .post-text h6');
+                var id = "";
+                h.each(function (i, e) {
+                    e = $(e);
+                    if (e.offset().top - 10 <= currentScroll) {
+                        id = e.attr('id');
+                    }
+                });
+                var active = $toc.find('a.active');
+                if (active.length == 1 && active.eq(0).attr('href') == '#' + id) return true;
+
+                active.each(function (i, e) {
+                    $(e).removeClass('active').siblings('ul').hide();
+                });
+                $toc.find('a[href="#' + id + '"]').parentsUntil('#TableOfContents').each(function (i, e) {
+                    $(e).children('a').addClass('active').siblings('ul').show();
+                });
+            }
+
+            $window.on('scroll', onScroll);
+            $(document).ready(function() {
+                $toc.find('a').parent('li').find('ul').hide();
+                onScroll();
+                document.getElementsByClassName('post-toc')[0].style.display = '';
+            });
+        }
+    })();
+</script>
+
+
+</html>

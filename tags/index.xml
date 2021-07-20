@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Drazen Golic</title>
+    <link>https://www.drazengolic.com/tags/</link>
+    <description>Recent content in Tags on Drazen Golic</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>Drazen Golic</copyright>
+    <lastBuildDate>Fri, 16 Jul 2021 23:33:12 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Databases</title>
+      <link>https://www.drazengolic.com/tags/databases/</link>
+      <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/tags/databases/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Performance</title>
+      <link>https://www.drazengolic.com/tags/performance/</link>
+      <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/tags/performance/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL</title>
+      <link>https://www.drazengolic.com/tags/postgresql/</link>
+      <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/tags/postgresql/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

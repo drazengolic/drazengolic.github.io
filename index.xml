@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Drazen Golic</title>
+    <link>https://www.drazengolic.com/</link>
+    <description>Recent content on Drazen Golic</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>Drazen Golic</copyright>
+    <lastBuildDate>Fri, 16 Jul 2021 23:33:12 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Speeding up text pattern searching and sorting in PostgreSQL</title>
+      <link>https://www.drazengolic.com/blog/text-search-postgres/</link>
+      <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/blog/text-search-postgres/</guid>
+      <description>Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://www.drazengolic.com/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/about/</guid>
+      <description>About me I&amp;rsquo;ve been a professional software developer for over 11 years. I&amp;rsquo;ve started off as a junior web developer tinkering with websites, later doing some application development, but for the past several years I&amp;rsquo;ve been doing mostly server-side and database development.
+My roots in software development go way back to the end of elementary school, when I&amp;rsquo;ve discovered QBASIC and Pascal. In my lifetime, I&amp;rsquo;ve put my hands on several programming languages and tools - I&amp;rsquo;ve built desktop apps, web sites, web apps, system integrations, and even some mobile games.</description>
+    </item>
+    
+  </channel>
+</rss>
