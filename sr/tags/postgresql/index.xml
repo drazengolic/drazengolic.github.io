@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Blog on Drazen Golic</title>
-    <link>https://www.drazengolic.com/blog/</link>
-    <description>Recent content in Blog on Drazen Golic</description>
+    <title>PostgreSQL on Дражен Голић</title>
+    <link>https://www.drazengolic.com/sr/tags/postgresql/</link>
+    <description>Recent content in PostgreSQL on Дражен Голић</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language>
+    <language>sr-BA</language>
     <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright>
-    <lastBuildDate>Fri, 16 Jul 2021 23:33:12 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 16 Jul 2021 23:33:12 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/sr/tags/postgresql/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Speeding up text pattern searching and sorting in PostgreSQL</title>
-      <link>https://www.drazengolic.com/blog/text-search-postgres/</link>
+      <title>Убрзавање претраге по текстуалном шаблону у PostgreSQL</title>
+      <link>https://www.drazengolic.com/sr/blog/text-search-postgres/</link>
       <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
       
-      <guid>https://www.drazengolic.com/blog/text-search-postgres/</guid>
-      <description>Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow.</description>
-      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
-<p>Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?</p>
-<p>What follows are some of the SQL performance optimization techniques, with accent on avoiding the sort operation as being potentially <a href="https://use-the-index-luke.com/sql/sorting-grouping">expensive operation</a>.</p>
-<p>As an example, we&rsquo;ll be using a sample table that holds data about various music artists:</p>
+      <guid>https://www.drazengolic.com/sr/blog/text-search-postgres/</guid>
+      <description>Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?</description>
+      <content:encoded><![CDATA[<h2 id="увод">Увод</h2>
+<p>Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?</p>
+<p>У наредним редовима видјећемо неке од техника оптимизације SQL перформанси, са акцентом на избјегавању операције сортирања као потенцијално <a href="https://use-the-index-luke.com/sql/sorting-grouping">скупе операције</a>.</p>
+<p>За примјер ћемо користити табелу која садржи податке о различитим музичким извођачима:</p>
 
 
 
@@ -31,12 +31,12 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">short_bio</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">active</span><span class="w"> </span><span class="nb">boolean</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rating</span><span class="w"> </span><span class="nb">bigint</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span></span></span></code></pre></div><p>While some of the concepts can be reused in different database systems, this article will discuss mostly PostgreSQL and it&rsquo;s features.</p>
-<h2 id="prefixpostfix-search">Prefix/postfix search</h2>
-<p>While searching for text that starts (or ends) in a certain way is not that common, it is worth describing on how to optimize in such cases, since it can be done with standard b-tree indexes.</p>
-<p>Prefix and postfix search use the <code>LIKE</code> operator, with a <code>%</code> sign at the end (prefix), or in front (postfix) of input text to search for. To make the search case-insensitive, you can either use <code>ILIKE</code> operator , or convert both column and input text to either lower or upper case.</p>
-<h3 id="prefix-search">Prefix search</h3>
-<p>Prepared statement for prefix search could look like this:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span></span></span></code></pre></div><p>Иако се неки од концепата могу искористити у различитим системима база података, овај чланак се примарно бави са PostgreSQL и његовим могућностима.</p>
+<h2 id="префикснапостфиксна-претрага">Префиксна/постфиксна претрага</h2>
+<p>Иако претрага за текст који почиње (или завршава) на одређени начин није тако честа, технику вриједи описати из разлога што се оптимизација може постићи стандардним b-tree индексом.</p>
+<p>Префикс и постфикс претрага користе <code>LIKE</code> оператор, са знаком <code>%</code> на крају (префикс), или на почетку (постфикс) текста за који претражујемо уписе. Како претрага не би била осјетљива на мала и велика слова, можемо да користимо <code>ILIKE</code> оператор, или да се и улазни и уписани текст конвертују у сва мала или сва велика слова.</p>
+<h3 id="префиксна-претрага">Префиксна претрага</h3>
+<p>Упит за префиксну претрагу написан као припремљени исказ може да изгледа овако:</p>
 
 
 
@@ -46,7 +46,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">ilike</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Running <code>explain</code> on this query shows that whole table needs to be read sequentially, results are then sorted in memory, and then the first 5 results are selected:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Извршавањем наредбе <code>explain</code> на овај упит показује да је потребно секвенцијално очитати цијелу табелу, све резултате сортирати у радној меморији, а затим одабрати првих 5 резултата:</p>
 
 
 
@@ -61,16 +61,16 @@
          -&gt;  Sort  (cost=28890.59..28986.39 rows=38319 width=50)
                Sort Key: rating DESC
                -&gt;  Parallel Seq Scan on music_artist  (cost=0.00..28254.12 rows=38319 width=50)
-                     Filter: (active AND ((name)::text ~~* &#39;the%&#39;::text))</code></pre><p>Since b-tree index supports prefix search of text (case sensitive), we can create an index that will contain <strong>name</strong> and <strong>rating</strong> columns, with <strong>name</strong> stored in lower case:</p>
+                     Filter: (active AND ((name)::text ~~* &#39;the%&#39;::text))</code></pre><p>Како b-tree индекс подржава префиксну претрагу текста (осјетљиво на мала/велика слова), можемо креирати индекс који ће садржати колоне <strong>name</strong> и <strong>rating</strong>, са текстом из колоне <strong>name</strong> конвертованим у сва мала слова:</p>
 
 
 
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">pref_search_idx</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="p">(</span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="p">,</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span></span></span></code></pre></div><p>This index is a partial, function-based index that stores transformed data for all rows that have the <strong>active</strong> column set to <code>true</code>. As we are interested in the most popular results first, we&rsquo;ll use the modifier <code>desc</code> on the <strong>rating</strong> column, and also place it as a first column within the index definition, since the index needs to match the <code>ORDER BY</code> clause as well.</p>
-<p>To update statistics after the new index is created, use <code>analyze music_artist;</code> command.</p>
-<p>Now the query needs to be rewritten so it makes use of the new index by using standard <code>LIKE</code> operator, with the column and the input text transformed to lower case:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span></span></span></code></pre></div><p>Овај индекс је парцијални, заснован на функцијама трансформације, који чува трансформисане податке за све уписе који имају колону <strong>active</strong> постављену на <code>true</code>. Како нас занимају само најбоље оцјењени резултати, искористићемо модификатор за опадајући редослијед <code>desc</code> на колони <strong>rating</strong>, и такође ћемо је поставити на прво мјесто приликом дефиниције индекса, јер редослијед мора да се поклапа са редослиједом у <code>ORDER BY</code> клаузули.</p>
+<p>Како би се ажурирала статистика у систему након креирања индекса, искористићемо команду<code>analyze music_artist;</code>.</p>
+<p>Сада упит може да се препише да користи нови индекс тако што ћемо да искористимо <code>LIKE</code> оператор, а колону и улазни текст трансформишемо у сва мала слова:</p>
 
 
 
@@ -80,7 +80,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Execution plan of the new query now only has an index scan that stops after the first 5 results are retrieved:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>План извршавања новог упита сада садржи само скенирање индекса (index scan) који се зауставља чим се пронађе првих 5 резултата:</p>
 
 
 
@@ -91,10 +91,10 @@
 --------------------------------------------------------------------------------------------------
  Limit  (cost=0.43..36.77 rows=5 width=50)
    -&gt;  Index Scan using pref_search_idx on music_artist  (cost=0.43..58586.92 rows=8061 width=50)
-         Filter: (lower((name)::text) ~~ &#39;the%&#39;::text)</code></pre><p>Response time is now improved from several hundreds of milliseconds down to only a handful of milliseconds (in a test environment with around 1.6M records in the table)!</p>
-<p>As you can see, there is no <code>Sort</code> step in the query execution plan, which means that results are already sorted, and no additional sorting is required.</p>
-<h3 id="caveats">Caveats</h3>
-<p>While the retrieval of popular records will be fast, you could experience significant drop in performance when the search needs to go deeper to find less popular records. If the performance becomes really bad in such cases, it can be further improved by creating a covering index (instead of the previous one) that will include all the columns from the query:</p>
+         Filter: (lower((name)::text) ~~ &#39;the%&#39;::text)</code></pre><p>Вријеме одзива је сада побољшано са више стотина милисекунди на свега неколико милисекунди (у тестном окружењу са око 1.6 милиона уписа у табели)!</p>
+<p>Као што видимо, у плану извршавања нема <code>Sort</code> операције, што значи да су резултати већ сортирани, и није потребно додатно сортирање.</p>
+<h3 id="недостаци">Недостаци</h3>
+<p>Док ће извлачење првих неколико резултата бити изузетно брзо, пад перформанси ће се примјетити када претрага буде морала да зађе дубље како би нашла лошије оцијењене уписе. Уколико у том случају перформансе буду изузетно лоше, могуће их је додатно побољшати помоћу покривајућег индекса (умјесто претходног), односно индекса који садржи све колоне из упита:</p>
 
 
 
@@ -110,9 +110,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">cover_photo</span><span class="p">,</span><span class="w"> </span><span class="n">short_bio</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Creating a covering index essentially means duplicating lots of columns (or even the whole table), so it could become a pricey solution in terms of disk usage. But the benefit of a covering index is that it keeps all the included data physically close in an order defined by the index, so looking deeper for results would become faster by reading just the index, without the need for random data access on the table heap.</p>
-<h3 id="postfix-search">Postfix search</h3>
-<p>Postfix search consists of simply reversing both the column and the input text, and creating an index with the same transformation functions:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Креирање покривајућег индекса у суштини значи дуплирање података из много колона (или чак цијеле табеле), и потенцијално је скупо рјешење у смислу потребног капацитета дискова. Али предност покривајућег индекса је што све укључене податке држи физички близу у предефинисаном редослиједу, тако да претрага дубље у податке постаје значајно бржа, јер нема потребе за насумичним приступањем подацима из табеле на диску.</p>
+<h3 id="постфиксна-претрага">Постфиксна претрага</h3>
+<p>Постфиксна претрага се састоји од тога тако што се једноставно обрну улазни текст и текст из колоне, и креира индекс са истим функцијама трансформације:</p>
 
 
 
@@ -127,10 +127,10 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">reverse</span><span class="p">(</span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="n">reverse</span><span class="p">(</span><span class="k">lower</span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Same execution plan and caveats apply just like for the prefix search.</p>
-<h2 id="infix-search">Infix search</h2>
-<p>This is a more common way of searching, when the input text can be anywhere within a string - the infix search. Infix search is when the input text is surrounded with <code>%</code> signs, for example <code>ILIKE %input text%</code>. How to speed up such query?</p>
-<p>Most common way in PostgreSQL is to use the <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> extension which supports pattern search operators (<code>LIKE</code>, <code>ILIKE</code>, <code>~*</code>), and then create a GIN (or GiST) index over the text column:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>План извршавања, као и недостаци, су исти као и за префиксну претрагу.</p>
+<h2 id="инфиксна-претрага">Инфиксна претрага</h2>
+<p>Ово је знатно чешћи начин претраге, када улазни текст може да буде било гдје у уписаном тексту, односно инфиксна претрага. Ова претрага се врши тако што се улазни текс окружи са <code>%</code> знаковима, нпр. <code>ILIKE %input text%</code>. Како убрзати такву претрагу?</p>
+<p>Најчешћи начин за PostgreSQL је кориштење екстензије <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> која подржава операторе шаблонске претраге (<code>LIKE</code>, <code>ILIKE</code>, <code>~*</code>), а онда се креира GIN (или GiST) индекс над текстуалном колоном:</p>
 
 
 
@@ -148,8 +148,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">ilike</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>There is a huge performance gain when doing it this way. With the reasonable amount of data, it should be enough to keep the response time short. But what when it isn&rsquo;t enough? Is there anything else that can be done?</p>
-<p>If you look at the execution plan of the query above, it does involve several steps, including sorting:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Перформансе су значајно повећане на овај начин. Са разумном количином података, ова техника је довољна да се вријеме одзива држи довољно ниским. Али шта ако није довољно ниско? Шта још може да се уради?</p>
+<p>Ако погледамо план извршавања од упита изнад, видимо да укључује неколико корака, укључујући сортирање:</p>
 
 
 
@@ -164,24 +164,24 @@
          -&gt;  Bitmap Heap Scan on music_artist
                Recheck Cond: (((name)::text ~~* &#39;%the%&#39;::text) AND active)
                -&gt;  Bitmap Index Scan on ma_name_gin_idx
-                     Index Cond: ((name)::text ~~* &#39;%the%&#39;::text)</code></pre><p>Addressing this requires a little bit more of creativity.</p>
-<h3 id="gist-index">GiST index</h3>
-<p>The <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> extension can also use the GiST index for pattern search indexing, even though the GIN is generally recommended as being faster in this particular use-case. GiST is also &ldquo;lossy&rdquo;, which affects performance.</p>
-<p>What is special about GiST index? This index can <a href="https://www.alibabacloud.com/blog/sorting-gist-indexes-by-leveraging-nearest-neighbor-enhancement-in-postgresql-9-1_597005">use</a> the <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">k-nearest neighbours</a> algorithm to sort the results via distance (<code>&lt;-&gt;</code>) operator, whereas GIN index doesn&rsquo;t support sorting at all.</p>
-<p>Since GiST index doesnt support scalar values by default, and <strong>rating</strong> column is a scalar (bigint), firstly we&rsquo;ll need an <a href="https://www.postgresql.org/docs/12/btree-gist.html">extension</a> to enable such support:</p>
+                     Index Cond: ((name)::text ~~* &#39;%the%&#39;::text)</code></pre><p>Рјешавање овог проблема захтјева нешто више креативности.</p>
+<h3 id="gist-индекс">GiST индекс</h3>
+<p>Екстензија <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> такође може да користи и GiST индекс за шаблонску претрагу текста, иако се GIN индекс генерално препоручује као бржи у оваквим случајевима. GiST такође интерно може да има ”лажно позитивне” резултате, што утиче на перформансе.</p>
+<p>Шта је посебно у вези GiST индекса? Овај индекс може да <a href="https://www.alibabacloud.com/blog/sorting-gist-indexes-by-leveraging-nearest-neighbor-enhancement-in-postgresql-9-1_597005">користи</a> тзв. алгоритам <a href="https://sr.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%B0%D0%BC_%D0%BA_%D0%BD%D0%B0%D1%98%D0%B1%D0%BB%D0%B8%D0%B6%D0%B8%D1%85_%D1%81%D1%83%D1%81%D0%B5%D0%B4%D0%B0">k-најближих сусједа</a> како би сортирао резултате помоћу оператора удаљености (<code>&lt;-&gt;</code>), док GIN индекс не подржава сортирање уопште.</p>
+<p>Како GiST индекс не подржава скаларне вриједности сам по себи, а <strong>rating</strong> колона је скаларна вриједност (број типа bigint), прво нам је потребна <a href="https://www.postgresql.org/docs/12/btree-gist.html">екстензија</a> која омогућава такву употребу:</p>
 
 
 
 
 
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="n">extension</span><span class="w"> </span><span class="n">btree_gist</span><span class="p">;</span></span></span></code></pre></div><p>Now, let&rsquo;s create a GiST index on the table (note: any previously created indexes should be dropped). Order of the columns is not important:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="n">extension</span><span class="w"> </span><span class="n">btree_gist</span><span class="p">;</span></span></span></code></pre></div><p>Сада креирајмо GiST индекс над табелом (напомена: претходно креирани индекси треба да се уклоне). Редослијед колона није важан:</p>
 
 
 
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">ma_name_gist_idx</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">gist</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="n">gist_trgm_ops</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span><span class="p">)</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span></span></span></code></pre></div><p>A query that will utilize the new index can be written like this:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span></span></span></code></pre></div><p>Упит који ће да искористи нови индекс може да се напише овако:</p>
 
 
 
@@ -191,7 +191,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">ilike</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="mi">50000</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Explain plan looks far simpler now:</p>
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Сада план извршавања изгледа много једноставније:</p>
 
 
 
@@ -203,18 +203,18 @@
  Limit
    -&gt;  Index Scan using ma_name_gist_idx on music_artist
          Index Cond: ((name)::text ~~* ((&#39;%&#39;::text || $1) || &#39;%&#39;::text))
-         Order By: (rating &lt;-&gt; &#39;50000&#39;::bigint)</code></pre><p>Value <strong>50000</strong> here is the value equal or larger than the maximum value of the <strong>rating</strong> column in the table, so that results are retrieved in an descending order. What is important to notice here is that the distance operator <strong><em>needs a constant</em></strong>. If you try to use a subquery instead of value 50000, index-enabled sorting will not trigger, and a <code>Sort</code> operation will show up in the execution plan! This means that you should have this value collected beforehand, if you&rsquo;d like to use the search in this way.</p>
+         Order By: (rating &lt;-&gt; &#39;50000&#39;::bigint)</code></pre><p>Вриједност <strong>50000</strong> овде је вриједност већа или једнака максималној вриједности из <strong>rating</strong> колоне, како би резултати били добијени у опадајућем редослиједу. Оно што је важно напоменути овде је да за оператор дистанце <strong><em>потребна константа</em></strong>. Ако покушамо да вриједност 50000 добијемо преко угњежденог упита, сортирање помоћу индекса неће бити активирано, и операција <code>Sort</code> ће да се појави у плану извршавања! То значи да ова вриједност мора да буде претходно прикупљена, у случају да се претрага обавља на овај начин.</p>
 <blockquote>
-<p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p>
+<p><strong>Напомена</strong>: опрезно са кориштењем колона типа <em>bigint</em> са овим приступом, јер чини се да постоји грешка приликом кориштења високих вриједности за константу, која може да поремети редослијед резултата. Чак сам <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">поставио питање</a> на Stack Overflow на ову тему, али чини се да нема одговора.</p>
 </blockquote>
-<h3 id="caveats-1">Caveats</h3>
-<p>This way of indexing suffers from the same problem as the prefix/postfix search. Lesser the popularity, bigger the search time. Unfortunately, it&rsquo;s performance cannot be improved further with a covering index. GiST index does support covering, but not all operator classes will trigger the index-only scan. And it seems that it won&rsquo;t trigger in this very use-case.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>Whether you will use standard index, GIN or GiST to speed up your search depends on what your goal is, and on how much data do you have. I hope I&rsquo;ve managed to give some insight into pros and cons for each of them when it comes to performance of text pattern searching. However, if a relational database is not up to the task of searching lots of text, perhaps using a specialized tool (i.e. Elastic Search) would be a better option.</p>
-<h2 id="further-reading">Further reading</h2>
+<h3 id="недостаци-1">Недостаци</h3>
+<p>Овај начин индексирања пати од истих проблема као и префиксна/постиксна претрага. Што је мања оцјена, дуже је вријеме претраге. Нажалост, не може даље да се побољша кориштењем покривајућег индекса. GiST индекс подржава покривајуће индексирање, али скенирање самог индекса неће бити активирано за све класе оператора, што се чини да је овде случај.</p>
+<h2 id="закључак">Закључак</h2>
+<p>Да ли ћете користити стандардни индекс, GIN или GiST како би убрзали претрагу, зависи од тога шта је циљ, као и од количине прикупљених података. Надам се да сам дао увид у предности и мане за сваки од њих када је у питању претрага текста по шаблону. Међутим, ако релациона база података није довољно добра за претрагу веће количине текста, можда би било боље искористити специјализовани алат за претрагу текста, као нпр. Elastic Search.</p>
+<h2 id="додатна-литература">Додатна литература</h2>
 <ul>
-<li>I highly recommend visiting <a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> website by Markus Winand, where you can learn all the power of database indexing and SQL, a much needed skill if your job description includes databases</li>
-<li>If you&rsquo;d like to see more performance tuning examples, I have a GitHub <a href="https://github.com/drazengolic/music-streamer-db">repo</a> where I&rsquo;ve dealt with optimization techniques similar to the ones in this article, and also with some of the data denormalization strategies</li>
+<li>Топло препоручујем веб сајт <a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> који води Маркус Винанд, гдје може много да се научи о индексирању података и SQL-у, пријеко потребном знању за сваког чији опис посла укључује рад са базама података</li>
+<li>Ако неког интересује више примјера из области оптимизације перформанси, направио сам GitHub <a href="https://github.com/drazengolic/music-streamer-db">репозиторијум</a> гдје сам се бавио техникама оптимизације сличним онима описаним у овом чланку, као и неким стратегијама денормализације података</li>
 </ul>
 ]]></content:encoded>
     </item>

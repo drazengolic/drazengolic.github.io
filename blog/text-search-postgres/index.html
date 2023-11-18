@@ -17,50 +17,28 @@
 
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<meta property="og:title" content="Speeding up text pattern searching and sorting in PostgreSQL" />
+  <meta property="og:title" content="Speeding up text pattern searching and sorting in PostgreSQL" />
 <meta property="og:description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.drazengolic.com/blog/text-search-postgres/" />
-
-<meta property="og:image" content="https://www.drazengolic.com/images/social_card_bg_hu0f7c7fe460ec4b5e9751ccb8d9c9aa0f_651110_d41ae8c27ac27d8990f18c07ebe2e745.webp"/><meta property="article:section" content="blog" />
+<meta property="og:url" content="https://www.drazengolic.com/blog/text-search-postgres/" /><meta property="og:image" content="https://www.drazengolic.com/images/postgresql.webp" /><meta property="article:section" content="blog" />
 <meta property="article:published_time" content="2021-07-16T23:33:12+02:00" />
 <meta property="article:modified_time" content="2021-07-16T23:33:12+02:00" /><meta property="og:site_name" content="Drazen Golic" />
 
 
-
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://www.drazengolic.com/images/social_card_bg_hu0f7c7fe460ec4b5e9751ccb8d9c9aa0f_651110_d41ae8c27ac27d8990f18c07ebe2e745.webp"/>
+  
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.drazengolic.com/images/postgresql.webp"/>
 
 <meta name="twitter:title" content="Speeding up text pattern searching and sorting in PostgreSQL"/>
 <meta name="twitter:description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow."/>
 <meta name="twitter:site" content="@Drazen_88"/>
 
 
-<meta itemprop="name" content="Speeding up text pattern searching and sorting in PostgreSQL">
+  
+  <meta itemprop="name" content="Speeding up text pattern searching and sorting in PostgreSQL">
 <meta itemprop="description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow."><meta itemprop="datePublished" content="2021-07-16T23:33:12+02:00" />
 <meta itemprop="dateModified" content="2021-07-16T23:33:12+02:00" />
-<meta itemprop="wordCount" content="1682">
-
-<meta itemprop="image" content="https://www.drazengolic.com/images/social_card_bg_hu0f7c7fe460ec4b5e9751ccb8d9c9aa0f_651110_d41ae8c27ac27d8990f18c07ebe2e745.webp"/>
-
-
+<meta itemprop="wordCount" content="1682"><meta itemprop="image" content="https://www.drazengolic.com/images/postgresql.webp">
 <meta itemprop="keywords" content="Databases,PostgreSQL,Performance," />
 
 <meta name="referrer" content="no-referrer-when-downgrade" />
@@ -92,12 +70,13 @@
 
 
 
+  
+
 
 
 
   
-    
-    
+    <a href="https://www.drazengolic.com/sr/blog/text-search-postgres/">sr 🇷🇸</a>
   
 
 </nav>
@@ -174,16 +153,16 @@
 
 
 
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain execute mas<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                                           QUERY PLAN
-</span></span><span class="line"><span class="cl">------------------------------------------------------------------------------------------------
-</span></span><span class="line"><span class="cl"> Limit  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>29890.60..29891.17 <span class="nv">rows</span><span class="o">=</span><span class="m">5</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
-</span></span><span class="line"><span class="cl">   -&gt;  Gather Merge  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>29890.60..34297.28 <span class="nv">rows</span><span class="o">=</span><span class="m">38319</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
-</span></span><span class="line"><span class="cl">         Workers Planned: <span class="m">1</span>
-</span></span><span class="line"><span class="cl">         -&gt;  Sort  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>28890.59..28986.39 <span class="nv">rows</span><span class="o">=</span><span class="m">38319</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
-</span></span><span class="line"><span class="cl">               Sort Key: rating DESC
-</span></span><span class="line"><span class="cl">               -&gt;  Parallel Seq Scan on music_artist  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>0.00..28254.12 <span class="nv">rows</span><span class="o">=</span><span class="m">38319</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
-</span></span><span class="line"><span class="cl">                     Filter: <span class="o">(</span>active AND <span class="o">((</span>name<span class="o">)</span>::text ~~* <span class="s1">&#39;the%&#39;</span>::text<span class="o">))</span></span></span></code></pre></div><p>Since b-tree index supports prefix search of text (case sensitive), we can create an index that will contain <strong>name</strong> and <strong>rating</strong> columns, with <strong>name</strong> stored in lower case:</p>
+<pre tabindex="0"><code>=&gt; explain execute mas(&#39;the&#39;);
+                                           QUERY PLAN
+------------------------------------------------------------------------------------------------
+ Limit  (cost=29890.60..29891.17 rows=5 width=50)
+   -&gt;  Gather Merge  (cost=29890.60..34297.28 rows=38319 width=50)
+         Workers Planned: 1
+         -&gt;  Sort  (cost=28890.59..28986.39 rows=38319 width=50)
+               Sort Key: rating DESC
+               -&gt;  Parallel Seq Scan on music_artist  (cost=0.00..28254.12 rows=38319 width=50)
+                     Filter: (active AND ((name)::text ~~* &#39;the%&#39;::text))</code></pre><p>Since b-tree index supports prefix search of text (case sensitive), we can create an index that will contain <strong>name</strong> and <strong>rating</strong> columns, with <strong>name</strong> stored in lower case:</p>
 
 
 
@@ -208,12 +187,12 @@
 
 
 
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain execute mas2<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                                            QUERY PLAN
-</span></span><span class="line"><span class="cl">--------------------------------------------------------------------------------------------------
-</span></span><span class="line"><span class="cl"> Limit  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>0.43..36.77 <span class="nv">rows</span><span class="o">=</span><span class="m">5</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
-</span></span><span class="line"><span class="cl">   -&gt;  Index Scan using pref_search_idx on music_artist  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>0.43..58586.92 <span class="nv">rows</span><span class="o">=</span><span class="m">8061</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
-</span></span><span class="line"><span class="cl">         Filter: <span class="o">(</span>lower<span class="o">((</span>name<span class="o">)</span>::text<span class="o">)</span> ~~ <span class="s1">&#39;the%&#39;</span>::text<span class="o">)</span></span></span></code></pre></div><p>Response time is now improved from several hundreds of milliseconds down to only a handful of milliseconds (in a test environment with around 1.6M records in the table)!</p>
+<pre tabindex="0"><code>=&gt; explain execute mas2(&#39;the&#39;);
+                                            QUERY PLAN
+--------------------------------------------------------------------------------------------------
+ Limit  (cost=0.43..36.77 rows=5 width=50)
+   -&gt;  Index Scan using pref_search_idx on music_artist  (cost=0.43..58586.92 rows=8061 width=50)
+         Filter: (lower((name)::text) ~~ &#39;the%&#39;::text)</code></pre><p>Response time is now improved from several hundreds of milliseconds down to only a handful of milliseconds (in a test environment with around 1.6M records in the table)!</p>
 <p>As you can see, there is no <code>Sort</code> step in the query execution plan, which means that results are already sorted, and no additional sorting is required.</p>
 <h3 id="caveats">Caveats</h3>
 <p>While the retrieval of popular records will be fast, you could experience significant drop in performance when the search needs to go deeper to find less popular records. If the performance becomes really bad in such cases, it can be further improved by creating a covering index (instead of the previous one) that will include all the columns from the query:</p>
@@ -277,16 +256,16 @@
 
 
 
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain <span class="o">(</span>costs off<span class="o">)</span> execute mas5<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                                QUERY PLAN
-</span></span><span class="line"><span class="cl">---------------------------------------------------------------------------
-</span></span><span class="line"><span class="cl"> Limit
-</span></span><span class="line"><span class="cl">   -&gt;  Sort
-</span></span><span class="line"><span class="cl">         Sort Key: rating DESC
-</span></span><span class="line"><span class="cl">         -&gt;  Bitmap Heap Scan on music_artist
-</span></span><span class="line"><span class="cl">               Recheck Cond: <span class="o">(((</span>name<span class="o">)</span>::text ~~* <span class="s1">&#39;%the%&#39;</span>::text<span class="o">)</span> AND active<span class="o">)</span>
-</span></span><span class="line"><span class="cl">               -&gt;  Bitmap Index Scan on ma_name_gin_idx
-</span></span><span class="line"><span class="cl">                     Index Cond: <span class="o">((</span>name<span class="o">)</span>::text ~~* <span class="s1">&#39;%the%&#39;</span>::text<span class="o">)</span></span></span></code></pre></div><p>Addressing this requires a little bit more of creativity.</p>
+<pre tabindex="0"><code>=&gt; explain (costs off) execute mas5(&#39;the&#39;);
+                                QUERY PLAN
+---------------------------------------------------------------------------
+ Limit
+   -&gt;  Sort
+         Sort Key: rating DESC
+         -&gt;  Bitmap Heap Scan on music_artist
+               Recheck Cond: (((name)::text ~~* &#39;%the%&#39;::text) AND active)
+               -&gt;  Bitmap Index Scan on ma_name_gin_idx
+                     Index Cond: ((name)::text ~~* &#39;%the%&#39;::text)</code></pre><p>Addressing this requires a little bit more of creativity.</p>
 <h3 id="gist-index">GiST index</h3>
 <p>The <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> extension can also use the GiST index for pattern search indexing, even though the GIN is generally recommended as being faster in this particular use-case. GiST is also &ldquo;lossy&rdquo;, which affects performance.</p>
 <p>What is special about GiST index? This index can <a href="https://www.alibabacloud.com/blog/sorting-gist-indexes-by-leveraging-nearest-neighbor-enhancement-in-postgresql-9-1_597005">use</a> the <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">k-nearest neighbours</a> algorithm to sort the results via distance (<code>&lt;-&gt;</code>) operator, whereas GIN index doesn&rsquo;t support sorting at all.</p>
@@ -319,13 +298,13 @@
 
 
 
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain <span class="o">(</span>costs off<span class="o">)</span> execute mas6<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                               QUERY PLAN
-</span></span><span class="line"><span class="cl">-------------------------------------------------------------------------
-</span></span><span class="line"><span class="cl"> Limit
-</span></span><span class="line"><span class="cl">   -&gt;  Index Scan using ma_name_gist_idx on music_artist
-</span></span><span class="line"><span class="cl">         Index Cond: <span class="o">((</span>name<span class="o">)</span>::text ~~* <span class="o">((</span><span class="s1">&#39;%&#39;</span>::text <span class="o">||</span> <span class="nv">$1</span><span class="o">)</span> <span class="o">||</span> <span class="s1">&#39;%&#39;</span>::text<span class="o">))</span>
-</span></span><span class="line"><span class="cl">         Order By: <span class="o">(</span>rating &lt;-&gt; <span class="s1">&#39;50000&#39;</span>::bigint<span class="o">)</span></span></span></code></pre></div><p>Value <strong>50000</strong> here is the value equal or larger than the maximum value of the <strong>rating</strong> column in the table, so that results are retrieved in an descending order. What is important to notice here is that the distance operator <strong><em>needs a constant</em></strong>. If you try to use a subquery instead of value 50000, index-enabled sorting will not trigger, and a <code>Sort</code> operation will show up in the execution plan! This means that you should have this value collected beforehand, if you&rsquo;d like to use the search in this way.</p>
+<pre tabindex="0"><code>=&gt; explain (costs off) execute mas6(&#39;the&#39;);
+                               QUERY PLAN
+-------------------------------------------------------------------------
+ Limit
+   -&gt;  Index Scan using ma_name_gist_idx on music_artist
+         Index Cond: ((name)::text ~~* ((&#39;%&#39;::text || $1) || &#39;%&#39;::text))
+         Order By: (rating &lt;-&gt; &#39;50000&#39;::bigint)</code></pre><p>Value <strong>50000</strong> here is the value equal or larger than the maximum value of the <strong>rating</strong> column in the table, so that results are retrieved in an descending order. What is important to notice here is that the distance operator <strong><em>needs a constant</em></strong>. If you try to use a subquery instead of value 50000, index-enabled sorting will not trigger, and a <code>Sort</code> operation will show up in the execution plan! This means that you should have this value collected beforehand, if you&rsquo;d like to use the search in this way.</p>
 <blockquote>
 <p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p>
 </blockquote>

@@ -6,6 +6,27 @@
     <description>Recent content in Tags on Дражен Голић</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>sr-BA</language>
-    <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright><atom:link href="https://www.drazengolic.com/sr/tags/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright>
+    <lastBuildDate>Fri, 16 Jul 2021 23:33:12 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/sr/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PostgreSQL</title>
+      <link>https://www.drazengolic.com/sr/tags/postgresql/</link>
+      <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/tags/postgresql/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Перформансе</title>
+      <link>https://www.drazengolic.com/sr/tags/%D0%BF%D0%B5%D1%80%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%B5/</link>
+      <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/tags/%D0%BF%D0%B5%D1%80%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%B5/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
   </channel>
 </rss>
