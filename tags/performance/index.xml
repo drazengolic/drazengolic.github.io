@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Performance on Drazen Golic</title>
     <link>https://www.drazengolic.com/tags/performance/</link>
     <description>Recent content in Performance on Drazen Golic</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <copyright>Drazen Golic</copyright>
+    <language>en-US</language>
+    <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright>
     <lastBuildDate>Fri, 16 Jul 2021 23:33:12 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/tags/performance/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Speeding up text pattern searching and sorting in PostgreSQL</title>
@@ -15,6 +15,208 @@
       
       <guid>https://www.drazengolic.com/blog/text-search-postgres/</guid>
       <description>Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow.</description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?</p>
+<p>What follows are some of the SQL performance optimization techniques, with accent on avoiding the sort operation as being potentially <a href="https://use-the-index-luke.com/sql/sorting-grouping">expensive operation</a>.</p>
+<p>As an example, we&rsquo;ll be using a sample table that holds data about various music artists:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">character</span><span class="w"> </span><span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">cover_photo</span><span class="w"> </span><span class="nb">character</span><span class="w"> </span><span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">short_bio</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">active</span><span class="w"> </span><span class="nb">boolean</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rating</span><span class="w"> </span><span class="nb">bigint</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">);</span></span></span></code></pre></div><p>While some of the concepts can be reused in different database systems, this article will discuss mostly PostgreSQL and it&rsquo;s features.</p>
+<h2 id="prefixpostfix-search">Prefix/postfix search</h2>
+<p>While searching for text that starts (or ends) in a certain way is not that common, it is worth describing on how to optimize in such cases, since it can be done with standard b-tree indexes.</p>
+<p>Prefix and postfix search use the <code>LIKE</code> operator, with a <code>%</code> sign at the end (prefix), or in front (postfix) of input text to search for. To make the search case-insensitive, you can either use <code>ILIKE</code> operator , or convert both column and input text to either lower or upper case.</p>
+<h3 id="prefix-search">Prefix search</h3>
+<p>Prepared statement for prefix search could look like this:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">prepare</span><span class="w"> </span><span class="n">mas</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">ilike</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Running <code>explain</code> on this query shows that whole table needs to be read sequentially, results are then sorted in memory, and then the first 5 results are selected:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain execute mas<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                                           QUERY PLAN
+</span></span><span class="line"><span class="cl">------------------------------------------------------------------------------------------------
+</span></span><span class="line"><span class="cl"> Limit  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>29890.60..29891.17 <span class="nv">rows</span><span class="o">=</span><span class="m">5</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   -&gt;  Gather Merge  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>29890.60..34297.28 <span class="nv">rows</span><span class="o">=</span><span class="m">38319</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         Workers Planned: <span class="m">1</span>
+</span></span><span class="line"><span class="cl">         -&gt;  Sort  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>28890.59..28986.39 <span class="nv">rows</span><span class="o">=</span><span class="m">38319</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">               Sort Key: rating DESC
+</span></span><span class="line"><span class="cl">               -&gt;  Parallel Seq Scan on music_artist  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>0.00..28254.12 <span class="nv">rows</span><span class="o">=</span><span class="m">38319</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">                     Filter: <span class="o">(</span>active AND <span class="o">((</span>name<span class="o">)</span>::text ~~* <span class="s1">&#39;the%&#39;</span>::text<span class="o">))</span></span></span></code></pre></div><p>Since b-tree index supports prefix search of text (case sensitive), we can create an index that will contain <strong>name</strong> and <strong>rating</strong> columns, with <strong>name</strong> stored in lower case:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">pref_search_idx</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="p">(</span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="p">,</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span></span></span></code></pre></div><p>This index is a partial, function-based index that stores transformed data for all rows that have the <strong>active</strong> column set to <code>true</code>. As we are interested in the most popular results first, we&rsquo;ll use the modifier <code>desc</code> on the <strong>rating</strong> column, and also place it as a first column within the index definition, since the index needs to match the <code>ORDER BY</code> clause as well.</p>
+<p>To update statistics after the new index is created, use <code>analyze music_artist;</code> command.</p>
+<p>Now the query needs to be rewritten so it makes use of the new index by using standard <code>LIKE</code> operator, with the column and the input text transformed to lower case:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">prepare</span><span class="w"> </span><span class="n">mas2</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Execution plan of the new query now only has an index scan that stops after the first 5 results are retrieved:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain execute mas2<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                                            QUERY PLAN
+</span></span><span class="line"><span class="cl">--------------------------------------------------------------------------------------------------
+</span></span><span class="line"><span class="cl"> Limit  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>0.43..36.77 <span class="nv">rows</span><span class="o">=</span><span class="m">5</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   -&gt;  Index Scan using pref_search_idx on music_artist  <span class="o">(</span><span class="nv">cost</span><span class="o">=</span>0.43..58586.92 <span class="nv">rows</span><span class="o">=</span><span class="m">8061</span> <span class="nv">width</span><span class="o">=</span>50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         Filter: <span class="o">(</span>lower<span class="o">((</span>name<span class="o">)</span>::text<span class="o">)</span> ~~ <span class="s1">&#39;the%&#39;</span>::text<span class="o">)</span></span></span></code></pre></div><p>Response time is now improved from several hundreds of milliseconds down to only a handful of milliseconds (in a test environment with around 1.6M records in the table)!</p>
+<p>As you can see, there is no <code>Sort</code> step in the query execution plan, which means that results are already sorted, and no additional sorting is required.</p>
+<h3 id="caveats">Caveats</h3>
+<p>While the retrieval of popular records will be fast, you could experience significant drop in performance when the search needs to go deeper to find less popular records. If the performance becomes really bad in such cases, it can be further improved by creating a covering index (instead of the previous one) that will include all the columns from the query:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- covering index
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">pref_search_idx</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="p">(</span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="p">,</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">include</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">cover_photo</span><span class="p">,</span><span class="w"> </span><span class="n">short_bio</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- new query
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">prepare</span><span class="w"> </span><span class="n">mas4</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">cover_photo</span><span class="p">,</span><span class="w"> </span><span class="n">short_bio</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="k">lower</span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Creating a covering index essentially means duplicating lots of columns (or even the whole table), so it could become a pricey solution in terms of disk usage. But the benefit of a covering index is that it keeps all the included data physically close in an order defined by the index, so looking deeper for results would become faster by reading just the index, without the need for random data access on the table heap.</p>
+<h3 id="postfix-search">Postfix search</h3>
+<p>Postfix search consists of simply reversing both the column and the input text, and creating an index with the same transformation functions:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- index
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">pref_search_rev_idx</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="p">(</span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="p">,</span><span class="w"> </span><span class="n">reverse</span><span class="p">(</span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- query
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">prepare</span><span class="w"> </span><span class="n">mas3</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">reverse</span><span class="p">(</span><span class="k">lower</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="n">reverse</span><span class="p">(</span><span class="k">lower</span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Same execution plan and caveats apply just like for the prefix search.</p>
+<h2 id="infix-search">Infix search</h2>
+<p>This is a more common way of searching, when the input text can be anywhere within a string - the infix search. Infix search is when the input text is surrounded with <code>%</code> signs, for example <code>ILIKE %input text%</code>. How to speed up such query?</p>
+<p>Most common way in PostgreSQL is to use the <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> extension which supports pattern search operators (<code>LIKE</code>, <code>ILIKE</code>, <code>~*</code>), and then create a GIN (or GiST) index over the text column:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- add extension
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">create</span><span class="w"> </span><span class="n">extension</span><span class="w"> </span><span class="n">pg_trgm</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- create GIN index
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">ma_name_gin_idx</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">gin</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="n">gin_trgm_ops</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- query
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">prepare</span><span class="w"> </span><span class="n">mas5</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">ilike</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">desc</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>There is a huge performance gain when doing it this way. With the reasonable amount of data, it should be enough to keep the response time short. But what when it isn&rsquo;t enough? Is there anything else that can be done?</p>
+<p>If you look at the execution plan of the query above, it does involve several steps, including sorting:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain <span class="o">(</span>costs off<span class="o">)</span> execute mas5<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                                QUERY PLAN
+</span></span><span class="line"><span class="cl">---------------------------------------------------------------------------
+</span></span><span class="line"><span class="cl"> Limit
+</span></span><span class="line"><span class="cl">   -&gt;  Sort
+</span></span><span class="line"><span class="cl">         Sort Key: rating DESC
+</span></span><span class="line"><span class="cl">         -&gt;  Bitmap Heap Scan on music_artist
+</span></span><span class="line"><span class="cl">               Recheck Cond: <span class="o">(((</span>name<span class="o">)</span>::text ~~* <span class="s1">&#39;%the%&#39;</span>::text<span class="o">)</span> AND active<span class="o">)</span>
+</span></span><span class="line"><span class="cl">               -&gt;  Bitmap Index Scan on ma_name_gin_idx
+</span></span><span class="line"><span class="cl">                     Index Cond: <span class="o">((</span>name<span class="o">)</span>::text ~~* <span class="s1">&#39;%the%&#39;</span>::text<span class="o">)</span></span></span></code></pre></div><p>Addressing this requires a little bit more of creativity.</p>
+<h3 id="gist-index">GiST index</h3>
+<p>The <a href="https://www.postgresql.org/docs/12/pgtrgm.html">pg_trgm</a> extension can also use the GiST index for pattern search indexing, even though the GIN is generally recommended as being faster in this particular use-case. GiST is also &ldquo;lossy&rdquo;, which affects performance.</p>
+<p>What is special about GiST index? This index can <a href="https://www.alibabacloud.com/blog/sorting-gist-indexes-by-leveraging-nearest-neighbor-enhancement-in-postgresql-9-1_597005">use</a> the <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">k-nearest neighbours</a> algorithm to sort the results via distance (<code>&lt;-&gt;</code>) operator, whereas GIN index doesn&rsquo;t support sorting at all.</p>
+<p>Since GiST index doesnt support scalar values by default, and <strong>rating</strong> column is a scalar (bigint), firstly we&rsquo;ll need an <a href="https://www.postgresql.org/docs/12/btree-gist.html">extension</a> to enable such support:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="n">extension</span><span class="w"> </span><span class="n">btree_gist</span><span class="p">;</span></span></span></code></pre></div><p>Now, let&rsquo;s create a GiST index on the table (note: any previously created indexes should be dropped). Order of the columns is not important:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">index</span><span class="w"> </span><span class="n">ma_name_gist_idx</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">gist</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="n">gist_trgm_ops</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span></span></span></code></pre></div><p>A query that will utilize the new index can be written like this:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">prepare</span><span class="w"> </span><span class="n">mas6</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">music_artist</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">ilike</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="o">&lt;-&gt;</span><span class="w"> </span><span class="mi">50000</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">limit</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div><p>Explain plan looks far simpler now:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">=</span>&gt; explain <span class="o">(</span>costs off<span class="o">)</span> execute mas6<span class="o">(</span><span class="s1">&#39;the&#39;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                               QUERY PLAN
+</span></span><span class="line"><span class="cl">-------------------------------------------------------------------------
+</span></span><span class="line"><span class="cl"> Limit
+</span></span><span class="line"><span class="cl">   -&gt;  Index Scan using ma_name_gist_idx on music_artist
+</span></span><span class="line"><span class="cl">         Index Cond: <span class="o">((</span>name<span class="o">)</span>::text ~~* <span class="o">((</span><span class="s1">&#39;%&#39;</span>::text <span class="o">||</span> <span class="nv">$1</span><span class="o">)</span> <span class="o">||</span> <span class="s1">&#39;%&#39;</span>::text<span class="o">))</span>
+</span></span><span class="line"><span class="cl">         Order By: <span class="o">(</span>rating &lt;-&gt; <span class="s1">&#39;50000&#39;</span>::bigint<span class="o">)</span></span></span></code></pre></div><p>Value <strong>50000</strong> here is the value equal or larger than the maximum value of the <strong>rating</strong> column in the table, so that results are retrieved in an descending order. What is important to notice here is that the distance operator <strong><em>needs a constant</em></strong>. If you try to use a subquery instead of value 50000, index-enabled sorting will not trigger, and a <code>Sort</code> operation will show up in the execution plan! This means that you should have this value collected beforehand, if you&rsquo;d like to use the search in this way.</p>
+<blockquote>
+<p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p>
+</blockquote>
+<h3 id="caveats-1">Caveats</h3>
+<p>This way of indexing suffers from the same problem as the prefix/postfix search. Lesser the popularity, bigger the search time. Unfortunately, it&rsquo;s performance cannot be improved further with a covering index. GiST index does support covering, but not all operator classes will trigger the index-only scan. And it seems that it won&rsquo;t trigger in this very use-case.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Whether you will use standard index, GIN or GiST to speed up your search depends on what your goal is, and on how much data do you have. I hope I&rsquo;ve managed to give some insight into pros and cons for each of them when it comes to performance of text pattern searching. However, if a relational database is not up to the task of searching lots of text, perhaps using a specialized tool (i.e. Elastic Search) would be a better option.</p>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>I highly recommend visiting <a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> website by Markus Winand, where you can learn all the power of database indexing and SQL, a much needed skill if your job description includes databases</li>
+<li>If you&rsquo;d like to see more performance tuning examples, I have a GitHub <a href="https://github.com/drazengolic/music-streamer-db">repo</a> where I&rsquo;ve dealt with optimization techniques similar to the ones in this article, and also with some of the data denormalization strategies</li>
+</ul>
+]]></content:encoded>
     </item>
     
   </channel>
