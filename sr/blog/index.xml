@@ -7,7 +7,290 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>sr-BA</language>
     <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright>
-    <lastBuildDate>Fri, 16 Jul 2021 23:33:12 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/sr/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 22 Nov 2023 11:22:23 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/sr/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Формирај JSON одговор директно у PostgreSQL-у</title>
+      <link>https://www.drazengolic.com/sr/blog/json-response-postgres/</link>
+      <pubDate>Wed, 22 Nov 2023 11:22:23 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/blog/json-response-postgres/</guid>
+      <description>Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
+Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.</description>
+      <content:encoded><![CDATA[<h2 id="увод">Увод</h2>
+<p>Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:</p>
+<ol>
+<li>Шаље упит на базу и чита резултате</li>
+<li>Трансформише податке у тражени формат</li>
+<li>Враћа одговор</li>
+</ol>
+<p>Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.</p>
+<h2 id="проблем">Проблем</h2>
+<h3 id="вишеструки-кораци">Вишеструки кораци</h3>
+<p>Након што се добије резултат упита на базу, потребно га је десеријализовати у некакву структуру података или објекат (или скуп објеката) који се касније могу искористити за приступ подацима или њихову модификацију. Уколико постоји неслагање између структуре података у бази и структуре одговора који сервис враћа, потребно је креирати још један скуп објеката од првобитног скупа како би се добио одговор. Затим је потребно серијализовати нови скуп објеката, овај пут у JSON формат, и послати стринг као одговор. То је <strong>једна десеријализација</strong>, <strong>једна серијализација</strong>, и <strong>вишеструко алоцирање меморије</strong> између.</p>
+<p>Уколико се користи језик са динамичким типовима, вјероватно је могуће проћи са манипулацијом хеш мапи и/или низова и завршити посао. А ако је у питању језик са статичким типовима, вјероватно би било потребно дефинисати типове за модел података, за одговор, а можда и некакве прелазне типове потребне у процесу.</p>
+<h3 id="orm-ови-и-градитељи-упита">ORM-ови и ”градитељи упита”</h3>
+<p>Ствари могу да постану још растрошније (да не спомињем и спорије) када се користе ови алати, чак и када се користе опрезно. Можда те то не занима и важнија ти је погодност кориштења, али ево пар ствари које се дешавају када се користе ови алати за упите на базу:</p>
+<ol>
+<li>У ORM алату, модел (класа) одговара табели у бази, и садржи сва поља као и табела. Сваки пут када се креира упит са овим моделом, извлаче се подаци <strong>из свих колона</strong> табеле, чак и када нису потребни. У случају да постоји начин да се селектују само нека од поља, добија се модел који није конзистентан.</li>
+<li>Модели који су у вези са првобитним добијају се на два начина: или са <strong>спајањима (joins)</strong> или <strong>засебним упитима</strong>.</li>
+</ol>
+<p>Када се користи спајање, број добијених уписа се мултиплицира са бројем уписа из везне табеле, и сваки ред садржи податке из обе табеле. Више операција спајања, више мултиплицирања редова. А ако се користи <code>cross join</code>, резултат је <a href="https://sr.wikipedia.org/wiki/%D0%94%D0%B5%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D0%B2_%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%B2%D0%BE%D0%B4">декартов производ</a> уписа. Комбинујући ово са чињеницом под 1., то је <strong>много</strong> редундантних података које је потребно доставити преко мреже и смјестити у меморију. Затим је потребно проћи кроз све те редове како би се креирала структура дефинисана моделом података, што значи додатно вријеме за обраду и додатне алокације меморије.</p>
+<p>Кориштење засебних упита не захтјева толико меморије или времена за обраду, али захтјева додатне <strong>мрежне скокове</strong> према бази података, чекање на њен одговор, и десеријализацију одговора у корисну структуру.</p>
+<h2 id="рјешење">Рјешење</h2>
+<p>Шта ако је могуће пресјећи кроз све ове слојеве и добити одговор директно са извора података? Ипак, системи база података нису само мјесто за податаке, то су <strong>системи</strong> (С у СУБП), што значи да њихове могућности превазилазе пуко смјештање и добављање података. А систем о коме је овде говоримо је врло моћан: PostgreSQL.</p>
+<h3 id="postgresql-и-json">PostgreSQL и JSON</h3>
+<p>PostgreSQL подржава JSON као <a href="https://www.postgresql.org/docs/current/datatype-json.html">тип података</a> од верзије 9.4 пуштене 2014, и тако омогућио флексибилније начине чувања података. Али није у питању само чување и претраживање JSON података, постоји много <a href="https://www.postgresql.org/docs/current/functions-json.html">функција и оператора</a> који се могу искористити за креирање, модификацију, тестирање или <a href="https://www.postgresql.org/docs/current/functions-aggregate.html">агрегирање</a> JSON објеката и низова директно као резултат SQL упита. Иако постоје одређена <a href="https://www.infoworld.com/article/3651356/jsonb-in-postgresql-today-and-tomorrow.html">ограничења</a>, корисност ове функционалности је неупитна.</p>
+<p>Постоје два типа која се користе за JSON: JSON и JSONB. Први је у суштини текст који је потребно парсирати сваки пут кад се оперише над њим, док је други бинарно оптимизован за бржи приступ и операције над подацима, и генерално се препоручује као тип за чување у бази.</p>
+<h3 id="примјер">Примјер</h3>
+<p>Као примјер ћу да искористим релацију сличну једној са којом сам се сусрео недавно: замислимо да имамо двије табеле назване <code>folder</code> и <code>document</code>, а које су у релацији 1:н, гдје сваки документ припада неком фолдеру. Сваки фолдер има своја подешавања која се чувају као JSON објекат, и има низ именованих веб линкова који се такође чувају као JSON. Документ садржи детаље који се презентују као кључ-вриједност, а који се такође, наравно, чувају као JSON.</p>
+<p>API сервис који добаља детаље неког фолдера мора да врати све доступне колоне фолдера, подскуп његових подешавања, али и све његове документе као низ под <code>documents</code> атрибутом.</p>
+<figure><img src="/images/folder-document-schema.png"
+         alt="Шема"/><figcaption>
+            <p>Шема</p>
+        </figcaption>
+</figure>
+
+<p>Подешавања фолдера изгледају отприлике овако:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-JSON" data-lang="JSON"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;qr_size&#34;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;qr_color&#34;</span><span class="p">:</span> <span class="s2">&#34;#4d00a7&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;folder_color&#34;</span><span class="p">:</span> <span class="s2">&#34;#4d00a7&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;show_label&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;qr_bg_color&#34;</span><span class="p">:</span> <span class="s2">&#34;#ffffff&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;alert_on_visit&#34;</span><span class="p">:</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div><p>Екстерни веб линкови изгледају овако:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-JSON" data-lang="JSON"><span class="line"><span class="cl"><span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;4cb41be0-ad12-4161-83cb-02c159801be8&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;link&#34;</span><span class="p">:</span> <span class="s2">&#34;https://www.google.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;web&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;label&#34;</span><span class="p">:</span> <span class="s2">&#34;Google&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// можда још линкова
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">]</span></span></span></code></pre></div><p>Детаљи документа изгледају овако:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-JSON" data-lang="JSON"><span class="line"><span class="cl"><span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;b6f9fe23-d4d6-4a61-b01a-934f3dd61a5e&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;mask&#34;</span><span class="p">:</span> <span class="s2">&#34;abc***xyz&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;име поља&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;value&#34;</span><span class="p">:</span> <span class="s2">&#34;вриједност поља&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// можда још детаља
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">]</span></span></span></code></pre></div><p>Примјетимо како елементи низова имају генерисано <code>id</code> поље, како би кориснички дио апликације адекватно управљао са њима. Али они не треба да буду укључени у одговор. Такође примјетимо поље <code>mask</code> у детаљима документа, на које ћемо се вратити касније.</p>
+<h3 id="писање-упита">Писање упита</h3>
+<p>Прво напишимо упит без укључивања докумената:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">json_build_object</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s1">&#39;settings&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="s1">&#39;alert_on_visit&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">settings</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">&#39;alert_on_visit&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="s1">&#39;folder_color&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">settings</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">&#39;folder_color&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s1">&#39;external_links&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">json_agg</span><span class="p">(</span><span class="n">el</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="s1">&#39;id&#39;</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">from</span><span class="w"> </span><span class="n">jsonb_array_elements</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">external_links</span><span class="p">)</span><span class="w"> </span><span class="n">el</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">folder</span><span class="w"> </span><span class="n">f</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span></span></span></code></pre></div><p>Објашњења кориштених фукција и оператора:</p>
+<ul>
+<li><code>json_build_object</code> је, очигледно, функција за креирање JSON објекта тако што јој се прослиједи промјенљив, али паран број аргумената, смјењујући кључ и вриједност наизмјенично</li>
+<li><code>-&gt;</code> је оператор за екстрактовање вриједности из JSON објекта под неким кључем у оригиналној верзији, док оператор <code>-&gt;&gt;</code> екстрактује вриједност као текст</li>
+<li><code>jsonb_array_elements</code> проширује JSON низ (чуван као JSONB, примјетимо префикс jsonb_) у <em>скуп</em> JSON вриједности, како би се операције над скуповима попут <code>select</code> могле да користе</li>
+<li><code>-</code> је оператор којим се уклања кључ (и вриједност под њим) из JSON објекта</li>
+<li><code>json_agg</code> је агрегатна функција која скупља улазне вриједности (укључујући NULL) у JSON низ, при том конвертујући вриједности у JSON</li>
+</ul>
+<p>Сада када разумијемо основне градивне јединице, додајмо и подупит за документе:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">json_build_object</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;settings&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="s1">&#39;alert_on_visit&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">settings</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">&#39;alert_on_visit&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="s1">&#39;folder_color&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">settings</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">&#39;folder_color&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;external_links&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">json_agg</span><span class="p">(</span><span class="n">el</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="s1">&#39;id&#39;</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">from</span><span class="w"> </span><span class="n">jsonb_array_elements</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">external_links</span><span class="p">)</span><span class="w"> </span><span class="n">el</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;documents&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">with</span><span class="w"> </span><span class="n">doc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">select</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">details</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">document</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">folder_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">desc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">json_agg</span><span class="p">(</span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w">   
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p">.</span><span class="n">title</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="s1">&#39;type&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="s1">&#39;details&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">json_agg</span><span class="p">(</span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dd</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dd</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">))</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">jsonb_array_elements</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">details</span><span class="p">)</span><span class="w"> </span><span class="n">dd</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">from</span><span class="w"> </span><span class="n">doc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">folder</span><span class="w"> </span><span class="n">f</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span></span></span></code></pre></div><p>Овде је искориштен CTE како би се добили и сортирали документи у траженом редослиједу, а затим се од њих креира JSON низ помоћу агрегатне функције.</p>
+<p>Сада када имамо упит, још је преостало да креирамо код који прихвата веб захтјев, извршава упит и просљеђује одговор без обраде.</p>
+<p>Ако користимо нпр. Go, HTTP ”руковалац” би могао да изгледа овако:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">folderGetHandler</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// добавити конекцију на базу, упит и број фолдера
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="nx">row</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">QueryRow</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">folderId</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">row</span><span class="p">.</span><span class="nf">Scan</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">s</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">server</span><span class="p">.</span><span class="nf">NotFoundResponse</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">w</span><span class="p">.</span><span class="nf">Header</span><span class="p">().</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;content-type&#34;</span><span class="p">,</span> <span class="s">&#34;application/json&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div><h3 id="резиме">Резиме</h3>
+<p>Упоредимо код изнад са оним који би се иначе користио за овакве сервисе. Са нешто дужим SQL упитом избјегавамо:</p>
+<ol>
+<li>Серијализацију и десеријализацију података у објекте и обратно. Само текст треба да се декодује.</li>
+<li>Спајање са везним табелама</li>
+<li>Додатне позиве на базу</li>
+<li>Достављање редундантних података преко мреже, као и њихово процесирање било гдје у апликацији</li>
+<li>Дефинисање додатних типова</li>
+<li>Потребу за едитовањем на више мјеста како би се измјенила структура одговора</li>
+</ol>
+<p>А уз адекватно <a href="https://www.drazengolic.com/sr/blog/text-search-postgres/">индексирање</a> табела, вријеме одзива сервиса ће да буде <em>примјетно краће</em>.</p>
+<h2 id="изазови">Изазови</h2>
+<p>Као што се може да се наслути, уклањање низа слојева апстракције на овај начин доноси и одређене изазове које је потребно узети у обзир приликом доношења одлуке о дизајну. Испод су наведени неки од њих.</p>
+<h3 id="подаци-изван-базе-података">Подаци изван базе података</h3>
+<p>Можда се подаци које је потребно вратити у одговору не налазе сви у бази података. Неки од њих могу да се налазе нпр. у корисничкој сесији, или у неком дјељеном ресурсу.</p>
+<p>Ако је количина тих података мала, онда би могли да се начине као дио упита, и затим их добити назад као дио одговора. Веће количине би вјероватно захтјевале обраду или спајање текста, што није баш погодно ни препоручљиво. Али ако се значајан дио одговора не налази у бази, онда овај приступ није адекватан, и више ће да створи проблема него што ће да буде користан.</p>
+<h3 id="специфичне-трансформације">Специфичне трансформације</h3>
+<p>Сада је вријеме да се вратимо на поље <code>mask</code> споменуто у примјеру. Захтјев који није ријешен у примјеру је да се детаљи из документа могу маскирати по неком предефинисаном шаблону, а који је смјештен у том пољу. Да ли то значи да треба да одбацимо све урађено и вратимо се на стари начин, због једне мање трансформације? Не нужно. Трансформација коју је потребно извршити је релативно једноставна, нема тзв. бочних ефеката, и може се лако написати као PL/pgSQL <a href="https://www.postgresql.org/docs/current/sql-createfunction.html">функција</a>:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PL/pgSQL" data-lang="PL/pgSQL"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">replace</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">mask_detail</span><span class="p">(</span><span class="n">mask</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="nb">text</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="k">returns</span><span class="w"> </span><span class="nb">text</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="k">language</span><span class="w"> </span><span class="n">plpgsql</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="k">immutable</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="n">parallel</span><span class="w"> </span><span class="n">safe</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="k">returns</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">input</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">as</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">declare</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="nb">text</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="nb">int</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">begin</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">trim</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">output</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="n">mask</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="c1">-- mask middle text
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="s1">&#39;abc***xyz&#39;</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="k">case</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">when</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;***&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">when</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;***&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">when</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;***&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">when</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">else</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;***&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">case</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="c1">-- other cases omitted for clarity
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w"> </span><span class="k">else</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">output</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="k">case</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">output</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">end</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">$$</span></span></span></code></pre></div><p>Сада подупит за детаље документа може да изгледа овако:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">json_agg</span><span class="p">(</span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dd</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mask_detail</span><span class="p">(</span><span class="n">dd</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">&#39;mask&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">dd</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">))</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">jsonb_array_elements</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">details</span><span class="p">)</span><span class="w"> </span><span class="n">dd</span></span></span></code></pre></div><p>Све ово значи да ће можда бити потребно да се и одређени дио кода, а који је уско везан за податке, пребаци у слој базе података (а са којим се управља кроз систем миграција, као и са табелама), а не само креирање одговора кроз упит. Ова идеја тешко ће да легне некоме коме се не допада да има логику ”разбацану на више мјеста”.</p>
+<p>Са друге стране, није неуобичајена појава да нека апликација функционише као низ одвојених сервиса задужених за различите ствари, па би PostgreSQL могао да се посматра као засебан <strong>сервис</strong> са којим се комуницира преко RPC API-ја, а који умјесто protobuf или JSON формата парсира SQL.</p>
+<h3 id="динамички-упити">Динамички упити</h3>
+<p>Разумно питање у овом моменту би било: <em>Како динамички да креирам упите? Немој ми рећи да сад треба да спајам SQL стрингове као у раним данима PHP-а?</em></p>
+<p>Креирање упита спајањем стрингова заиста јесте лоше рјешење - читљивост је лоша и погодно је тло за грешке. Како смо установили да ORM није опција, шта нам друго преостаје? Пошто су сада упити нешто дужи него иначе, рјешење које ћу да предложим је исто оно које су људи измислили како не би користили спајање стрингова за генерисање HTML кода: <strong>шаблонски језик</strong>.</p>
+<p>То може да буде било који шаблонски језик са сљедећим особинама:</p>
+<ol>
+<li>Има синтаксу која је лако уочљива у тексту. Они засновани на великим заградама би требало да одговарају.</li>
+<li>Брзо се парсира, или има механизам за кеширање, како би се једном парсирани шаблон могао да користи више пута.</li>
+</ol>
+<p>Испробао сам овај начин са Go-овим <a href="https://pkg.go.dev/text/template">text/template</a> и ембедовањем фајлова помоћу <a href="https://pkg.go.dev/embed">embed</a> директива, и за сада ми није одбојан (мада волио бих да постоји боља подршка за едитор). Напомињем да није потребан Go за ово, може се пробати нешто слично са шаблонским језицима попут <a href="https://twig.symfony.com/">Twig</a>, <a href="https://shopify.github.io/liquid/">Liquid</a>, <a href="http://mustache.github.io/">Mustache</a> или било ког другог који би могао да одговара.</p>
+<p>А како то заправо изгледа може да се види у примјеру испод, гдје су подаци о кориснику везаном за фолдер опциони:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">json_build_object</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s1">&#39;settings&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">json_build_object</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="s1">&#39;alert_on_visit&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">settings</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">&#39;alert_on_visit&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="s1">&#39;folder_color&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">settings</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">&#39;folder_color&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="err">{{</span><span class="k">if</span><span class="w"> </span><span class="p">.</span><span class="n">ShowUser</span><span class="err">}}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s1">&#39;user_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s1">&#39;user_profile&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">profile</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="err">{{</span><span class="k">end</span><span class="err">}}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="s1">&#39;external_links&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">json_agg</span><span class="p">(</span><span class="n">el</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="s1">&#39;id&#39;</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="k">from</span><span class="w"> </span><span class="n">jsonb_array_elements</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">external_links</span><span class="p">)</span><span class="w"> </span><span class="n">el</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">from</span><span class="w"> </span><span class="n">folder</span><span class="w"> </span><span class="n">f</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">{{</span><span class="k">if</span><span class="w"> </span><span class="p">.</span><span class="n">ShowUser</span><span class="err">}}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">user_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">{{</span><span class="k">end</span><span class="err">}}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span></span></span></code></pre></div><p>Није идеално, али цијеним да је боље рјешење од спајања стрингова. И при том је на располагању сав подржан SQL, без потребе за ”превођењем”.</p>
+<h2 id="закључак">Закључак</h2>
+<p>Презентујући ову идеју, надам се да сам подстакао читаоце на даље истраживање могућности алата које свакодневно користе, како би дошли до рјешења која су једноставнија и/или бржа. Лако је држати се принципа који су &ldquo;најмањи заједнички именилац&rdquo;, и менталитета &ldquo;одувијек радимо на овај начин&rdquo;, и на тај начин, фигуративно речено, одложити многе корисне ствари на таван да скупљају прашину, јер нисмо сигурни да ли да их користимо. И да, као прави инжењери, пажљиво анализирају исплативост сваке идеје у неком датом контексту.</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>Убрзавање претраге по текстуалном шаблону у PostgreSQL</title>
       <link>https://www.drazengolic.com/sr/blog/text-search-postgres/</link>
