@@ -9,6 +9,114 @@
     <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright>
     <lastBuildDate>Wed, 22 Nov 2023 11:22:23 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Projects</title>
+      <link>https://www.drazengolic.com/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/projects/</guid>
+      <description>Projects Some notable projects I&amp;rsquo;ve done over the years completely by myself (or with very little assistance).
+▷ QR4DOC (2022 - 2023) A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies. View project details
+Note: this project is in search for funding, or it&amp;rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</description>
+      <content:encoded><![CDATA[<h1 id="projects">Projects</h1>
+<p>Some notable projects I&rsquo;ve done over the years completely by myself (or with very little assistance).</p>
+<h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
+<p>A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies. <a href="https://www.drazengolic.com/qr4doc/">View project details</a></p>
+<blockquote>
+<p><strong>Note:</strong> this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</p>
+</blockquote>
+<h3 id="-salesforce-based-payment-processing-application-2019---2020">▷ Salesforce-based payment processing application (2019 - 2020)</h3>
+<p>An application that enabled Salesforce users to take order payments from customers on-site or online, by utilizing <a href="https://www.adyen.com/">Adyen</a> payment platform&rsquo;s <a href="https://docs.adyen.com/point-of-sale/design-your-integration/choose-your-architecture/cloud/">cloud-enabled</a> POS terminals and other forms of payment, such as online payments (supported 3-D Secure 1 &amp; 2), Apple Pay, and telephone orders. A record of a successful transaction was saved to Salesforce as a part of the paid order, with an option to issue a refund by this same app. POS payment section has displayed messages from the payment terminals in real-time.</p>
+<p>More than 90% of payment transactions to the company were processed by this application for a period of at least two years, with several millions of EUR worth in total.</p>
+<p>Tech stack: .NET Core, SignalR, Redis, Bash, Ubuntu. Some clients for the app&rsquo;s API-s were done in PHP.</p>
+<p><em>Company: Famille Carabello-Baum SAS (Château de Pommard) / Vivant Inc</em></p>
+<div style="column-count: 3;">
+  <a href="/images/payapp/1.jpg"><img src="/images/payapp/1.jpg" alt="Choose payment method"></a>
+<a href="/images/payapp/2.jpg"><img src="/images/payapp/2.jpg" alt="Chose POS terminal"></a>
+<a href="/images/payapp/3.jpg"><img src="/images/payapp/3.jpg" alt="POS screen"></a>
+</div>
+
+
+<h3 id="-plugins-for-e-commerce-systems-2016---2017">▷ Plugins for e-commerce systems (2016 - 2017)</h3>
+<p>Plugins for monitoring shopping cart contents and product views for: Woocommerce, Shopify, Magento 1 &amp; 2</p>
+<p><em>Company: Ematic Solutions Pte. Ltd., Singapore</em></p>
+<h3 id="-opengl-widget-for-react-native-on-ios-2016">▷ OpenGL widget for React Native on iOS (2016)</h3>
+<p>Developed an animated, gesture based three-dimensional rating widget as a React Native plugin in Objective-C by using plain OpenGL API. <a href="https://youtu.be/43CTs8OLhBI?t=143">Youtube Video</a></p>
+<p><em>Company: Oroundo Mobile GmbH, Austria</em></p>
+<h3 id="-scan-packer-2015---2016">▷ Scan Packer (2015 - 2016)</h3>
+<p>A desktop app (Java SE) and later a web app (HTML5 + PHP) for uploading large quantities of project images (scans) and organizing them into a structure suitable for the automated workflow system that was in place.</p>
+<p><em>Company: DOOB 3D Labs d.o.o. Banja Luka</em></p>
+<h3 id="-mobile-games-2013---2014">▷ Mobile games (2013 - 2014)</h3>
+<p>A couple of mobile games for Android that I did for fun by using Java and <a href="https://libgdx.com/">libGDX</a> under the pseudonim &ldquo;fontelee&rdquo;. Unfortunately, they&rsquo;re not available on the Play Store any more, since they&rsquo;re using old Google+ APIs and I&rsquo;ve lost important files required to update the games.</p>
+<p><a href="/images/penguin_hop.png"><figure><img src="/images/penguin_hop.png"
+         alt="Penguin Hop" width="50%"/><figcaption>
+            <p>Penguin Hop</p>
+        </figcaption>
+</figure>
+</a>
+<a href="/images/simon_swipes.png"><figure><img src="/images/simon_swipes.png"
+         alt="Simon Swipes" width="50%"/><figcaption>
+            <p>Simon Swipes</p>
+        </figcaption>
+</figure>
+</a></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Пројекти</title>
+      <link>https://www.drazengolic.com/sr/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/projects/</guid>
+      <description>Пројекти Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.
+▷ QR4DOC (2022 - 2023) Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, оригинално намијењен за полисе осигурања. Види детаље пројекта
+Напомена: у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље, молио бих да ме контактира.</description>
+      <content:encoded><![CDATA[<h1 id="пројекти">Пројекти</h1>
+<p>Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.</p>
+<h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
+<p>Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, оригинално намијењен за полисе осигурања. <a href="https://www.drazengolic.com/sr/qr4doc/">Види детаље пројекта</a></p>
+<blockquote>
+<p><strong>Напомена:</strong> у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље, молио бих да ме контактира.</p>
+</blockquote>
+<h3 id="-апликација-за-наплату-интегрисана-са-salesforce-системом-2019---2020">▷ Апликација за наплату интегрисана са Salesforce системом (2019 - 2020)</h3>
+<p>Апликација која омогућује корисницима Salesforce система да наплаћују наруџбе на лицу мјеста или путем интернета, користећи <a href="https://www.adyen.com/">Adyen</a> систем за плаћање и њихове ПОС терминале <a href="https://docs.adyen.com/point-of-sale/design-your-integration/choose-your-architecture/cloud/">у облаку</a>, као и друге видове плаћања, попут онлајн плаћања (подржани 3-D Secure 1 и 2), Apple Pay, или телефонских наруџби. Запис о успјешној трансакцији се сачувао као дио наруџбе која је плаћена, а коју је било могуће и рефундирати помоћу ове исте апликације. Сегмент за ПОС плаћање је приказивао поруке са ПОС терминала у реалном времену.</p>
+<p>Више од 90% платног промета компаније је ишло преко ове апликације у периоду од најмање двије године, са укупном вриједношћу од неколико милиона евра.</p>
+<p>Технологије: .NET Core, SignalR, Redis, Bash, Ubuntu. Неке апликације писане као клијент API-ја ове апликације су писане у PHP-у.</p>
+<p><em>Компанија: Famille Carabello-Baum SAS (Château de Pommard) / Vivant Inc</em></p>
+<div style="column-count: 3;">
+  <a href="/images/payapp/1.jpg"><img src="/images/payapp/1.jpg" alt="Choose payment method"></a>
+<a href="/images/payapp/2.jpg"><img src="/images/payapp/2.jpg" alt="Chose POS terminal"></a>
+<a href="/images/payapp/3.jpg"><img src="/images/payapp/3.jpg" alt="POS screen"></a>
+</div>
+
+
+<h3 id="-додаци-за-e-commerce-системе-2016---2017">▷ Додаци за e-commerce системе (2016 - 2017)</h3>
+<p>Додаци (plugins) за праћење садржаја корпе за куповину и прегледања производа за платформе: Woocommerce, Shopify, Magento 1 &amp; 2</p>
+<p><em>Компанија: Ematic Solutions Pte. Ltd., Singapore</em></p>
+<h3 id="-opengl-виџет-за-react-native-на-ios-у-2016">▷ OpenGL виџет за React Native на iOS-у (2016)</h3>
+<p>Анимирани виџет за оцјењивање у три димензије путем гестуре прстом, развијен као додатак за React Native, писан у Objective-C помоћу нативног OpenGL API-а. <a href="https://youtu.be/43CTs8OLhBI?t=143">Youtube видео</a></p>
+<p><em>Компанија: Oroundo Mobile GmbH, Austria</em></p>
+<h3 id="-пакер-скенова-2015---2016">▷ Пакер Скенова (2015 - 2016)</h3>
+<p>Десктоп апликација (Java SE) а касније и веб апликација (HTML5 + PHP) за отпремање великих количина слика (скенова) и њихово организовање у структуру погодну за систем за аутоматизовање радног процеса који је тада кориштен.</p>
+<p><em>Компанија: DOOB 3D Labs d.o.o. Banja Luka</em></p>
+<h3 id="-игрице-за-мобилни-телефон-2013---2014">▷ Игрице за мобилни телефон (2013 - 2014)</h3>
+<p>Пар игрица за Android које сам направио из разоноде, користећи језик Java и <a href="https://libgdx.com/">libGDX</a> под псеудонимом &ldquo;fontelee&rdquo;. Нажалост, нису више доступне на Play Store-у, јер користе стари Google+ API, а загубио сам важне датотеке потребне да се игрице ажурирају.</p>
+<p><a href="/images/penguin_hop.png"><figure><img src="/images/penguin_hop.png"
+         alt="Penguin Hop" width="50%"/><figcaption>
+            <p>Penguin Hop</p>
+        </figcaption>
+</figure>
+</a>
+<a href="/images/simon_swipes.png"><figure><img src="/images/simon_swipes.png"
+         alt="Simon Swipes" width="50%"/><figcaption>
+            <p>Simon Swipes</p>
+        </figcaption>
+</figure>
+</a></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Build a JSON response directly in PostgreSQL</title>
       <link>https://www.drazengolic.com/blog/json-response-postgres/</link>
       <pubDate>Wed, 22 Nov 2023 11:22:23 +0200</pubDate>
@@ -1103,6 +1211,88 @@ Query the data Transform it to the required format Send it over the wire Looks s
 <li>Топло препоручујем веб сајт <a href="https://use-the-index-luke.com/">Use The Index, Luke!</a> који води Маркус Винанд, гдје може много да се научи о индексирању података и SQL-у, пријеко потребном знању за сваког чији опис посла укључује рад са базама података</li>
 <li>Ако неког интересује више примјера из области оптимизације перформанси, направио сам GitHub <a href="https://github.com/drazengolic/music-streamer-db">репозиторијум</a> гдје сам се бавио техникама оптимизације сличним онима описаним у овом чланку, као и неким стратегијама денормализације података</li>
 </ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>QR4DOC</title>
+      <link>https://www.drazengolic.com/sr/qr4doc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/qr4doc/</guid>
+      <description>QR4DOC Напомена: у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље на било који начин, молио бих да ме контактира.
+Опис Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, примарно намијењен за полисе осигурања.
+Сервис генерише јединствени линк који се затим угради у документ у виду QR кода.</description>
+      <content:encoded><![CDATA[<h1 id="qr4doc">QR4DOC</h1>
+<p><em><strong>Напомена:</strong> у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље на било који начин, молио бих да ме контактира.</em></p>
+<h2 id="опис">Опис</h2>
+<p>Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, примарно намијењен за полисе осигурања.</p>
+<p>Сервис генерише јединствени линк који се затим угради у документ у виду QR кода. Скенирањем кода и отварањем линка биће приказан резиме документа (свих његових верзија) како би се <strong>визуелно упоредио</strong> са важним елементима из документа, као метод утврђивања да ли је документ <strong>фалсификат</strong> или је <strong>застарио</strong>. Приказ такође може да садржи неке екстерне линкове везане за документ (попут линка за плаћање, контакта и сл.), а могуће је и претплатити се на обавјештења о новим верзијама или о промјени статуса, уколико је статус додјељен документу.</p>
+<h2 id="технички-детаљи">Технички детаљи</h2>
+<p>Примарни сервис:</p>
+<ul>
+<li>Тзв. вишестанарска (по издавачу документа), вишејезична апликација која садржи веб кориснички интерфејс и JSON API, станарство је засновано на комбинацији засебних PostgreSQL шема са станарским кључем</li>
+<li>Креирање издавача и њихова ограничења у кориштењу (зависно од нивоа претплате, ручно се подешава), глобална ограничења кориштења и обраде захтјева, креирање и пријављивање корисника, креирање картотека и докумената (документи могу само да се додају), маскирање детаља докумената, форма за притужбе посјетилаца, основна статистика о посјетиоцима, web push нотификације</li>
+<li>QR и DataMatrix кодови за генерисане јединствене линкове</li>
+<li>Развијено у технологијама <a href="https://elixir-lang.org/">Elixir</a> + <a href="https://www.phoenixframework.org/">Phoenix LiveView</a> + <a href="https://tailwindcss.com/">Tailwind</a> + хакови, објављено као systemd сервис на Ubuntu машини иза <a href="https://caddyserver.com/">Caddy</a> прокси сервера, blue-green објављивање преко специјалних bash скрипти (извршни програм се компајлира локално)</li>
+<li>Преводи на: Енглески, Српски (ћирилица), Босански, Хрватски</li>
+</ul>
+<p>Секундарни (нетестирани) сервис:</p>
+<ul>
+<li>API за мобилну апликацију са посебним системом за ауторизацију преко јавних кључева, претплаћивање на push нотификације и њихова достава путем <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> или Huawei PushKit</li>
+<li>Развијен у Go језику, са крајњим циљем да се сва функционалност пребаци из примарног сервиса у овај, ради побољшања портабилности и дугорочне одрживости апликације.</li>
+</ul>
+<p>Мобилна апликација је планирана, али није развијена.</p>
+<h2 id="неке-слике-екрана">Неке слике екрана</h2>
+<div style="column-count: 2;">
+  <a href="/images/qr4doc/1.png"><img src="/images/qr4doc/1.png" alt="Приказ документа"></a>
+<a href="/images/qr4doc/2.png"><img src="/images/qr4doc/2.png" alt="Почетни екран"></a>
+<a href="/images/qr4doc/3.png"><img src="/images/qr4doc/3.png" alt="Претрага докумената"></a>
+<a href="/images/qr4doc/4.png"><img src="/images/qr4doc/4.png" alt="Обрада докумената"></a>
+</div>
+
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>QR4DOC</title>
+      <link>https://www.drazengolic.com/qr4doc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/qr4doc/</guid>
+      <description>QR4DOC Note: this project is in search for funding, or it&amp;rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.
+Description A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.
+It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&amp;rsquo;s versions) for a visual comparison of important document elements as a method of checking if the print is a fraud copy or obsolete.</description>
+      <content:encoded><![CDATA[<h1 id="qr4doc">QR4DOC</h1>
+<p><em><strong>Note:</strong> this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</em></p>
+<h2 id="description">Description</h2>
+<p>A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.</p>
+<p>It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&rsquo;s versions) for a <strong>visual comparison</strong> of important document elements as a method of checking if the print is a <strong>fraud copy</strong> or <strong>obsolete</strong>. The page can also contain multiple web links (think Linktree) relevant for the document, and visitors can subscribe for notifications on new document versions, or the change of it&rsquo;s status if it has any.</p>
+<h2 id="technical-details">Technical details</h2>
+<p>Primary service:</p>
+<ul>
+<li>Multi-tenant (per document issuer), multilingual application that hosts the Web UI and a JSON API, tenancy is based on combination of separate PostgreSQL schemas and a tenant key</li>
+<li>Issuer creation and usage limits (depending on subscription, manually configured), global usage limits &amp; request throttling, User creation and auth, file &amp; document creation (documents are append only), document detail masking, visitor complaint forms, basic visitor stats, web push notifications on file update</li>
+<li>QR and DataMatrix codes for generated file URLs</li>
+<li>Developed in <a href="https://elixir-lang.org/">Elixir</a> + <a href="https://www.phoenixframework.org/">Phoenix LiveView</a> + <a href="https://tailwindcss.com/">Tailwind</a> + hacks, deployed as systemd service on an Ubuntu box behind a <a href="https://caddyserver.com/">Caddy</a> server proxy, blue-green deployment via custom bash scripts (binaries built locally)</li>
+<li>Translations for: English, Serbian (cyrillic), Bosnian, Croatian</li>
+</ul>
+<p>Secondary (untested) service:</p>
+<ul>
+<li>Mobile API service with a custom public key authentication, push notification subscriptions and delivery via <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> or Huawei PushKit</li>
+<li>Developed in Go language, with an end-goal to port all functionality from the primary service in order to improve portability and maintainability of the project</li>
+</ul>
+<p>Mobile client app was planned, but not developed.</p>
+<h2 id="some-screenshots">Some screenshots</h2>
+<div style="column-count: 2;">
+  <a href="/images/qr4doc/1.png"><img src="/images/qr4doc/1.png" alt="Document view"></a>
+<a href="/images/qr4doc/2.png"><img src="/images/qr4doc/2.png" alt="Home screen"></a>
+<a href="/images/qr4doc/3.png"><img src="/images/qr4doc/3.png" alt="Document search"></a>
+<a href="/images/qr4doc/4.png"><img src="/images/qr4doc/4.png" alt="Document edit"></a>
+</div>
+
+
 ]]></content:encoded>
     </item>
     

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="https://www.drazengolic.com/images/favicon.png" />
+<title>QR4DOC | Drazen Golic</title>
+<meta name="title" content="QR4DOC" />
+<meta name="description" content="QR4DOC Note: this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.
+Description A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.
+It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&rsquo;s versions) for a visual comparison of important document elements as a method of checking if the print is a fraud copy or obsolete." />
+<meta name="keywords" content="" />
+
+
+
+
+
+
+  
+  <meta property="og:title" content="QR4DOC" />
+<meta property="og:description" content="QR4DOC Note: this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.
+Description A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.
+It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&rsquo;s versions) for a visual comparison of important document elements as a method of checking if the print is a fraud copy or obsolete." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.drazengolic.com/qr4doc/" /><meta property="og:image" content="https://www.drazengolic.com/images/qr4doc/2.png" /><meta property="article:section" content="" />
+
+<meta property="og:site_name" content="Drazen Golic" />
+
+
+  
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.drazengolic.com/images/qr4doc/2.png"/>
+
+<meta name="twitter:title" content="QR4DOC"/>
+<meta name="twitter:description" content="QR4DOC Note: this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.
+Description A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.
+It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&rsquo;s versions) for a visual comparison of important document elements as a method of checking if the print is a fraud copy or obsolete."/>
+<meta name="twitter:site" content="@Drazen_88"/>
+
+
+  
+  <meta itemprop="name" content="QR4DOC">
+<meta itemprop="description" content="QR4DOC Note: this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.
+Description A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.
+It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&rsquo;s versions) for a visual comparison of important document elements as a method of checking if the print is a fraud copy or obsolete.">
+
+<meta itemprop="wordCount" content="321"><meta itemprop="image" content="https://www.drazengolic.com/images/qr4doc/2.png">
+<meta itemprop="keywords" content="" />
+
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+  
+  <link href="/style.min.css" rel="stylesheet">
+
+  
+
+  
+
+  
+</head>
+
+<body>
+  <header><a class="skip-link" href="#main-content">Skip to main content</a>
+
+<a href="/" class="title"><h1>Drazen Golic</h1></a>
+<nav>
+  <a href="/">Home</a>
+
+  <a href="/blog/">Blog</a>
+
+  <a href="/projects/">Projects</a>
+
+<a href='https://www.drazengolic.com/index.xml'>RSS</a>
+
+
+
+
+  
+
+
+
+
+  
+    <a href="https://www.drazengolic.com/sr/qr4doc/">sr 🇷🇸</a>
+  
+
+</nav>
+</header>
+  <main id="main-content">
+
+<content>
+  <h1 id="qr4doc">QR4DOC</h1>
+<p><em><strong>Note:</strong> this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</em></p>
+<h2 id="description">Description</h2>
+<p>A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.</p>
+<p>It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&rsquo;s versions) for a <strong>visual comparison</strong> of important document elements as a method of checking if the print is a <strong>fraud copy</strong> or <strong>obsolete</strong>. The page can also contain multiple web links (think Linktree) relevant for the document, and visitors can subscribe for notifications on new document versions, or the change of it&rsquo;s status if it has any.</p>
+<h2 id="technical-details">Technical details</h2>
+<p>Primary service:</p>
+<ul>
+<li>Multi-tenant (per document issuer), multilingual application that hosts the Web UI and a JSON API, tenancy is based on combination of separate PostgreSQL schemas and a tenant key</li>
+<li>Issuer creation and usage limits (depending on subscription, manually configured), global usage limits &amp; request throttling, User creation and auth, file &amp; document creation (documents are append only), document detail masking, visitor complaint forms, basic visitor stats, web push notifications on file update</li>
+<li>QR and DataMatrix codes for generated file URLs</li>
+<li>Developed in <a href="https://elixir-lang.org/">Elixir</a> + <a href="https://www.phoenixframework.org/">Phoenix LiveView</a> + <a href="https://tailwindcss.com/">Tailwind</a> + hacks, deployed as systemd service on an Ubuntu box behind a <a href="https://caddyserver.com/">Caddy</a> server proxy, blue-green deployment via custom bash scripts (binaries built locally)</li>
+<li>Translations for: English, Serbian (cyrillic), Bosnian, Croatian</li>
+</ul>
+<p>Secondary (untested) service:</p>
+<ul>
+<li>Mobile API service with a custom public key authentication, push notification subscriptions and delivery via <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> or Huawei PushKit</li>
+<li>Developed in Go language, with an end-goal to port all functionality from the primary service in order to improve portability and maintainability of the project</li>
+</ul>
+<p>Mobile client app was planned, but not developed.</p>
+<h2 id="some-screenshots">Some screenshots</h2>
+<div style="column-count: 2;">
+  <a href="/images/qr4doc/1.png"><img src="/images/qr4doc/1.png" alt="Document view"></a>
+<a href="/images/qr4doc/2.png"><img src="/images/qr4doc/2.png" alt="Home screen"></a>
+<a href="/images/qr4doc/3.png"><img src="/images/qr4doc/3.png" alt="Document search"></a>
+<a href="/images/qr4doc/4.png"><img src="/images/qr4doc/4.png" alt="Document edit"></a>
+</div>
+
+
+
+</content>
+<p>
+  
+</p>
+
+
+  </main>
+  <footer><small>
+  © Drazen Golic (<a href="https://creativecommons.org/licenses/by/4.0/deed.en">CC BY 4.0</a>) | Made with <a href="https://github.com/clente/hugo-bearcub">Bear Cub</a>
+</small></footer>
+
+    
+</body>
+
+</html>
