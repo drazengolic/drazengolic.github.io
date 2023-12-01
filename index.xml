@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright>
-    <lastBuildDate>Wed, 22 Nov 2023 11:22:23 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 28 Nov 2023 11:30:23 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Projects</title>
       <link>https://www.drazengolic.com/projects/</link>
@@ -113,6 +113,256 @@ Note: this project is in search for funding, or it&amp;rsquo;s source code is fo
         </figcaption>
 </figure>
 </a></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Hire me</title>
+      <link>https://www.drazengolic.com/hire-me/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/hire-me/</guid>
+      <description>Hire me I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp;amp; management.
+A non-exhaustive list of technologies I can use to deliver working solutions:
+Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreSQL, MySQL, Redis Cloud services: any Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.
+With my personal network of skilled professionals, it is also possible to arrange a complete greenfield or brownfield project development by covering the following areas: service development, web development, mobile application development, Salesforce development, UI/UX design, product management.</description>
+      <content:encoded><![CDATA[<h1 id="hire-me">Hire me</h1>
+<p>I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp; management.</p>
+<p>A non-exhaustive list of technologies I can use to deliver working solutions:</p>
+<ul>
+<li>Programming languages: PHP, Go, Elixir, C#, Java, JavaScript</li>
+<li>Databases: PostgreSQL, MySQL, Redis</li>
+<li>Cloud services: any</li>
+</ul>
+<p>Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.</p>
+<p>With my personal network of skilled professionals, it is also possible to arrange a complete <strong>greenfield</strong> or <strong>brownfield</strong> project development by covering the following areas: service development, web development, mobile application development, Salesforce development, UI/UX design, product management.</p>
+<h2 id="contact">Contact</h2>
+<p>To contact me, please fill out the form below.</p>
+
+<form id="fs-frm" name="contact-form" accept-charset="utf-8" action="https://formspree.io/f/mjvqqlgy" method="post">
+    <input type="text" name="name" id="full-name" placeholder="Full Name" required="">
+    <input type="text" name="company" id="company" placeholder="Company" required="">
+    <input type="email" name="_replyto" id="email-address" placeholder="E-mail Address" required="">
+    <textarea rows="5" name="message" id="message" placeholder="Enter your message..." required=""></textarea>
+    <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission">
+    <input type="hidden" name="lang" id="lang" value="en">
+  <input type="submit" value="Submit">
+</form>
+<script>
+    (function() {
+      var form = document.getElementById("fs-frm");     
+      async function handleSubmit(event) {
+        event.preventDefault();
+        var data = new FormData(event.target);
+        fetch(event.target.action, {
+          method: form.method,
+          body: data,
+          headers: {
+              'Accept': 'application/json'
+          }
+        }).then(response => {
+          if (response.ok) {
+            alert("Thanks for your contacting me! You can expect a reply within 24 hours.");
+            form.reset()
+          } else {
+            response.json().then(data => {
+              if (Object.hasOwn(data, 'errors')) {
+                alert(data["errors"].map(error => error["message"]).join(", "))
+              } else {
+                alert("Oops! There was a problem submitting your form")
+              }
+            })
+          }
+        }).catch(error => {
+          alert("Oops! There was a problem submitting your form")
+        });
+      }
+      form.addEventListener("submit", handleSubmit)})();
+</script>
+
+<p>Or, if you&rsquo;d rather email me directly, running the following snippet in a <em>macOS</em> or a <em>GNU/Linux</em> terminal will reveal my e-mail address:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;ZHJhemVuQGZhc3R&#34;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1&#34;tYWlsLmNvbQ==&#34;}&#39;</span> <span class="p">|</span> base64 --decode<span class="sb">`</span></span></span></code></pre></div><p>Please allow up to 24h for me to get back to you.</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Ангажуј ме</title>
+      <link>https://www.drazengolic.com/sr/hire-me/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/hire-me/</guid>
+      <description>Ангажуј ме Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.
+Непотпуна листа технологија у којима могу да доставим функционална рјешења:
+Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript Базе података: PostgreSQL, MySQL, Redis Сервиси у ”облаку”: било који Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.
+Са мојом личном мрежом искусних професионалаца, такође је могуће је договорити развој нових или постојећих пројеката у потпуности, покривајући сљедеће области: развој сервиса, веб развој, развој мобилних апликација, Salesforce развој, UI/UX дизајн, управљање развојем производа.</description>
+      <content:encoded><![CDATA[<h1 id="ангажуј-ме">Ангажуј ме</h1>
+<p>Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.</p>
+<p>Непотпуна листа технологија у којима могу да доставим функционална рјешења:</p>
+<ul>
+<li>Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript</li>
+<li>Базе података: PostgreSQL, MySQL, Redis</li>
+<li>Сервиси у ”облаку”: било који</li>
+</ul>
+<p>Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.</p>
+<p>Са мојом личном мрежом искусних професионалаца, такође је могуће је договорити развој <strong>нових</strong> или <strong>постојећих</strong> пројеката у потпуности, покривајући сљедеће области: развој сервиса, веб развој, развој мобилних апликација, Salesforce развој, UI/UX дизајн, управљање развојем производа.</p>
+<h2 id="контакт">Контакт</h2>
+<p>Да бисте ме контактирали, попуните форму испод.</p>
+
+<form id="fs-frm" name="contact-form" accept-charset="utf-8" action="https://formspree.io/f/mjvqqlgy" method="post">
+    <input type="text" name="name" id="full-name" placeholder="Пуно име" required="">
+    <input type="text" name="company" id="company" placeholder="Компанија" required="">
+    <input type="email" name="_replyto" id="email-address" placeholder="E-mail адреса" required="">
+    <textarea rows="5" name="message" id="message" placeholder="Унеси поруку..." required=""></textarea>
+    <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission">
+    <input type="hidden" name="lang" id="lang" value="sr">
+  <input type="submit" value="Пошаљи">
+</form>
+<script>
+    (function() {
+      var form = document.getElementById("fs-frm");     
+      async function handleSubmit(event) {
+        event.preventDefault();
+        var data = new FormData(event.target);
+        fetch(event.target.action, {
+          method: form.method,
+          body: data,
+          headers: {
+              'Accept': 'application/json'
+          }
+        }).then(response => {
+          if (response.ok) {
+            alert("Хвала што сте ме контактирали! Одговор очекујте у року од 24 часа.");
+            form.reset()
+          } else {
+            response.json().then(data => {
+              if (Object.hasOwn(data, 'errors')) {
+                alert(data["errors"].map(error => error["message"]).join(", "))
+              } else {
+                alert("Грешка у слању поруке.")
+              }
+            })
+          }
+        }).catch(error => {
+          alert("Грешка у слању поруке.")
+        });
+      }
+      form.addEventListener("submit", handleSubmit)})();
+</script>
+
+<p>Или ако пак желите да ми пошаљете мејл директно, извршавање кода испод у <em>macOS</em> или <em>GNU/Linux</em> терминалу ће да прикаже моју адресу:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;ZHJhemVuQGZhc3R&#34;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1&#34;tYWlsLmNvbQ==&#34;}&#39;</span> <span class="p">|</span> base64 --decode<span class="sb">`</span></span></span></code></pre></div><p>Молим дозволите до 24 часа за одговор.</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Securing server APIs for mobile apps without user registration</title>
+      <link>https://www.drazengolic.com/blog/secure-mobile-api/</link>
+      <pubDate>Tue, 28 Nov 2023 11:30:23 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/blog/secure-mobile-api/</guid>
+      <description>The Problem Let&amp;rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You&amp;rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&amp;rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&amp;rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&amp;rsquo;re paying for.</description>
+      <content:encoded><![CDATA[<h2 id="the-problem">The Problem</h2>
+<p>Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:</p>
+<ul>
+<li>You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering</li>
+<li>You could turn down many users from using the app by asking them to register</li>
+<li>Creating the social login or login/registration workflow with emails is tedious</li>
+<li>You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to</li>
+</ul>
+<p>Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for.</p>
+<p>There are a couple of options being used in the wild, but all of them are flawed:</p>
+<ol>
+<li><em>Fully open API</em> - we already decided this is unacceptable</li>
+<li><em>Using a secret key shared between the app and the server</em> - This is easy to break, as the apps are relatively easy to decompile and have all the string constants extracted from them. And if the key gets compromised, you&rsquo;ll have to update both the app and the server, until the new key gets compromised just as the previous one</li>
+<li><em>Splitting the key to different parts of the app, or using some simplistic algorithm to generate one</em> - This isn&rsquo;t much harder to discover than a stored string, so it&rsquo;s just as futile as the previous option</li>
+</ol>
+<p>Now, even if you require users to register, someone savvy enough to extract their legit access token to your APIs can still misuse them if you don&rsquo;t have a mechanism in place to <strong>limit their usage</strong>, such as request limits and throttling. You can limit your API usage based on the IP address (and you should <strong>always</strong> do that!), but this limitation can be easily avoided by using different proxy servers, or by having access to a fleet of hosts with different IP addresses.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>So, you still need <em>some</em> form of registration. But instead of users, you could <strong>register a device</strong> running your app. But how do you make sure that it&rsquo;s <em>your app</em> that is asking to register, and not something else? With something unique to your app: <strong>push notifications</strong>.</p>
+<blockquote>
+<p><strong>Disclaimer</strong>: there are no bullet-proof solutions, and neither it&rsquo;s this one. However, it&rsquo;s good enough to keep those less tech-savvy and less motivated at bay, while enabling you to apply different security strategies just like for APIs with user authentication.</p>
+</blockquote>
+<p>Without further ado, here is a full <a href="https://en.wikipedia.org/wiki/Sequence_diagram">sequence diagram</a> of the device registration workflow:</p>
+<figure><img src="/images/mobile_secure_en.png"
+         alt="Device registration worflow"/><figcaption>
+            <p>Device registration worflow</p>
+        </figcaption>
+</figure>
+
+<p><em><strong>TL;DR</strong>: the app is asking the server to send it a registration URL via push data message, that is also encrypted with a public key generated by the app.</em></p>
+<p>After the registration is complete, you can continue with the usual <strong>refresh token</strong> flow to access the APIs.</p>
+<p>Some important notes about the challenges:</p>
+<ul>
+<li>Time to complete the challenge should be relatively short, no more than a couple of minutes</li>
+<li>Endpoints for requesting and completing the challenge are open, and should be heavily throttled</li>
+<li>There should be a scheduled job in place to regularly delete all of the expired challenges from the database (or set a TTL value if using something like Redis)</li>
+</ul>
+<p>Generated device ID could be an UUID, or anything similar. And if delivering push notifications is a regular feature of the app, it&rsquo;s a good idea to store the ID with the push service registration token together somewhere (effectively registering a device account) so you could easily update the token on the server when the app receives a new one from the push service. Note that you <strong>don&rsquo;t need</strong> to ask users for permission to retreive data messages without displaying a notification.</p>
+<p>Having the device ID in the access and refresh tokens will allow you to limit usage per device, and in case of a detected misbehavior, even deny refreshing the access token (thus shutting down the device account either temporary or permanently). Expiration time for the new access tokens should be reasonably short.</p>
+<h2 id="usage-in-the-real-world">Usage in The Real World™</h2>
+<p>While I have a PoC project with this design, it&rsquo;s not ready for production yet. But if you like the idea and decide to use it in production yourself, please do give me a shout on how it went over any channel where I&rsquo;m present! Maybe there are no comments on this website, but I&rsquo;d be happy to publish any real world experiences (with your permission) as a part of this article.</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Заштита API сервиса за мобилне апликације без регистрације корисника</title>
+      <link>https://www.drazengolic.com/sr/blog/secure-mobile-api/</link>
+      <pubDate>Tue, 28 Nov 2023 11:30:23 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/blog/secure-mobile-api/</guid>
+      <description>Проблем Претпоставимо да је потребно креирати API сервис за мобилну апликацију, при чему апликација мора да буде потпуно функционална без тражења од корисника да се (првобитно) региструју. Разлога може да буде више, на примјер:
+Апликација само преузима неки садржај, и нема очигледне користи од регистрације ни за нас ни за кориснике Многе потенцијалне кориснике може да одбије захтјев за регистрацијом Креирање логовања преко социјалних мрежа или регистрације са имејлом и шифром је напорно Брину нас стриктни GDPR прописи и радије не би да имамо приступ приватним подацима ако за њима нема потребе Али, и даље желимо да наши API сервиси буду екслузивни за нашу апликацију, како би спријечили злоупотребу података, али и ресурса за које плаћамо.</description>
+      <content:encoded><![CDATA[<h2 id="проблем">Проблем</h2>
+<p>Претпоставимо да је потребно креирати API сервис за мобилну апликацију, при чему апликација мора да буде потпуно функционална без тражења од корисника да се (првобитно) региструју. Разлога може да буде више, на примјер:</p>
+<ul>
+<li>Апликација само преузима неки садржај, и нема очигледне користи од регистрације ни за нас ни за кориснике</li>
+<li>Многе потенцијалне кориснике може да одбије захтјев за регистрацијом</li>
+<li>Креирање логовања преко социјалних мрежа или регистрације са имејлом и шифром је напорно</li>
+<li>Брину нас стриктни GDPR прописи и радије не би да имамо приступ приватним подацима ако за њима нема потребе</li>
+</ul>
+<p>Али, и даље желимо да наши API сервиси буду екслузивни за нашу апликацију, како би спријечили злоупотребу података, али и ресурса за које плаћамо.</p>
+<p>Може се наићи на неколико опција, али су све проблематичне:</p>
+<ol>
+<li><em>Потпуно отворен API</em> - За ово смо се већ изјаснили да није опција</li>
+<li><em>Кориштење тајног кључа, дијељеног између апликације и сервера</em> - Ово је лако провалити, јер се апликације релативно лако декомпајлирају, а текстуалне константе извлаче без проблема. У случају да се кључ открије, потребно је ажурирати и апликацију и сервер, и функционисаће све док се и нови кључ не открије на потпуно исти начин</li>
+<li><em>Спремање дијелова кључа на различита мјеста у коду, или кориштење релативно једноставног алгоритма за његово генерисање</em> - Ово није знатно теже за провалити од претходног случаја, тако да подједнако није вриједно труда</li>
+</ol>
+<p>Међутим, све и да тражимо од корисника да се региструју, неко ко је довољно способан да открије свој легитимно добијени приступни кључ према API сервисима, и даље може да их злоупотријеби уколико не постоји механизам <strong>за ограничавање њиховог кориштења</strong>, попут ограничавања и пригушивања броја захтјева. Можемо поставити ограничења на бази ИП адреса (и то је <strong>увијек</strong> потребно!), али то ограничење се лако заобиђе кориштењем различитих прокси сервера, или са могућношћу приступа већем броју уређаја са конекцијом на интернет и са различитим ИП адресама.</p>
+<h2 id="рјешење">Рјешење</h2>
+<p>Дакле, и даље нам је потребан <em>некакав</em> вид регистрације. Али, умјесто корисника, можемо да <strong>региструјемо уређај</strong>. Међутим, како ћемо да знамо да је управо <em>наша апликација</em> та која жели да се региструје, а не неко или нешто друго? Тако што ћемо да искористимо нешто што је јединствено за нашу апликацију, а то су <strong>пуш нотификације</strong>.</p>
+<blockquote>
+<p><strong>Одрицање од одговорности</strong>: не постоје рјешења која су непробојна, а самим тим ни ово није једно од њих. Међутим, довољно је добро да држи подаље оне који су мање технички спретни или мање мотивисани, а уједно и омогућује примјену сигурносних стратегија сличних онима гдје постоје регистровани корисници.</p>
+</blockquote>
+<p>Без даљег дужења, слиједи потпуни <a href="https://en.wikipedia.org/wiki/Sequence_diagram">дијаграм секвенци</a> процеса регистрације уређаја:</p>
+<figure><img src="/images/mobile_secure_sr.png"
+         alt="Процес регистрације уређаја"/><figcaption>
+            <p>Процес регистрације уређаја</p>
+        </figcaption>
+</figure>
+
+<p><em>Укратко речено: апликација тражи од сервера да јој пошаље УРЛ за регистрацију преко податковне пуш поруке, који је уједно енкриптован јавним кључем који је генерисала апликација.</em></p>
+<p>Након што је регистрација завршена, наредне аутентикације уређаја на API могу да се обављају стандардним <strong>освјежавањем токена</strong>.</p>
+<p>Важне напомене у вези изазова за регистрацију:</p>
+<ul>
+<li>Рок да се испуни неки изазов треба да буде релативно кратак, не дужи од пар минута</li>
+<li>Серверске руте за захтјевање и испуњавање изазова су јавне, и приступ њима треба да буде што боље ограничен</li>
+<li>Потребно је имплементирати некакав процес у позадини који ће да брише све изазове из базе чији је рок истекао (или постављањем TTL вриједности ако се користи нпр. Redis)</li>
+</ul>
+<p>Генерисани ЈИБ уређаја може да буде UUID или нешто слично. А ако је достављање пуш нотификација саставни дио апликације, онда би било добро негдје сачувати ЈИБ заједно са регистрационим токеном пуш сервиса (и тако ефективно направити налог за уређај), како би се регистрациони токен лако ажурирао на серверу након што мобилна апликација добије нови токен од пуш сервиса. Важно је напоменути да <strong>није потребно</strong> одобрење од корисника апликације за добијање податковних порука уколико оне не садрже нотификације.</p>
+<p>Чувајући ЈИБ уређаја унутар приступног токена и токена за освјежавање нам омогућава да ограничимо кориштење сервиса по уређају, а у случају да је детектовано сумњиво понашање, могуће је и одбити захтјев за освјежењем приступног токена и тако привремено или трајно угасити налог. Зато је потребно да рок трајања приступног токена буде разумно кратак.</p>
+<h2 id="употреба-у-стварном-свијету">Употреба у Стварном Свијету™</h2>
+<p>Иако имам пројекат који је тзв. доказ концепта овог дизајна, он није још увијек спреман за продукцију. Међутим, ако се некоме свидјела идеја и жели да је примијени у својој апликацији, волио бих да сазнам колико добро је прошла, и о том ме можете обавијестити преко било ког канала на којем сам присутан. Можда немам коментаре на овом сајту, али радо ћу објавити искуства из ”стварног свијета” у оквиру овог чланка, наравно уз одобрење.</p>
 ]]></content:encoded>
     </item>
     
@@ -1239,7 +1489,7 @@ Query the data Transform it to the required format Send it over the wire Looks s
 </ul>
 <p>Секундарни (нетестирани) сервис:</p>
 <ul>
-<li>API за мобилну апликацију са посебним системом за ауторизацију преко јавних кључева, претплаћивање на push нотификације и њихова достава путем <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> или Huawei PushKit</li>
+<li>API за мобилну апликацију са посебним <a href="https://www.drazengolic.com/sr/blog/secure-mobile-api/">системом за ауторизацију</a> преко јавних кључева, претплаћивање на push нотификације и њихова достава путем <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> или Huawei PushKit</li>
 <li>Развијен у Go језику, са крајњим циљем да се сва функционалност пребаци из примарног сервиса у овај, ради побољшања портабилности и дугорочне одрживости апликације.</li>
 </ul>
 <p>Мобилна апликација је планирана, али није развијена.</p>
@@ -1280,7 +1530,7 @@ It generates a unique link that gets embedded in the document in the form of a Q
 </ul>
 <p>Secondary (untested) service:</p>
 <ul>
-<li>Mobile API service with a custom public key authentication, push notification subscriptions and delivery via <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> or Huawei PushKit</li>
+<li>Mobile API service with a <a href="https://www.drazengolic.com/blog/secure-mobile-api/">custom public key authentication</a>, push notification subscriptions and delivery via <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> or Huawei PushKit</li>
 <li>Developed in Go language, with an end-goal to port all functionality from the primary service in order to improve portability and maintainability of the project</li>
 </ul>
 <p>Mobile client app was planned, but not developed.</p>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="https://www.drazengolic.com/images/favicon.png" />
+<title>Securing server APIs for mobile apps without user registration | Drazen Golic</title>
+<meta name="title" content="Securing server APIs for mobile apps without user registration" />
+<meta name="description" content="The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for." />
+<meta name="keywords" content="Mobile,API,Security," />
+
+
+
+
+
+
+  
+  <meta property="og:title" content="Securing server APIs for mobile apps without user registration" />
+<meta property="og:description" content="The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.drazengolic.com/blog/secure-mobile-api/" /><meta property="og:image" content="https://www.drazengolic.com/images/private.jpg" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2023-11-28T11:30:23+02:00" />
+<meta property="article:modified_time" content="2023-11-28T11:30:23+02:00" /><meta property="og:site_name" content="Drazen Golic" />
+
+
+  
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.drazengolic.com/images/private.jpg"/>
+
+<meta name="twitter:title" content="Securing server APIs for mobile apps without user registration"/>
+<meta name="twitter:description" content="The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for."/>
+<meta name="twitter:site" content="@Drazen_88"/>
+
+
+  
+  <meta itemprop="name" content="Securing server APIs for mobile apps without user registration">
+<meta itemprop="description" content="The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for."><meta itemprop="datePublished" content="2023-11-28T11:30:23+02:00" />
+<meta itemprop="dateModified" content="2023-11-28T11:30:23+02:00" />
+<meta itemprop="wordCount" content="766"><meta itemprop="image" content="https://www.drazengolic.com/images/private.jpg">
+<meta itemprop="keywords" content="Mobile,API,Security," />
+
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+  
+  <link href="/style.min.css" rel="stylesheet">
+
+  
+
+  
+
+  
+</head>
+
+<body>
+  <header><a class="skip-link" href="#main-content">Skip to main content</a>
+
+<a href="/" class="title"><h1>Drazen Golic</h1></a>
+<nav>
+  <a href="/">Home</a>
+
+  <a href="/blog/">Blog</a>
+
+  <a href="/projects/">Projects</a>
+
+  <a href="/hire-me/">Hire me</a>
+
+<a href='https://www.drazengolic.com/index.xml'>RSS</a>
+
+
+
+
+  
+
+
+
+
+  
+    <a href="https://www.drazengolic.com/sr/blog/secure-mobile-api/">sr 🇷🇸</a>
+  
+
+</nav>
+</header>
+  <main id="main-content">
+
+<h1>Securing server APIs for mobile apps without user registration</h1>
+<p class="byline">
+  <time datetime='2023-11-28' pubdate>
+    2023-11-28
+  </time>
+  
+</p>
+
+<content>
+  
+  <i>Contents:</i>
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-problem">The Problem</a></li>
+    <li><a href="#the-solution">The Solution</a></li>
+    <li><a href="#usage-in-the-real-world">Usage in The Real World™</a></li>
+  </ul>
+</nav>
+  
+
+  <h2 id="the-problem">The Problem</h2>
+<p>Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:</p>
+<ul>
+<li>You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering</li>
+<li>You could turn down many users from using the app by asking them to register</li>
+<li>Creating the social login or login/registration workflow with emails is tedious</li>
+<li>You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to</li>
+</ul>
+<p>Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for.</p>
+<p>There are a couple of options being used in the wild, but all of them are flawed:</p>
+<ol>
+<li><em>Fully open API</em> - we already decided this is unacceptable</li>
+<li><em>Using a secret key shared between the app and the server</em> - This is easy to break, as the apps are relatively easy to decompile and have all the string constants extracted from them. And if the key gets compromised, you&rsquo;ll have to update both the app and the server, until the new key gets compromised just as the previous one</li>
+<li><em>Splitting the key to different parts of the app, or using some simplistic algorithm to generate one</em> - This isn&rsquo;t much harder to discover than a stored string, so it&rsquo;s just as futile as the previous option</li>
+</ol>
+<p>Now, even if you require users to register, someone savvy enough to extract their legit access token to your APIs can still misuse them if you don&rsquo;t have a mechanism in place to <strong>limit their usage</strong>, such as request limits and throttling. You can limit your API usage based on the IP address (and you should <strong>always</strong> do that!), but this limitation can be easily avoided by using different proxy servers, or by having access to a fleet of hosts with different IP addresses.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>So, you still need <em>some</em> form of registration. But instead of users, you could <strong>register a device</strong> running your app. But how do you make sure that it&rsquo;s <em>your app</em> that is asking to register, and not something else? With something unique to your app: <strong>push notifications</strong>.</p>
+<blockquote>
+<p><strong>Disclaimer</strong>: there are no bullet-proof solutions, and neither it&rsquo;s this one. However, it&rsquo;s good enough to keep those less tech-savvy and less motivated at bay, while enabling you to apply different security strategies just like for APIs with user authentication.</p>
+</blockquote>
+<p>Without further ado, here is a full <a href="https://en.wikipedia.org/wiki/Sequence_diagram">sequence diagram</a> of the device registration workflow:</p>
+<figure><img src="/images/mobile_secure_en.png"
+         alt="Device registration worflow"/><figcaption>
+            <p>Device registration worflow</p>
+        </figcaption>
+</figure>
+
+<p><em><strong>TL;DR</strong>: the app is asking the server to send it a registration URL via push data message, that is also encrypted with a public key generated by the app.</em></p>
+<p>After the registration is complete, you can continue with the usual <strong>refresh token</strong> flow to access the APIs.</p>
+<p>Some important notes about the challenges:</p>
+<ul>
+<li>Time to complete the challenge should be relatively short, no more than a couple of minutes</li>
+<li>Endpoints for requesting and completing the challenge are open, and should be heavily throttled</li>
+<li>There should be a scheduled job in place to regularly delete all of the expired challenges from the database (or set a TTL value if using something like Redis)</li>
+</ul>
+<p>Generated device ID could be an UUID, or anything similar. And if delivering push notifications is a regular feature of the app, it&rsquo;s a good idea to store the ID with the push service registration token together somewhere (effectively registering a device account) so you could easily update the token on the server when the app receives a new one from the push service. Note that you <strong>don&rsquo;t need</strong> to ask users for permission to retreive data messages without displaying a notification.</p>
+<p>Having the device ID in the access and refresh tokens will allow you to limit usage per device, and in case of a detected misbehavior, even deny refreshing the access token (thus shutting down the device account either temporary or permanently). Expiration time for the new access tokens should be reasonably short.</p>
+<h2 id="usage-in-the-real-world">Usage in The Real World™</h2>
+<p>While I have a PoC project with this design, it&rsquo;s not ready for production yet. But if you like the idea and decide to use it in production yourself, please do give me a shout on how it went over any channel where I&rsquo;m present! Maybe there are no comments on this website, but I&rsquo;d be happy to publish any real world experiences (with your permission) as a part of this article.</p>
+
+</content>
+<p>
+  
+    <a class="blog-tags" href="https://www.drazengolic.com/tags/mobile/">#Mobile</a>&nbsp;&nbsp;
+  
+    <a class="blog-tags" href="https://www.drazengolic.com/tags/api/">#API</a>&nbsp;&nbsp;
+  
+    <a class="blog-tags" href="https://www.drazengolic.com/tags/security/">#Security</a>&nbsp;&nbsp;
+  
+</p>
+
+
+  </main>
+  <footer><small>
+  © Drazen Golic (<a href="https://creativecommons.org/licenses/by/4.0/deed.en">CC BY 4.0</a>) | Made with <a href="https://github.com/clente/hugo-bearcub">Bear Cub</a>
+</small></footer>
+
+    
+</body>
+
+</html>
