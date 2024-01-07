@@ -14,10 +14,16 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/projects/</guid>
-      <description>Projects Some notable projects I&amp;rsquo;ve done over the years completely by myself (or with very little assistance).
-▷ QR4DOC (2022 - 2023) A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies. View project details
-Note: this project is in search for funding, or it&amp;rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</description>
+      <description>Projects Active ▷ Kombinat Generic combinatorial functions and generators for producing combinations, permutations, multiset permutations and variations from elements in a slice of any type in Go language.
+View on GitHub
+Previous work Some notable projects I&amp;rsquo;ve done over the years completely by myself (or with very little assistance).
+▷ QR4DOC (2022 - 2023) A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.</description>
       <content:encoded><![CDATA[<h1 id="projects">Projects</h1>
+<h2 id="active">Active</h2>
+<h3 id="-kombinat">▷ Kombinat</h3>
+<p>Generic combinatorial functions and generators for producing combinations, permutations, multiset permutations and variations from elements in a slice of any type in Go language.</p>
+<p><a href="https://github.com/drazengolic/kombinat">View on GitHub</a></p>
+<h2 id="previous-work">Previous work</h2>
 <p>Some notable projects I&rsquo;ve done over the years completely by myself (or with very little assistance).</p>
 <h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
 <p>A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies. <a href="https://www.drazengolic.com/qr4doc/">View project details</a></p>
@@ -68,10 +74,16 @@ Note: this project is in search for funding, or it&amp;rsquo;s source code is fo
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/sr/projects/</guid>
-      <description>Пројекти Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.
-▷ QR4DOC (2022 - 2023) Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, оригинално намијењен за полисе осигурања. Види детаље пројекта
-Напомена: у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље, молио бих да ме контактира.</description>
+      <description>Пројекти Активни ▷ Kombinat Генеричке комбинаторне функције и генератори за генерисање комбинација, пермутација са и без понављања, као и варијација са понављањем од елемената из слајсова било којег типа у Го језику.
+Види на GitHub-у
+Претходни радови Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.
+▷ QR4DOC (2022 - 2023) Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, оригинално намијењен за полисе осигурања.</description>
       <content:encoded><![CDATA[<h1 id="пројекти">Пројекти</h1>
+<h2 id="активни">Активни</h2>
+<h3 id="-kombinat">▷ Kombinat</h3>
+<p>Генеричке комбинаторне функције и генератори за генерисање комбинација, пермутација са и без понављања, као и варијација са понављањем од елемената из слајсова било којег типа у Го језику.</p>
+<p><a href="https://github.com/drazengolic/kombinat">Види на GitHub-у</a></p>
+<h2 id="претходни-радови">Претходни радови</h2>
 <p>Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.</p>
 <h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
 <p>Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, оригинално намијењен за полисе осигурања. <a href="https://www.drazengolic.com/sr/qr4doc/">Види детаље пројекта</a></p>
