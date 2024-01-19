@@ -14,15 +14,17 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/projects/</guid>
-      <description>Projects Active ▷ Kombinat Generic combinatorial functions and generators for producing combinations, permutations, multiset permutations and variations from elements in a slice of any type in Go language.
-View on GitHub
-Previous work Some notable projects I&amp;rsquo;ve done over the years completely by myself (or with very little assistance).
-▷ QR4DOC (2022 - 2023) A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.</description>
+      <description>Projects Active ▷ My Number Game A simple web game that is similar in spirit to Countdown Numbers, but modeled after one of the games in the popular TV show Slagalica on Radio Television of Serbia. The game makes heavy use of the kombinat library, compiled to WASM via TinyGo.
+English Serbian
+▷ Kombinat Generic combinatorial functions and generators for producing combinations, permutations, multiset permutations and variations from elements in a slice of any type in Go language.</description>
       <content:encoded><![CDATA[<h1 id="projects">Projects</h1>
 <h2 id="active">Active</h2>
+<h3 id="-my-number-game">▷ My Number Game</h3>
+<p>A simple web game that is similar in spirit to Countdown Numbers, but modeled after one of the games in the popular TV show <em>Slagalica</em> on Radio Television of Serbia. The game makes heavy use of the <strong>kombinat</strong> library, compiled to WASM via TinyGo.</p>
+<p><a href="https://mynumber.drazengolic.com">English</a> <a href="https://mojbroj.drazengolic.com">Serbian</a></p>
 <h3 id="-kombinat">▷ Kombinat</h3>
 <p>Generic combinatorial functions and generators for producing combinations, permutations, multiset permutations and variations from elements in a slice of any type in Go language.</p>
-<p><a href="https://github.com/drazengolic/kombinat">View on GitHub</a></p>
+<p><a href="https://github.com/drazengolic/kombinat">GitHub</a> <a href="https://pkg.go.dev/github.com/drazengolic/kombinat">Pkg Reference</a></p>
 <h2 id="previous-work">Previous work</h2>
 <p>Some notable projects I&rsquo;ve done over the years completely by myself (or with very little assistance).</p>
 <h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
@@ -74,15 +76,19 @@ Previous work Some notable projects I&amp;rsquo;ve done over the years completel
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/sr/projects/</guid>
-      <description>Пројекти Активни ▷ Kombinat Генеричке комбинаторне функције и генератори за генерисање комбинација, пермутација са и без понављања, као и варијација са понављањем од елемената из слајсова било којег типа у Го језику.
-Види на GitHub-у
-Претходни радови Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.
-▷ QR4DOC (2022 - 2023) Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, оригинално намијењен за полисе осигурања.</description>
+      <description>Пројекти Активни ▷ Игра Мој Број Онлајн игра моделована по игри из популарне ТВ Слагалице са Радио Телевизије Србије. Игра интензивно користи kombinat библиотеку и компајлирана је у WASM помоћу TinyGo компајлера.
+Српски Енглески
+▷ Kombinat Генеричке комбинаторне функције и генератори за генерисање комбинација, пермутација са и без понављања, као и варијација са понављањем од елемената из слајсова било којег типа у Го језику.
+GitHub Pkg Reference
+Претходни радови Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.</description>
       <content:encoded><![CDATA[<h1 id="пројекти">Пројекти</h1>
 <h2 id="активни">Активни</h2>
+<h3 id="-игра-мој-број">▷ Игра Мој Број</h3>
+<p>Онлајн игра моделована по игри из популарне ТВ Слагалице са Радио Телевизије Србије. Игра интензивно користи <strong>kombinat</strong> библиотеку и компајлирана је у WASM помоћу TinyGo компајлера.</p>
+<p><a href="https://mojbroj.drazengolic.com">Српски</a> <a href="https://mynumber.drazengolic.com">Енглески</a></p>
 <h3 id="-kombinat">▷ Kombinat</h3>
 <p>Генеричке комбинаторне функције и генератори за генерисање комбинација, пермутација са и без понављања, као и варијација са понављањем од елемената из слајсова било којег типа у Го језику.</p>
-<p><a href="https://github.com/drazengolic/kombinat">Види на GitHub-у</a></p>
+<p><a href="https://github.com/drazengolic/kombinat">GitHub</a> <a href="https://pkg.go.dev/github.com/drazengolic/kombinat">Pkg Reference</a></p>
 <h2 id="претходни-радови">Претходни радови</h2>
 <p>Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.</p>
 <h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
@@ -199,6 +205,11 @@ With my personal network of skilled professionals, it is also possible to arrang
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;ZHJhemVuQGZhc3R&#34;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1&#34;tYWlsLmNvbQ==&#34;}&#39;</span> <span class="p">|</span> base64 --decode<span class="sb">`</span></span></span></code></pre></div><p>Please allow up to 24h for me to get back to you.</p>
+<h2 id="business-details">Business details</h2>
+<p><strong>Business name:</strong> &ldquo;EPRUBIT&rdquo; Dražen Golić s.p. Banja Luka<br>
+<strong>Address:</strong> Bulevar vojovode Stepe Stepanovića 165, Banja Luka, Republic of Srpska, Bosnia and Herzegovina<br>
+<strong>JIB:</strong> 4512081610008</p>
+<p><a href="http://bizreg.esrpska.com/Home/PregledPreduzetnika/236550">BizReg entry</a> (government page)</p>
 ]]></content:encoded>
     </item>
     
@@ -273,6 +284,11 @@ With my personal network of skilled professionals, it is also possible to arrang
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;ZHJhemVuQGZhc3R&#34;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $1&#34;tYWlsLmNvbQ==&#34;}&#39;</span> <span class="p">|</span> base64 --decode<span class="sb">`</span></span></span></code></pre></div><p>Молим дозволите до 24 часа за одговор.</p>
+<h2 id="пословне-информације">Пословне информације</h2>
+<p><strong>Пословно име:</strong> &ldquo;EPRUBIT&rdquo; Dražen Golić s.p. Banja Luka<br>
+<strong>Адреса:</strong> Булевар војводе Степе Степановића 165, Бања Лука, Република Српска, Босна и Херцеговина<br>
+<strong>JIB:</strong> 4512081610008</p>
+<p><a href="http://bizreg.esrpska.com/Home/PregledPreduzetnika/236550">BizReg</a> (државна веб страница)</p>
 ]]></content:encoded>
     </item>
     
