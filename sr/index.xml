@@ -293,6 +293,59 @@ With my personal network of skilled professionals, it is also possible to arrang
     </item>
     
     <item>
+      <title>Keep a project glossary (with the source code)</title>
+      <link>https://www.drazengolic.com/blog/keep-a-project-glossary/</link>
+      <pubDate>Mon, 11 Mar 2024 16:40:23 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/blog/keep-a-project-glossary/</guid>
+      <description>Introduction &amp;ldquo;A wise one writes it down, a foolish one memorizes it.&amp;rdquo; (sr. &amp;ldquo;паметан пише, будала памти&amp;rdquo;) &amp;ndash; A Serbian proverb
+Let&amp;rsquo;s admit it - the biggest enemy of a software project&amp;rsquo;s success is ambiguity. Ambiguity of requirements (am I solving the right problem?), ambiguity of the system design (am I changing things in the right place?), ambiguity in code abstractions (wtf does this thing do?) etc. Anything you can do to reduce ambiguity can only help a project in the long run.</description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<blockquote>
+<p>&ldquo;A wise one writes it down, a foolish one memorizes it.&rdquo; (sr. &ldquo;паметан пише, будала памти&rdquo;)
+&ndash; A Serbian proverb</p>
+</blockquote>
+<p>Let&rsquo;s admit it - the biggest enemy of a software project&rsquo;s success is ambiguity. Ambiguity of requirements (<em>am I solving the right problem?</em>), ambiguity of the system design (<em>am I changing things in the right place?</em>), ambiguity in code abstractions (<em>wtf does this thing do?</em>) etc. Anything you can do to reduce ambiguity can only help a project in the long run.</p>
+<p>Humans have a very <a href="https://evidencebased.education/how-limited-is-working-memory-capacity/">limited</a> working memory. Less things we have to keep in our memory, higher the chance we&rsquo;ll make the right decision. And what we can&rsquo;t keep in memory, it should be only a search away, without the need for breaking ours, or anyone else&rsquo;s <a href="https://en.wikipedia.org/wiki/Flow_(psychology)">flow</a>.</p>
+<p>The trouble is, with Agile methodologies becoming the default, documenting things is rarely a priority. There&rsquo;s no place you can go and quickly learn what you need. Or there is, but it isn&rsquo;t up to date, or it&rsquo;s scattered among dozens of Slack channels, private chats, Miro boards and whatnot. Important information lives in people&rsquo;s heads. If you don&rsquo;t understand something, the first thing you&rsquo;ll do is to find out who knows what you need, and then go ahead and ask that person. A new hire comes and does the same things like you. Wasted time just keeps adding up. Also, people leave companies, and important information leaves with them, hurting the project (at least until someone else learns the same information in the same way, which means more wasted time).</p>
+<p>Most developers don&rsquo;t like writing technical documentation, and it seems that project/product managers don&rsquo;t like writing project documentation either. They just focus on writing user stories, meeting OKR-s and etc., none of which contributes in having an overall picture on what is being solved, how and why. What can make things even worse is when those managers get promoted from another role, not because they have demonstrated a vast domain knowledge or managerial qualities, but because of belief that they&rsquo;ll perform better than in their current role.</p>
+<p>With a domain knowledge taken so lightly, no wonder why wrong features get developed, same thing gets done multiple times, solutions get overengineered and many other problems. Also, arguing with someone for hours about something just to figure out that you have a completely different interpretation of what that something means is because there is no single source of truth about that something. All of this drives disinterest into project&rsquo;s success and an employee burn-out.</p>
+<h2 id="a-glossary-of-terms">A glossary of terms&hellip;</h2>
+<p>One way to reduce ambiguity is to keep everyone on the same page, both current and the future colleagues, when things are being discussed or worked on. Having a glossary of terms used in the project is a great way to do so. For example, if the project is in the e-commerce domain, a glossary should say what an order is. If an order has a status, every status should be described, how it affects an order and so on. Product types, all of the abbreviations used etc.</p>
+<p>A glossary of terms could correspond to the ubiquitous language described in the <a href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain-Driven Design</a>, that is, a list of unambiguous terms shared by domain experts, users, and developers (note that I&rsquo;m not advocating DDD here, it&rsquo;s just that having a common language is universally a good idea).</p>
+<p>This is not a novel idea, it&rsquo;s just forgotten or simply ignored.</p>
+<p>Here&rsquo;s <a href="https://en.wikipedia.org/wiki/Rich_Hickey">Rich Hickey</a>, one of my favorite people in this industry, explaining why having a project glossary (I recommend the entire video though):</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/c5QF2HjHLSE?start=519" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<p>Or, see <a href="https://delatbabel.medium.com/what-is-a-project-glossary-a49e71f5a8e2">here</a> and <a href="https://www.visual-paradigm.com/learning/handbooks/software-design-handbook/project-glossary.jsp">here</a> what makes a project glossary.</p>
+<h2 id="defined-in-the-source-code">&hellip;defined in the source code</h2>
+<p>If the project documentation isn&rsquo;t exactly a &ldquo;first class citizen&rdquo; on the project you&rsquo;re working on, this is a good, alternative place to maintain a glossary. Why? It will live right with the rest of the project files and be available to all developers, right from the editor. It&rsquo;s versioned, and changes to terminology can be committed together with implementation changes.</p>
+<p>You&rsquo;re probably asking yourself now - how does this help at all, since it&rsquo;s available only to developers? As I&rsquo;ve said earlier, it&rsquo;s important for developers to know what they&rsquo;re dealing with in order to execute properly. If no one else cares, then there&rsquo;s no point in maintaining a page in Notion that no one will ever read or update. Maintaining the file will help everyone in the development team, and also help reduce the onboarding time of the new hires.</p>
+<h2 id="how-to-make-one">How to make one?</h2>
+<p>Chances are, you have an up to date <code>README.md</code> file that explains how to set up the project. You can create an additional file, say <code>glossary.md</code> and highlight in the README that this is the file to refer to for the project terminology. It can follow a simple format, like this:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gh"># Glossary
+</span></span></span><span class="line"><span class="cl"><span class="gh"></span>
+</span></span><span class="line"><span class="cl"><span class="gu">## Term 1
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span>
+</span></span><span class="line"><span class="cl">Definition of the Term 1. Deprecated, see [<span class="nt">Term 2</span>](<span class="na">#term-2</span>)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## Term 2
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span>
+</span></span><span class="line"><span class="cl">Definition of the Term 2</span></span></code></pre></div><p>and so on. Markdown files are easy to read and update, even without rendering into HTML. If you use VS Code, you can use extensions like <a href="https://marketplace.visualstudio.com/items?itemName=RoeySagie.markdown-sort">Markdown sort</a> to maintain the order of the terms, or <a href="https://marketplace.visualstudio.com/items?itemName=AlexandriteSoftware.markdown-search">Markdown Full Text Search</a> for easier search in case of larger files.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So the next time when someone on the project clarifies some term over Slack, MS Teams, e-mail, meeting notes or whatever, make sure to grab the text immediately and put it in the glossary file to persist it, don&rsquo;t just memorize it. Once recorded, insist on that definition in further communication until there is a compelling reason for change.</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Securing server APIs for mobile apps without user registration</title>
       <link>https://www.drazengolic.com/blog/secure-mobile-api/</link>
       <pubDate>Tue, 28 Nov 2023 11:30:23 +0200</pubDate>

@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.drazengolic.com/</loc>
-    <lastmod>2023-11-28T11:30:23+02:00</lastmod>
+    <lastmod>2024-03-11T16:40:23+02:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="sr-BA"
@@ -16,7 +16,7 @@
                 />
   </url><url>
     <loc>https://www.drazengolic.com/blog/</loc>
-    <lastmod>2023-11-28T11:30:23+02:00</lastmod>
+    <lastmod>2024-03-11T16:40:23+02:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="sr-BA"
@@ -52,6 +52,25 @@
                 href="https://www.drazengolic.com/hire-me/"
                 />
   </url><url>
+    <loc>https://www.drazengolic.com/blog/keep-a-project-glossary/</loc>
+    <lastmod>2024-03-11T16:40:23+02:00</lastmod>
+  </url><url>
+    <loc>https://www.drazengolic.com/tags/project-management/</loc>
+    <lastmod>2024-03-11T16:40:23+02:00</lastmod>
+  </url><url>
+    <loc>https://www.drazengolic.com/tags/</loc>
+    <lastmod>2024-03-11T16:40:23+02:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="sr-BA"
+                href="https://www.drazengolic.com/sr/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-US"
+                href="https://www.drazengolic.com/tags/"
+                />
+  </url><url>
     <loc>https://www.drazengolic.com/tags/api/</loc>
     <lastmod>2023-11-28T11:30:23+02:00</lastmod>
     <xhtml:link
@@ -83,19 +102,6 @@
   </url><url>
     <loc>https://www.drazengolic.com/tags/security/</loc>
     <lastmod>2023-11-28T11:30:23+02:00</lastmod>
-  </url><url>
-    <loc>https://www.drazengolic.com/tags/</loc>
-    <lastmod>2023-11-28T11:30:23+02:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="sr-BA"
-                href="https://www.drazengolic.com/sr/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-US"
-                href="https://www.drazengolic.com/tags/"
-                />
   </url><url>
     <loc>https://www.drazengolic.com/blog/json-response-postgres/</loc>
     <lastmod>2023-11-22T11:22:23+02:00</lastmod>
