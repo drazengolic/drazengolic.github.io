@@ -18,32 +18,39 @@
 
 
   
-  <meta property="og:title" content="Формирај JSON одговор директно у PostgreSQL-у" />
-<meta property="og:description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
-Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.drazengolic.com/sr/blog/json-response-postgres/" /><meta property="og:image" content="https://www.drazengolic.com/images/postgres-json.png" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2023-11-22T11:22:23+02:00" />
-<meta property="article:modified_time" content="2023-11-22T11:22:23+02:00" /><meta property="og:site_name" content="Drazen Golic" />
+  <meta property="og:url" content="https://www.drazengolic.com/sr/blog/json-response-postgres/">
+  <meta property="og:site_name" content="Дражен Голић">
+  <meta property="og:title" content="Формирај JSON одговор директно у PostgreSQL-у">
+  <meta property="og:description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
+Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.">
+  <meta property="og:locale" content="sr-BA">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2023-11-22T11:22:23+02:00">
+    <meta property="article:modified_time" content="2023-11-22T11:22:23+02:00">
+    <meta property="article:tag" content="Databases">
+    <meta property="article:tag" content="PostgreSQL">
+    <meta property="article:tag" content="JSON">
+    <meta property="og:image" content="https://www.drazengolic.com/images/postgres-json.png">
 
 
   
-  <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://www.drazengolic.com/images/postgres-json.png"/>
-
-<meta name="twitter:title" content="Формирај JSON одговор директно у PostgreSQL-у"/>
+  <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.drazengolic.com/images/postgres-json.png"><meta name="twitter:title" content="Формирај JSON одговор директно у PostgreSQL-у">
 <meta name="twitter:description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
-Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе."/>
-<meta name="twitter:site" content="@Drazen_88"/>
+Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.">
 
 
+  
   
   <meta itemprop="name" content="Формирај JSON одговор директно у PostgreSQL-у">
-<meta itemprop="description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
-Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе."><meta itemprop="datePublished" content="2023-11-22T11:22:23+02:00" />
-<meta itemprop="dateModified" content="2023-11-22T11:22:23+02:00" />
-<meta itemprop="wordCount" content="2189"><meta itemprop="image" content="https://www.drazengolic.com/images/postgres-json.png">
-<meta itemprop="keywords" content="Databases,PostgreSQL,JSON," />
+  <meta itemprop="description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
+Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.">
+  <meta itemprop="datePublished" content="2023-11-22T11:22:23+02:00">
+  <meta itemprop="dateModified" content="2023-11-22T11:22:23+02:00">
+  <meta itemprop="wordCount" content="2189">
+  <meta itemprop="image" content="https://www.drazengolic.com/images/postgres-json.png">
+  <meta itemprop="keywords" content="Databases,PostgreSQL,JSON">
 
 <meta name="referrer" content="no-referrer-when-downgrade" />
 
@@ -160,9 +167,9 @@
 <p>Као примјер ћу да искористим релацију сличну једној са којом сам се сусрео недавно: замислимо да имамо двије табеле назване <code>folder</code> и <code>document</code>, а које су у релацији 1:н, гдје сваки документ припада неком фолдеру. Сваки фолдер има своја подешавања која се чувају као JSON објекат, и има низ именованих веб линкова који се такође чувају као JSON. Документ садржи детаље који се презентују као кључ-вриједност, а који се такође, наравно, чувају као JSON.</p>
 <p>API сервис који добаља детаље неког фолдера мора да врати све доступне колоне фолдера, подскуп његових подешавања, али и све његове документе као низ под <code>documents</code> атрибутом.</p>
 <figure><img src="/images/folder-document-schema.png"
-         alt="Шема"/><figcaption>
-            <p>Шема</p>
-        </figcaption>
+    alt="Шема"><figcaption>
+      <p>Шема</p>
+    </figcaption>
 </figure>
 
 <p>Подешавања фолдера изгледају отприлике овако:</p>
@@ -473,7 +480,7 @@
 
   </main>
   <footer><small>
-  © Drazen Golic (<a href="https://creativecommons.org/licenses/by/4.0/deed.en">CC BY 4.0</a>) | Креирано са <a href="https://github.com/clente/hugo-bearcub">Bear Cub</a>
+  © Drazen Golic (<a href="https://creativecommons.org/licenses/by/4.0/deed.en">CC BY 4.0</a>)<br />Креирано са <a href="https://github.com/clente/hugo-bearcub">Bear Cub</a>
 </small>
 
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3a08ad115c3246619d5178f8db9fefc7"}'></script>

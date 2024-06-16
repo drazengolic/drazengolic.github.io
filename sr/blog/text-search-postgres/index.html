@@ -17,29 +17,35 @@
 
 
   
-  <meta property="og:title" content="Убрзавање претраге по текстуалном шаблону у PostgreSQL" />
-<meta property="og:description" content="Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.drazengolic.com/sr/blog/text-search-postgres/" /><meta property="og:image" content="https://www.drazengolic.com/images/postgresql.webp" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2021-07-16T23:33:12+02:00" />
-<meta property="article:modified_time" content="2021-07-16T23:33:12+02:00" /><meta property="og:site_name" content="Drazen Golic" />
+  <meta property="og:url" content="https://www.drazengolic.com/sr/blog/text-search-postgres/">
+  <meta property="og:site_name" content="Дражен Голић">
+  <meta property="og:title" content="Убрзавање претраге по текстуалном шаблону у PostgreSQL">
+  <meta property="og:description" content="Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?">
+  <meta property="og:locale" content="sr-BA">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2021-07-16T23:33:12+02:00">
+    <meta property="article:modified_time" content="2021-07-16T23:33:12+02:00">
+    <meta property="article:tag" content="PostgreSQL">
+    <meta property="article:tag" content="Перформансе">
+    <meta property="og:image" content="https://www.drazengolic.com/images/postgresql.webp">
 
 
   
-  <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://www.drazengolic.com/images/postgresql.webp"/>
-
-<meta name="twitter:title" content="Убрзавање претраге по текстуалном шаблону у PostgreSQL"/>
-<meta name="twitter:description" content="Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?"/>
-<meta name="twitter:site" content="@Drazen_88"/>
+  <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.drazengolic.com/images/postgresql.webp"><meta name="twitter:title" content="Убрзавање претраге по текстуалном шаблону у PostgreSQL">
+<meta name="twitter:description" content="Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?">
 
 
+  
   
   <meta itemprop="name" content="Убрзавање претраге по текстуалном шаблону у PostgreSQL">
-<meta itemprop="description" content="Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?"><meta itemprop="datePublished" content="2021-07-16T23:33:12+02:00" />
-<meta itemprop="dateModified" content="2021-07-16T23:33:12+02:00" />
-<meta itemprop="wordCount" content="1561"><meta itemprop="image" content="https://www.drazengolic.com/images/postgresql.webp">
-<meta itemprop="keywords" content="PostgreSQL,Перформансе," />
+  <meta itemprop="description" content="Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?">
+  <meta itemprop="datePublished" content="2021-07-16T23:33:12+02:00">
+  <meta itemprop="dateModified" content="2021-07-16T23:33:12+02:00">
+  <meta itemprop="wordCount" content="1561">
+  <meta itemprop="image" content="https://www.drazengolic.com/images/postgresql.webp">
+  <meta itemprop="keywords" content="PostgreSQL,Перформансе">
 
 <meta name="referrer" content="no-referrer-when-downgrade" />
 
@@ -334,7 +340,7 @@
 
   </main>
   <footer><small>
-  © Drazen Golic (<a href="https://creativecommons.org/licenses/by/4.0/deed.en">CC BY 4.0</a>) | Креирано са <a href="https://github.com/clente/hugo-bearcub">Bear Cub</a>
+  © Drazen Golic (<a href="https://creativecommons.org/licenses/by/4.0/deed.en">CC BY 4.0</a>)<br />Креирано са <a href="https://github.com/clente/hugo-bearcub">Bear Cub</a>
 </small>
 
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3a08ad115c3246619d5178f8db9fefc7"}'></script>

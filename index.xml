@@ -38,9 +38,9 @@ English Serbian
 <p>Tech stack: .NET Core, SignalR, Redis, Bash, Ubuntu. Some clients for the app&rsquo;s API-s were done in PHP.</p>
 <p><em>Company: Famille Carabello-Baum SAS (Château de Pommard) / Vivant Inc</em></p>
 <div style="column-count: 3;">
-  <a href="/images/payapp/1.jpg"><img src="/images/payapp/1.jpg" alt="Choose payment method"></a>
-<a href="/images/payapp/2.jpg"><img src="/images/payapp/2.jpg" alt="Chose POS terminal"></a>
-<a href="/images/payapp/3.jpg"><img src="/images/payapp/3.jpg" alt="POS screen"></a>
+  <a href="/images/payapp/1.jpg"><img alt="Choose payment method" src="/images/payapp/1.jpg"></a>
+<a href="/images/payapp/2.jpg"><img alt="Chose POS terminal" src="/images/payapp/2.jpg"></a>
+<a href="/images/payapp/3.jpg"><img alt="POS screen" src="/images/payapp/3.jpg"></a>
 </div>
 
 
@@ -56,15 +56,15 @@ English Serbian
 <h3 id="-mobile-games-2013---2014">▷ Mobile games (2013 - 2014)</h3>
 <p>A couple of mobile games for Android that I did for fun by using Java and <a href="https://libgdx.com/">libGDX</a> under the pseudonim &ldquo;fontelee&rdquo;. Unfortunately, they&rsquo;re not available on the Play Store any more, since they&rsquo;re using old Google+ APIs and I&rsquo;ve lost important files required to update the games.</p>
 <p><a href="/images/penguin_hop.png"><figure><img src="/images/penguin_hop.png"
-         alt="Penguin Hop" width="50%"/><figcaption>
-            <p>Penguin Hop</p>
-        </figcaption>
+    alt="Penguin Hop" width="50%"><figcaption>
+      <p>Penguin Hop</p>
+    </figcaption>
 </figure>
 </a>
 <a href="/images/simon_swipes.png"><figure><img src="/images/simon_swipes.png"
-         alt="Simon Swipes" width="50%"/><figcaption>
-            <p>Simon Swipes</p>
-        </figcaption>
+    alt="Simon Swipes" width="50%"><figcaption>
+      <p>Simon Swipes</p>
+    </figcaption>
 </figure>
 </a></p>
 ]]></content:encoded>
@@ -102,9 +102,9 @@ GitHub Pkg Reference
 <p>Технологије: .NET Core, SignalR, Redis, Bash, Ubuntu. Неке апликације писане као клијент API-ја ове апликације су писане у PHP-у.</p>
 <p><em>Компанија: Famille Carabello-Baum SAS (Château de Pommard) / Vivant Inc</em></p>
 <div style="column-count: 3;">
-  <a href="/images/payapp/1.jpg"><img src="/images/payapp/1.jpg" alt="Choose payment method"></a>
-<a href="/images/payapp/2.jpg"><img src="/images/payapp/2.jpg" alt="Chose POS terminal"></a>
-<a href="/images/payapp/3.jpg"><img src="/images/payapp/3.jpg" alt="POS screen"></a>
+  <a href="/images/payapp/1.jpg"><img alt="Choose payment method" src="/images/payapp/1.jpg"></a>
+<a href="/images/payapp/2.jpg"><img alt="Chose POS terminal" src="/images/payapp/2.jpg"></a>
+<a href="/images/payapp/3.jpg"><img alt="POS screen" src="/images/payapp/3.jpg"></a>
 </div>
 
 
@@ -120,15 +120,15 @@ GitHub Pkg Reference
 <h3 id="-игрице-за-мобилни-телефон-2013---2014">▷ Игрице за мобилни телефон (2013 - 2014)</h3>
 <p>Пар игрица за Android које сам направио из разоноде, користећи језик Java и <a href="https://libgdx.com/">libGDX</a> под псеудонимом &ldquo;fontelee&rdquo;. Нажалост, нису више доступне на Play Store-у, јер користе стари Google+ API, а загубио сам важне датотеке потребне да се игрице ажурирају.</p>
 <p><a href="/images/penguin_hop.png"><figure><img src="/images/penguin_hop.png"
-         alt="Penguin Hop" width="50%"/><figcaption>
-            <p>Penguin Hop</p>
-        </figcaption>
+    alt="Penguin Hop" width="50%"><figcaption>
+      <p>Penguin Hop</p>
+    </figcaption>
 </figure>
 </a>
 <a href="/images/simon_swipes.png"><figure><img src="/images/simon_swipes.png"
-         alt="Simon Swipes" width="50%"/><figcaption>
-            <p>Simon Swipes</p>
-        </figcaption>
+    alt="Simon Swipes" width="50%"><figcaption>
+      <p>Simon Swipes</p>
+    </figcaption>
 </figure>
 </a></p>
 ]]></content:encoded>
@@ -142,7 +142,7 @@ GitHub Pkg Reference
       <guid>https://www.drazengolic.com/hire-me/</guid>
       <description>Hire me I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp;amp; management.
 A non-exhaustive list of technologies I can use to deliver working solutions:
-Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreSQL, MySQL, Redis Cloud services: any Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.
+Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreSQL, MySQL, Redis Cloud services: any (I read documentation!) Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.
 With my personal network of skilled professionals, it is also possible to arrange a complete greenfield or brownfield project development by covering the following areas: service development, web development, mobile application development, Salesforce development, UI/UX design, product management.</description>
       <content:encoded><![CDATA[<h1 id="hire-me">Hire me</h1>
 <p>I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp; management.</p>
@@ -150,7 +150,7 @@ With my personal network of skilled professionals, it is also possible to arrang
 <ul>
 <li>Programming languages: PHP, Go, Elixir, C#, Java, JavaScript</li>
 <li>Databases: PostgreSQL, MySQL, Redis</li>
-<li>Cloud services: any</li>
+<li>Cloud services: any (I read documentation!)</li>
 </ul>
 <p>Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.</p>
 <p>With my personal network of skilled professionals, it is also possible to arrange a complete <strong>greenfield</strong> or <strong>brownfield</strong> project development by covering the following areas: service development, web development, mobile application development, Salesforce development, UI/UX design, product management.</p>
@@ -221,7 +221,7 @@ With my personal network of skilled professionals, it is also possible to arrang
       <guid>https://www.drazengolic.com/sr/hire-me/</guid>
       <description>Ангажуј ме Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.
 Непотпуна листа технологија у којима могу да доставим функционална рјешења:
-Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript Базе података: PostgreSQL, MySQL, Redis Сервиси у ”облаку”: било који Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.
+Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript Базе података: PostgreSQL, MySQL, Redis Сервиси у ”облаку”: било који (јер читам документацију) Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.
 Са мојом личном мрежом искусних професионалаца, такође је могуће је договорити развој нових или постојећих пројеката у потпуности, покривајући сљедеће области: развој сервиса, веб развој, развој мобилних апликација, Salesforce развој, UI/UX дизајн, управљање развојем производа.</description>
       <content:encoded><![CDATA[<h1 id="ангажуј-ме">Ангажуј ме</h1>
 <p>Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.</p>
@@ -229,7 +229,7 @@ With my personal network of skilled professionals, it is also possible to arrang
 <ul>
 <li>Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript</li>
 <li>Базе података: PostgreSQL, MySQL, Redis</li>
-<li>Сервиси у ”облаку”: било који</li>
+<li>Сервиси у ”облаку”: било који (јер читам документацију)</li>
 </ul>
 <p>Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.</p>
 <p>Са мојом личном мрежом искусних професионалаца, такође је могуће је договорити развој <strong>нових</strong> или <strong>постојећих</strong> пројеката у потпуности, покривајући сљедеће области: развој сервиса, веб развој, развој мобилних апликација, Salesforce развој, UI/UX дизајн, управљање развојем производа.</p>
@@ -316,9 +316,12 @@ Let&amp;rsquo;s admit it - the biggest enemy of a software project&amp;rsquo;s s
 <p>This is not a novel idea, it&rsquo;s just forgotten or simply ignored.</p>
 <p>Here&rsquo;s <a href="https://en.wikipedia.org/wiki/Rich_Hickey">Rich Hickey</a>, one of my favorite people in this industry, explaining why having a project glossary (I recommend the entire video though):</p>
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="https://www.youtube.com/embed/c5QF2HjHLSE?start=519" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
-</div>
+
+    
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/c5QF2HjHLSE?start=519?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+      ></iframe>
+    </div>
 
 <p>Or, see <a href="https://delatbabel.medium.com/what-is-a-project-glossary-a49e71f5a8e2">here</a> and <a href="https://www.visual-paradigm.com/learning/handbooks/software-design-handbook/project-glossary.jsp">here</a> what makes a project glossary.</p>
 <h2 id="defined-in-the-source-code">&hellip;defined in the source code</h2>
@@ -376,9 +379,9 @@ You&amp;rsquo;re just serving some content, and there is no obvious benefit for 
 </blockquote>
 <p>Without further ado, here is a full <a href="https://en.wikipedia.org/wiki/Sequence_diagram">sequence diagram</a> of the device registration workflow:</p>
 <figure><img src="/images/mobile_secure_en.png"
-         alt="Device registration worflow"/><figcaption>
-            <p>Device registration worflow</p>
-        </figcaption>
+    alt="Device registration worflow"><figcaption>
+      <p>Device registration worflow</p>
+    </figcaption>
 </figure>
 
 <p><em><strong>TL;DR</strong>: the app is asking the server to send it a registration URL via push data message, that is also encrypted with a public key generated by the app.</em></p>
@@ -427,9 +430,9 @@ You&amp;rsquo;re just serving some content, and there is no obvious benefit for 
 </blockquote>
 <p>Без даљег дужења, слиједи потпуни <a href="https://en.wikipedia.org/wiki/Sequence_diagram">дијаграм секвенци</a> процеса регистрације уређаја:</p>
 <figure><img src="/images/mobile_secure_sr.png"
-         alt="Процес регистрације уређаја"/><figcaption>
-            <p>Процес регистрације уређаја</p>
-        </figcaption>
+    alt="Процес регистрације уређаја"><figcaption>
+      <p>Процес регистрације уређаја</p>
+    </figcaption>
 </figure>
 
 <p><em>Укратко речено: апликација тражи од сервера да јој пошаље УРЛ за регистрацију преко податковне пуш поруке, који је уједно енкриптован јавним кључем који је генерисала апликација.</em></p>
@@ -484,9 +487,9 @@ Query the data Transform it to the required format Send it over the wire Looks s
 <p>For an example I&rsquo;ll use a relation similar to the one I&rsquo;ve encountered recently: let&rsquo;s imagine we have two tables called <code>folder</code> and <code>document</code> in a relation 1:n, where every document belongs to some folder. A single folder has different settings stored as a JSON object, and an array of named web links also stored as JSON. A document contains some key-value properties that is, as you can imagine, also stored as JSON.</p>
 <p>An API service to get details of a single folder needs to return all available columns, only a subset of it&rsquo;s settings, and also all of it&rsquo;s documents as an array under <code>documents</code> key.</p>
 <figure><img src="/images/folder-document-schema.png"
-         alt="An example schema"/><figcaption>
-            <p>An example schema</p>
-        </figcaption>
+    alt="An example schema"><figcaption>
+      <p>An example schema</p>
+    </figcaption>
 </figure>
 
 <p>Folder settings look like this:</p>
@@ -822,9 +825,9 @@ Query the data Transform it to the required format Send it over the wire Looks s
 <p>Као примјер ћу да искористим релацију сличну једној са којом сам се сусрео недавно: замислимо да имамо двије табеле назване <code>folder</code> и <code>document</code>, а које су у релацији 1:н, гдје сваки документ припада неком фолдеру. Сваки фолдер има своја подешавања која се чувају као JSON објекат, и има низ именованих веб линкова који се такође чувају као JSON. Документ садржи детаље који се презентују као кључ-вриједност, а који се такође, наравно, чувају као JSON.</p>
 <p>API сервис који добаља детаље неког фолдера мора да врати све доступне колоне фолдера, подскуп његових подешавања, али и све његове документе као низ под <code>documents</code> атрибутом.</p>
 <figure><img src="/images/folder-document-schema.png"
-         alt="Шема"/><figcaption>
-            <p>Шема</p>
-        </figcaption>
+    alt="Шема"><figcaption>
+      <p>Шема</p>
+    </figcaption>
 </figure>
 
 <p>Подешавања фолдера изгледају отприлике овако:</p>
@@ -1576,10 +1579,10 @@ Query the data Transform it to the required format Send it over the wire Looks s
 <p>Мобилна апликација је планирана, али није развијена.</p>
 <h2 id="неке-слике-екрана">Неке слике екрана</h2>
 <div style="column-count: 2;">
-  <a href="/images/qr4doc/1.png"><img src="/images/qr4doc/1.png" alt="Приказ документа"></a>
-<a href="/images/qr4doc/2.png"><img src="/images/qr4doc/2.png" alt="Почетни екран"></a>
-<a href="/images/qr4doc/3.png"><img src="/images/qr4doc/3.png" alt="Претрага докумената"></a>
-<a href="/images/qr4doc/4.png"><img src="/images/qr4doc/4.png" alt="Обрада докумената"></a>
+  <a href="/images/qr4doc/1.png"><img alt="Приказ документа" src="/images/qr4doc/1.png"></a>
+<a href="/images/qr4doc/2.png"><img alt="Почетни екран" src="/images/qr4doc/2.png"></a>
+<a href="/images/qr4doc/3.png"><img alt="Претрага докумената" src="/images/qr4doc/3.png"></a>
+<a href="/images/qr4doc/4.png"><img alt="Обрада докумената" src="/images/qr4doc/4.png"></a>
 </div>
 
 
@@ -1617,10 +1620,10 @@ It generates a unique link that gets embedded in the document in the form of a Q
 <p>Mobile client app was planned, but not developed.</p>
 <h2 id="some-screenshots">Some screenshots</h2>
 <div style="column-count: 2;">
-  <a href="/images/qr4doc/1.png"><img src="/images/qr4doc/1.png" alt="Document view"></a>
-<a href="/images/qr4doc/2.png"><img src="/images/qr4doc/2.png" alt="Home screen"></a>
-<a href="/images/qr4doc/3.png"><img src="/images/qr4doc/3.png" alt="Document search"></a>
-<a href="/images/qr4doc/4.png"><img src="/images/qr4doc/4.png" alt="Document edit"></a>
+  <a href="/images/qr4doc/1.png"><img alt="Document view" src="/images/qr4doc/1.png"></a>
+<a href="/images/qr4doc/2.png"><img alt="Home screen" src="/images/qr4doc/2.png"></a>
+<a href="/images/qr4doc/3.png"><img alt="Document search" src="/images/qr4doc/3.png"></a>
+<a href="/images/qr4doc/4.png"><img alt="Document edit" src="/images/qr4doc/4.png"></a>
 </div>
 
 

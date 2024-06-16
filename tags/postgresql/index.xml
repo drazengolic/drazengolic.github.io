@@ -45,9 +45,9 @@ Query the data Transform it to the required format Send it over the wire Looks s
 <p>For an example I&rsquo;ll use a relation similar to the one I&rsquo;ve encountered recently: let&rsquo;s imagine we have two tables called <code>folder</code> and <code>document</code> in a relation 1:n, where every document belongs to some folder. A single folder has different settings stored as a JSON object, and an array of named web links also stored as JSON. A document contains some key-value properties that is, as you can imagine, also stored as JSON.</p>
 <p>An API service to get details of a single folder needs to return all available columns, only a subset of it&rsquo;s settings, and also all of it&rsquo;s documents as an array under <code>documents</code> key.</p>
 <figure><img src="/images/folder-document-schema.png"
-         alt="An example schema"/><figcaption>
-            <p>An example schema</p>
-        </figcaption>
+    alt="An example schema"><figcaption>
+      <p>An example schema</p>
+    </figcaption>
 </figure>
 
 <p>Folder settings look like this:</p>
