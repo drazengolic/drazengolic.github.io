@@ -293,6 +293,37 @@ With my personal network of skilled professionals, it is also possible to arrang
     </item>
     
     <item>
+      <title>TDD - The Toilet-driven development</title>
+      <link>https://www.drazengolic.com/blog/tdd/</link>
+      <pubDate>Tue, 30 Jul 2024 21:36:47 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/blog/tdd/</guid>
+      <description>Warning: profanity ahead!
+An opinion is like an asshole. Everyone has one. &amp;ndash; A modern proverb
+It feels a bit strange to write anything remotely related to my gastrointestinal tract on a blog (and I really hope no one is genuinely interested in such topics), but there&amp;rsquo;s something funny related to it that will serve as a base of this post: some of my best solutions to hard problems were concieved while I was in the loo.</description>
+      <content:encoded><![CDATA[<p><strong>Warning: profanity ahead!</strong></p>
+<blockquote>
+<p>An opinion is like an asshole. Everyone has one.
+&ndash; A modern proverb</p>
+</blockquote>
+<p>It feels a bit strange to write anything remotely related to my gastrointestinal tract on a blog (and I really hope no one is genuinely interested in such topics), but there&rsquo;s something funny related to it that will serve as a base of this post: some of my best solutions to hard problems were concieved while I was in the loo. I shit you not (pun intended)!</p>
+<p>I don&rsquo;t know was it some kind of epiphany, or simply having some quiet time alone to think, but it worked many times, unintentionally. It happend so often that even a CEO of a certain company I was working for noticed it - once when we were discussing some really hard problem at the office (like we did many times before), he turned to me and, to my surprise, half-jokingly said: &ldquo;why don&rsquo;t you go into the loo and come back with a solution?&rdquo;. For better or worse, this is a true story. (And no, this doesn&rsquo;t mean I&rsquo;m spending way too much time over there at work btw)</p>
+<p>So you could say I have a <em>methodology</em> that worked for <em>me</em> on many occasions. It would be selfish to keep it to myself, wouldn&rsquo;t it? If it works for me, it must work for everyone else, amirite? Time for enlightening the world, earn some big $$$!</p>
+<p>Perhaps I should talk about it on some <em>developer conferences</em>. Or, launch a <em>podcast</em> where I discuss the benefits of toilet time for software development. Maybe even write a <em>book</em>, rebrand <em>TDD</em> into Toilet-driven development. And if my methodology doesn&rsquo;t work for some people, me and my faithful followers could use the opportunity to shout at them on how they <em>can&rsquo;t (do) shit <strong>properly</strong></em>.</p>
+<p>But, why stop there? I could also invent shitting in <em>pairs</em>, or even <em>mob</em> shitting. The more the merrier, right? The solutions would just keep dropping out at an incredible rate!</p>
+<p>What, you can&rsquo;t share the same toilet seat with someone? Oh, such an introvert! You must work on your social skills, learn to think outside the box. Shitting in a toilet is a social activity now!</p>
+
+<div style="width: 100%; text-align: center;">
+<div class="tenor-gif-embed" data-postid="16365000" data-share-method="host" data-aspect-ratio="1.11888" data-width="50%"><a href="https://tenor.com/view/sit-here-bunny-on-toilet-toilet-gif-16365000">Sit Here Bunny On Toilet GIF</a>from <a href="https://tenor.com/search/sit+here-gifs">Sit Here GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+</div>
+
+<p>Now, I hope it&rsquo;s obvious I&rsquo;m exagerating things quite a bit here, but the analogy should be clear. In a nutshell, this is how selling of any particular software development methodology looks to me. Some things work under certain conditions, and with a certain group of people. It&rsquo;s called a context. And anyone with a direct or indirect financial interest into success of a certain methodology will deny the existence of a context, because it would reduce their target area tremendously. And they don&rsquo;t care if the ideas range from wrong to utterly deranged, the perception of those with the money is all what matters.</p>
+<p>So, what would be the right methodology to use then? The cold truth is - none. It&rsquo;s a <em>roll your own</em> methodology. If you want trully to be agile, you&rsquo;ll think about your goals, the people that are working with you, and then mix and match what&rsquo;s already out there along with a dose of common sense. But more on that later.</p>
+<p>Obviously, all of this is my opinion on the matter. You can agree with me or not. These were not formed over a single day, but I understand that I may not have enough credibility to be taken more than lightly. But, you should also check how credible are the so called &ldquo;authorities&rdquo;. You&rsquo;d be surprised.</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Keep a project glossary (with the source code)</title>
       <link>https://www.drazengolic.com/blog/keep-a-project-glossary/</link>
       <pubDate>Mon, 11 Mar 2024 16:40:23 +0200</pubDate>
