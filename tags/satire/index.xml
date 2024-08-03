@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Properly on Drazen Golic</title>
-    <link>https://www.drazengolic.com/tags/properly/</link>
-    <description>Recent content in Properly on Drazen Golic</description>
+    <title>Satire on Drazen Golic</title>
+    <link>https://www.drazengolic.com/tags/satire/</link>
+    <description>Recent content in Satire on Drazen Golic</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>&amp;copy; Drazen Golic ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en))</copyright>
-    <lastBuildDate>Tue, 30 Jul 2024 21:36:47 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/tags/properly/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Jul 2024 21:36:47 +0200</lastBuildDate><atom:link href="https://www.drazengolic.com/tags/satire/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>TDD - The Toilet-driven development</title>
       <link>https://www.drazengolic.com/blog/tdd/</link>

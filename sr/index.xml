@@ -293,6 +293,87 @@ With my personal network of skilled professionals, it is also possible to arrang
     </item>
     
     <item>
+      <title>Roll your own methodology</title>
+      <link>https://www.drazengolic.com/blog/roll-your-own-methodology/</link>
+      <pubDate>Thu, 01 Aug 2024 23:04:16 +0200</pubDate>
+      
+      <guid>https://www.drazengolic.com/blog/roll-your-own-methodology/</guid>
+      <description>I am not teaching you anything. I just help you to explore yourself.
+&amp;ndash; Bruce Lee
+Now what would be a better way to start a post than to quote a childhood hero who was a martial artist, an actor, but also a philosopher - Bruce Lee! (The old movies were common on TV while I was growing up)
+This is a continuation of my satirical post TDD - The Toilet-driven development, albeit in a less satirical manner.</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>I am not teaching you anything. I just help you to explore yourself.</p>
+<p>&ndash; Bruce Lee</p>
+</blockquote>
+<p>Now what would be a better way to start a post than to quote a childhood hero who was a martial artist, an actor, but also a philosopher - Bruce Lee! (The old movies were common on TV while I was growing up)</p>
+<p>This is a continuation of my satirical post <a href="https://www.drazengolic.com/blog/tdd/">TDD - The Toilet-driven development</a>, albeit in a less satirical manner.</p>
+<p>I&rsquo;ve mentioned in the post how there is no right methodology to build software (especially those under the <em>Agile</em> umbrella), because they&rsquo;re being sold context-free. It&rsquo;s the context that decides whether you&rsquo;ll have success with a certain practice, but no one really knows the exact context under which a certain methodology was born (or if it&rsquo;s simply someone&rsquo;s thoughts on what <em>should</em> work).</p>
+<p>Building software is a lot like a martial art. The more you practice it, the more you get better at it. That&rsquo;s right, <em>practicing</em>. Not watching some youtubers, hanging out on streams, meetups, or even reading some stupid blogs like this one. Building stuff, even if it&rsquo;s something really stupid or completely useless.</p>
+<blockquote>
+<p>Practice makes perfect. After a long time of practicing, our work will become natural, skillfull, swift, and steady.</p>
+</blockquote>
+<p>The term <em>martial art</em> has it&rsquo;s roots in Latin, meaning &ldquo;arts of Mars&rdquo;. And we know that Mars was a Roman god of war. Coincidentally, Erik Meijer famously <a href="https://youtu.be/2u0sNRO-QKQ">compared</a> writing software with fighting a war. And it is a fight with almost everything - fighting the language constructs, the legacy codes, design patterns out of place, web frameworks that are trying hard to be the lid for every pot, hard deadlines, &ldquo;quick changes&rdquo;, acute insufficiency of important details written down, emergency bugs, people&rsquo;s opinions, your own motivation&hellip; the list goes on. It can be quite frustrating, but it&rsquo;s the frustration that helps you learn what works and what doesn&rsquo;t in a given situation. That&rsquo;s context.</p>
+<blockquote>
+<p>Without frustration you will not discover that you might be able to do something on your own. We grow through conflict.</p>
+</blockquote>
+<p>The waterfall software methodology was perceived as too rigid, and the Agile movement was born as something that was supposed to be better at &ldquo;responding to change&rdquo;. But what did we get? A set of recipes consisted of questionable practices, from coding to management, that somehow should transform an organisation into a software production powerhouse. And if you fail while doing it, you &ldquo;didn&rsquo;t do it properly&rdquo;, or you have &ldquo;skill issues&rdquo;. And if you change something to accomodate to your use case, then that&rsquo;s &ldquo;not the real method X&rdquo;. What is it, then? I should remind you that there are numerous books on Scrum, which was originally a 15-page pamphlet!</p>
+<p>And what do I suggest instead?</p>
+<blockquote>
+<p>Absorb what is useful, discard what is not, add what is uniquely your own.</p>
+</blockquote>
+<p>Rinse, repeat, and do not fear of failure.</p>
+<p>There are only three important things about any piece of software:</p>
+<ol>
+<li>It does what it&rsquo;s supposed to do, as good as possible</li>
+<li>It doesn&rsquo;t break the budget</li>
+<li>Is delivered in a reasonable time frame</li>
+</ol>
+<p>How will you get there is not really that important, as long as you care enough to actually get there. And as I suggested many times, there is no recipe that could be followed mindlessly while expecting a successful outcome every time. It takes something that everyone desperately tries to avoid - a bit of effort.</p>
+<blockquote>
+<p>Only the self-sufficient stand alone - most people follow the crowd and imitate.</p>
+</blockquote>
+<p>The idea to roll your own methodology probably sounds intimidating. It could raise questions like: Where do I start? Do I have room for errors, enough time to try out things? If you&rsquo;ve experienced enough frustration with the existing stuff, you&rsquo;ll probably have an idea or two what to do differently. While I can&rsquo;t give any specific instructions, I could point out some things that frustrate <em>me in particular</em>, and maybe you&rsquo;ll be able to pick up a couple of things from there.</p>
+<p>Here are some of the things I find frustrating with the existing methodologies, in no particular order:</p>
+<p><strong>Form without substance</strong></p>
+<p>This is something that frustrates me in general, not just in software development.</p>
+<p>For example - daily meetings. Why organize meetings every day, where no one is listening to anyone, just to satisfy some prescribed form? The first thing I&rsquo;d stop doing are the meetings for the sake of meetings, or any other activity being done just because it&rsquo;s &ldquo;by the book&rdquo;. This is especially infuriating in remote teams with the big time zone difference, when you have to stay at work late in the afternoon just to satisfy some stupid formality. Now don&rsquo;t get me wrong, meetings are important, but only when they&rsquo;re <em>productive</em>. I also don&rsquo;t like the idea of having a schedule to talk about what&rsquo;s good or bad. Imo those things should be discussed as soon as they happen. And those are best to be discussed one on one with the manager, rather than in a group where you won&rsquo;t feel just as free to talk about things.</p>
+<p>If you really want to spend your time fulfilling formalities with little to no sense, I suggest becoming a clerk in a state-owned institution in any of the post-communist countries in Europe. You could even earn a pension for doing it.</p>
+<p><strong>Evangelism</strong></p>
+<p>Do you know what actually has to be evangelized, rather than promoted? That&rsquo;s right, a religion. Or likely a cult. Did you also notice how you need to &ldquo;change your mindset&rdquo; every time they want you to swallow something that sounds downright crazy? There&rsquo;s no need to &ldquo;evangelize&rdquo; anything that sounds even remotely reasonable to most people.</p>
+<p><strong>Rituals</strong></p>
+<p>See above.</p>
+<p><strong>Borderline psychotherapy</strong></p>
+<p>Some of those agile &ldquo;gurus&rdquo; are way too enthusiastic about psychology, and I&rsquo;ve seen some collectives resembling a mental institution, or AA at least. Look pal/gal, I know that most programmers have issues, but, first and foremost, this is the workplace, and we&rsquo;re all grown-ups here. Why don&rsquo;t you go finish some college for a start, and run your sessions in your own house and leave us all alone?</p>
+<p>Besides - pairing, mobing, but also sprints&hellip; all of them look like some social experiment to me (or a psyop if you will), where <em>peer pressure</em> is intelligently deployed to squeeze out the last drop of productivity juice from every programmer involved. Even the best engines will burn out if you hold the gas pedal on the floor for too long, but that doesn&rsquo;t matter if you can afford changing cars every now and then. And it&rsquo;s hard for me to understand people who actually like to program in pairs. It must be either some ego trip where one keeps showing off their skills to some junior, or the sense of accomplishment for merely giving some input while the other person is doing all the work. But the salary is in the bank account, who cares about merit anyway.</p>
+<p><strong>Not giving credit</strong></p>
+<p>You&rsquo;ll notice how everything is about great teamwork, team this, team that. Being selfless and all. <em>From each according to his ability, to each according to his needs</em> and similar kind of BS. Newsflash - this is <em>work</em>, and we work for <em>money</em>, and for <em>recognition</em> so we could earn even more money. This is still capitalism as far as I know, and selflessness is for religions, charities and political extremism. Give credit where credit is due, or be ready to lose people. (Just to clarify one thing - none of this justifies being a jerk to your colleagues)</p>
+<p><strong>Insistence on vanity metrics</strong></p>
+<p>I have a huge issue with giving importance to the test coverage. Do you know that some time ago, a programmer&rsquo;s productivity was measured by the number of lines they could output? Sounds ridiculous, right? I feel just about the same for code coverage measuring code quality. Just because some code was executed in a test, it doesn&rsquo;t mean <em>it works</em>. Those are two different things. I write tests for coverage on a daily basis. They test <em>almost nothing</em>, but that beautiful green color is everywhere. Why? Not because I want to do it that way, but because I&rsquo;m expected to do so. It&rsquo;s also funny how can you exclude code from coverage and still keep that 100%. So, is it really 100% then? What about those non-trivial tests that you wrote, what&rsquo;s testing them? Besides, there are many ways to verify that software works as expected, and not all of it has to be automated on the lowest layer you know. A pedantic QA person is sometimes more valuable than your entire test suite. But tell that to a TDD zealot and be ready for some &ldquo;skill issue&rdquo; <em>ad hominem</em> attacks.</p>
+<p>Another stupid thing is the planning poker. Junior points can&rsquo;t be the same as senior points, and averaging it out will somehow make it more trustworthy? And a Fibonacci sequence lol, what&rsquo;s that for? To make it look more like it&rsquo;s rooted in math? Mystical, even? What a pile of rubbish! But I do like <a href="https://www.youtube.com/watch?v=Y7JG63IuaWs">Lateralus</a> though&hellip;</p>
+<p>Now some of you might say &ldquo;but something is still better than nothing&rdquo;. Well, I&rsquo;m in the nothing camp this time. It&rsquo;s better not to be in a marriage at all than to be in a really bad one.</p>
+<p><strong>Avoidance of all forms of documentation</strong></p>
+<p>A lot of people don&rsquo;t like writing documentation, and the most common excuse is that there&rsquo;s no time for it. But do you know what&rsquo;s great about documentation? You don&rsquo;t have to repeat yourself every now and then. New hires can get up to speed without much of your help. Also, a lot of WTFs could meet their &ldquo;ooooh that&rsquo;s why&rdquo; before someone expresses their wish to rewrite everything from scratch. And the company doesn&rsquo;t need to die with your departure either.</p>
+<hr>
+<p>Ok, I better stop before this post has turned completely from philosophy to <a href="https://www.youtube.com/watch?v=wBw14SVVQTI">free floating hostility</a>, and it&rsquo;s already way too long for most people. If you persisted up to this point, I&rsquo;d like to thank you and congratulate you on your patience.</p>
+<p>With all being said, what&rsquo;s next? Well, until there are enough brave souls to speak up and change the status quo, me, and a lot of other people like me, will continue reporting on daily meetings what they did, what they&rsquo;ll do and if they have any blockers.</p>
+<p>Maybe I&rsquo;ll apply this advice myself one day. Maybe you&rsquo;ll do it too, dear reader. But I don&rsquo;t expect this to ever become <em>a thing</em>. Why? Because it&rsquo;s common sense. There are no certificates for common sense. There are no expensive two-week education sessions for common sense. There&rsquo;s no branding value to exploit in common sense. So it&rsquo;s just us fighting with our frustrations. But:</p>
+<blockquote>
+<p>To hell with circumstances; I create opportunities.</p>
+</blockquote>
+<p>Thanks for reading!</p>
+
+
+    
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/nzQWYHHqvIw?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+      ></iframe>
+    </div>
+
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>TDD - The Toilet-driven development</title>
       <link>https://www.drazengolic.com/blog/tdd/</link>
       <pubDate>Tue, 30 Jul 2024 21:36:47 +0200</pubDate>
@@ -318,7 +399,7 @@ It feels a bit strange to write anything remotely related to my gastrointestinal
 </div>
 
 <p>Now, I hope it&rsquo;s obvious I&rsquo;m exagerating things quite a bit here, but the analogy should be clear. In a nutshell, this is how selling of any particular software development methodology looks to me. Some things work under certain conditions, and with a certain group of people. It&rsquo;s called a context. And anyone with a direct or indirect financial interest into success of a certain methodology will deny the existence of a context, because it would reduce their target area tremendously. And they don&rsquo;t care if the ideas range from wrong to utterly deranged, the perception of those with the money is all what matters.</p>
-<p>So, what would be the right methodology to use then? The cold truth is - none. It&rsquo;s a <em>roll your own</em> methodology. If you want trully to be agile, you&rsquo;ll think about your goals, the people that are working with you, and then mix and match what&rsquo;s already out there along with a dose of common sense. But more on that later.</p>
+<p>So, what would be the right methodology to use then? The cold truth is - none. It&rsquo;s a <a href="https://www.drazengolic.com/blog/roll-your-own-methodology/"><em>roll your own</em></a> methodology. If you want trully to be agile, you&rsquo;ll think about your goals, the people that are working with you, and then mix and match what&rsquo;s already out there along with a dose of common sense. But more on that later.</p>
 <p>Obviously, all of this is my opinion on the matter. You can agree with me or not. These were not formed over a single day, but I understand that I may not have enough credibility to be taken more than lightly. But, you should also check how credible are the so called &ldquo;authorities&rdquo;. You&rsquo;d be surprised.</p>
 ]]></content:encoded>
     </item>

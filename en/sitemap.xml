@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.drazengolic.com/</loc>
-    <lastmod>2024-07-30T21:36:47+02:00</lastmod>
+    <lastmod>2024-08-01T23:04:16+02:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="sr-BA"
@@ -16,7 +16,7 @@
                 />
   </url><url>
     <loc>https://www.drazengolic.com/blog/</loc>
-    <lastmod>2024-07-30T21:36:47+02:00</lastmod>
+    <lastmod>2024-08-01T23:04:16+02:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="sr-BA"
@@ -53,13 +53,16 @@
                 />
   </url><url>
     <loc>https://www.drazengolic.com/tags/agile/</loc>
-    <lastmod>2024-07-30T21:36:47+02:00</lastmod>
+    <lastmod>2024-08-01T23:04:16+02:00</lastmod>
   </url><url>
-    <loc>https://www.drazengolic.com/tags/properly/</loc>
-    <lastmod>2024-07-30T21:36:47+02:00</lastmod>
+    <loc>https://www.drazengolic.com/tags/ideas/</loc>
+    <lastmod>2024-08-01T23:04:16+02:00</lastmod>
+  </url><url>
+    <loc>https://www.drazengolic.com/blog/roll-your-own-methodology/</loc>
+    <lastmod>2024-08-01T23:04:16+02:00</lastmod>
   </url><url>
     <loc>https://www.drazengolic.com/tags/</loc>
-    <lastmod>2024-07-30T21:36:47+02:00</lastmod>
+    <lastmod>2024-08-01T23:04:16+02:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="sr-BA"
@@ -70,6 +73,12 @@
                 hreflang="en-US"
                 href="https://www.drazengolic.com/tags/"
                 />
+  </url><url>
+    <loc>https://www.drazengolic.com/tags/properly/</loc>
+    <lastmod>2024-07-30T21:36:47+02:00</lastmod>
+  </url><url>
+    <loc>https://www.drazengolic.com/tags/satire/</loc>
+    <lastmod>2024-07-30T21:36:47+02:00</lastmod>
   </url><url>
     <loc>https://www.drazengolic.com/blog/tdd/</loc>
     <lastmod>2024-07-30T21:36:47+02:00</lastmod>
