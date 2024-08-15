@@ -142,15 +142,14 @@ GitHub Pkg Reference
       <guid>https://www.drazengolic.com/hire-me/</guid>
       <description>Hire me I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp;amp; management.
 A non-exhaustive list of technologies I can use to deliver working solutions:
-Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreSQL, MySQL, Redis Cloud services: any (I read documentation!) Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.
-With my personal network of skilled professionals, it is also possible to arrange a complete greenfield or brownfield project development by covering the following areas: service development, web development, mobile application development, Salesforce development, UI/UX design, product management.</description>
+Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreSQL, MySQL, Redis Frameworks and cloud services: any (I read documentation!) Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.</description>
       <content:encoded><![CDATA[<h1 id="hire-me">Hire me</h1>
 <p>I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp; management.</p>
 <p>A non-exhaustive list of technologies I can use to deliver working solutions:</p>
 <ul>
 <li>Programming languages: PHP, Go, Elixir, C#, Java, JavaScript</li>
 <li>Databases: PostgreSQL, MySQL, Redis</li>
-<li>Cloud services: any (I read documentation!)</li>
+<li>Frameworks and cloud services: any (I read documentation!)</li>
 </ul>
 <p>Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.</p>
 <p>With my personal network of skilled professionals, it is also possible to arrange a complete <strong>greenfield</strong> or <strong>brownfield</strong> project development by covering the following areas: service development, web development, mobile application development, Salesforce development, UI/UX design, product management.</p>
@@ -221,15 +220,14 @@ With my personal network of skilled professionals, it is also possible to arrang
       <guid>https://www.drazengolic.com/sr/hire-me/</guid>
       <description>Ангажуј ме Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.
 Непотпуна листа технологија у којима могу да доставим функционална рјешења:
-Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript Базе података: PostgreSQL, MySQL, Redis Сервиси у ”облаку”: било који (јер читам документацију) Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.
-Са мојом личном мрежом искусних професионалаца, такође је могуће је договорити развој нових или постојећих пројеката у потпуности, покривајући сљедеће области: развој сервиса, веб развој, развој мобилних апликација, Salesforce развој, UI/UX дизајн, управљање развојем производа.</description>
+Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript Базе података: PostgreSQL, MySQL, Redis ”Фрејмворци” и сервиси у ”облаку”: било који (јер читам документацију) Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.</description>
       <content:encoded><![CDATA[<h1 id="ангажуј-ме">Ангажуј ме</h1>
 <p>Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.</p>
 <p>Непотпуна листа технологија у којима могу да доставим функционална рјешења:</p>
 <ul>
 <li>Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript</li>
 <li>Базе података: PostgreSQL, MySQL, Redis</li>
-<li>Сервиси у ”облаку”: било који (јер читам документацију)</li>
+<li>”Фрејмворци” и сервиси у ”облаку”: било који (јер читам документацију)</li>
 </ul>
 <p>Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.</p>
 <p>Са мојом личном мрежом искусних професионалаца, такође је могуће је договорити развој <strong>нових</strong> или <strong>постојећих</strong> пројеката у потпуности, покривајући сљедеће области: развој сервиса, веб развој, развој мобилних апликација, Salesforce развој, UI/UX дизајн, управљање развојем производа.</p>
