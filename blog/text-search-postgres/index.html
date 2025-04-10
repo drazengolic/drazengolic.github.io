@@ -8,7 +8,8 @@
 <link rel="shortcut icon" href="https://www.drazengolic.com/images/favicon.png" />
 <title>Speeding up text pattern searching and sorting in PostgreSQL | Drazen Golic</title>
 <meta name="title" content="Speeding up text pattern searching and sorting in PostgreSQL" />
-<meta name="description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow." />
+<meta name="description" content="Introduction
+Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?" />
 <meta name="keywords" content="Databases,PostgreSQL,Performance," />
 
 
@@ -20,8 +21,8 @@
   <meta property="og:url" content="https://www.drazengolic.com/blog/text-search-postgres/">
   <meta property="og:site_name" content="Drazen Golic">
   <meta property="og:title" content="Speeding up text pattern searching and sorting in PostgreSQL">
-  <meta property="og:description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow.">
-  <meta property="og:locale" content="en-US">
+  <meta property="og:description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?">
+  <meta property="og:locale" content="en_US">
   <meta property="og:type" content="article">
     <meta property="article:section" content="blog">
     <meta property="article:published_time" content="2021-07-16T23:33:12+02:00">
@@ -33,15 +34,17 @@
 
 
   
+  
   <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.drazengolic.com/images/postgresql.webp"><meta name="twitter:title" content="Speeding up text pattern searching and sorting in PostgreSQL">
-<meta name="twitter:description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow.">
+  <meta name="twitter:image" content="https://www.drazengolic.com/images/postgresql.webp">
+  <meta name="twitter:title" content="Speeding up text pattern searching and sorting in PostgreSQL">
+  <meta name="twitter:description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?">
 
 
   
   
   <meta itemprop="name" content="Speeding up text pattern searching and sorting in PostgreSQL">
-  <meta itemprop="description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow.">
+  <meta itemprop="description" content="Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?">
   <meta itemprop="datePublished" content="2021-07-16T23:33:12+02:00">
   <meta itemprop="dateModified" content="2021-07-16T23:33:12+02:00">
   <meta itemprop="wordCount" content="1682">
@@ -321,8 +324,7 @@
          Index Cond: ((name)::text ~~* ((&#39;%&#39;::text || $1) || &#39;%&#39;::text))
          Order By: (rating &lt;-&gt; &#39;50000&#39;::bigint)</code></pre><p>Value <strong>50000</strong> here is the value equal or larger than the maximum value of the <strong>rating</strong> column in the table, so that results are retrieved in an descending order. What is important to notice here is that the distance operator <strong><em>needs a constant</em></strong>. If you try to use a subquery instead of value 50000, index-enabled sorting will not trigger, and a <code>Sort</code> operation will show up in the execution plan! This means that you should have this value collected beforehand, if you&rsquo;d like to use the search in this way.</p>
 <blockquote>
-<p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p>
-</blockquote>
+<p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p></blockquote>
 <h3 id="caveats-1">Caveats</h3>
 <p>This way of indexing suffers from the same problem as the prefix/postfix search. Lesser the popularity, bigger the search time. Unfortunately, it&rsquo;s performance cannot be improved further with a covering index. GiST index does support covering, but not all operator classes will trigger the index-only scan. And it seems that it won&rsquo;t trigger in this very use-case.</p>
 <h2 id="conclusion">Conclusion</h2>

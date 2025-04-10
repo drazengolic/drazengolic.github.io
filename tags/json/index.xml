@@ -15,7 +15,8 @@
       
       <guid>https://www.drazengolic.com/blog/json-response-postgres/</guid>
       <description>Introduction Anyone involved in web or back-end development had to create an API service at some point that outputs data from a database in a JSON format. A typical database-centric service does more or less 3 things:
-Query the data Transform it to the required format Send it over the wire Looks simple, right? But there is a lot more going on just to deliver some data stored in the database.</description>
+Query the data Transform it to the required format Send it over the wire Looks simple, right? But there is a lot more going on just to deliver some data stored in the database.
+</description>
       <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>Anyone involved in web or back-end development had to create an API service at some point that outputs data from a database in a JSON format. A typical database-centric service does more or less 3 things:</p>
 <ol>
@@ -168,9 +169,9 @@ Query the data Transform it to the required format Send it over the wire Looks s
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">folderGetHandler</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="c1">// fetch the db connection, query, and the folder id
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// fetch the db connection, query, and the folder id</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="nx">row</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">QueryRow</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">folderId</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl">

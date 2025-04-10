@@ -8,8 +8,14 @@
 <link rel="shortcut icon" href="https://www.drazengolic.com/images/favicon.png" />
 <title>Формирај JSON одговор директно у PostgreSQL-у | Дражен Голић</title>
 <meta name="title" content="Формирај JSON одговор директно у PostgreSQL-у" />
-<meta name="description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
-Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе." />
+<meta name="description" content="Увод
+Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
+
+Шаље упит на базу и чита резултате
+Трансформише податке у тражени формат
+Враћа одговор
+
+Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе." />
 <meta name="keywords" content="Databases,PostgreSQL,JSON," />
 
 
@@ -23,7 +29,7 @@
   <meta property="og:title" content="Формирај JSON одговор директно у PostgreSQL-у">
   <meta property="og:description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
 Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.">
-  <meta property="og:locale" content="sr-BA">
+  <meta property="og:locale" content="sr_BA">
   <meta property="og:type" content="article">
     <meta property="article:section" content="blog">
     <meta property="article:published_time" content="2023-11-22T11:22:23+02:00">
@@ -35,9 +41,11 @@
 
 
   
+  
   <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.drazengolic.com/images/postgres-json.png"><meta name="twitter:title" content="Формирај JSON одговор директно у PostgreSQL-у">
-<meta name="twitter:description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
+  <meta name="twitter:image" content="https://www.drazengolic.com/images/postgres-json.png">
+  <meta name="twitter:title" content="Формирај JSON одговор директно у PostgreSQL-у">
+  <meta name="twitter:description" content="Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
 Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.">
 
 
@@ -294,9 +302,9 @@
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">folderGetHandler</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="c1">// добавити конекцију на базу, упит и број фолдера
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// добавити конекцију на базу, упит и број фолдера</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="nx">row</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">QueryRow</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">folderId</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl">

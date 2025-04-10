@@ -8,8 +8,15 @@
 <link rel="shortcut icon" href="https://www.drazengolic.com/images/favicon.png" />
 <title>Securing server APIs for mobile apps without user registration | Drazen Golic</title>
 <meta name="title" content="Securing server APIs for mobile apps without user registration" />
-<meta name="description" content="The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
-You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for." />
+<meta name="description" content="The Problem
+Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+
+You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering
+You could turn down many users from using the app by asking them to register
+Creating the social login or login/registration workflow with emails is tedious
+You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to
+
+Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for." />
 <meta name="keywords" content="Mobile,API,Security," />
 
 
@@ -23,7 +30,7 @@ You&rsquo;re just serving some content, and there is no obvious benefit for you 
   <meta property="og:title" content="Securing server APIs for mobile apps without user registration">
   <meta property="og:description" content="The Problem Let’s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
 You’re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You’re vary of GDPR policies and would rather not to have access to any personal data if you don’t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you’re paying for.">
-  <meta property="og:locale" content="en-US">
+  <meta property="og:locale" content="en_US">
   <meta property="og:type" content="article">
     <meta property="article:section" content="blog">
     <meta property="article:published_time" content="2023-11-28T11:30:23+02:00">
@@ -35,17 +42,19 @@ You’re just serving some content, and there is no obvious benefit for you or t
 
 
   
+  
   <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.drazengolic.com/images/private.jpg"><meta name="twitter:title" content="Securing server APIs for mobile apps without user registration">
-<meta name="twitter:description" content="The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
-You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for.">
+  <meta name="twitter:image" content="https://www.drazengolic.com/images/private.jpg">
+  <meta name="twitter:title" content="Securing server APIs for mobile apps without user registration">
+  <meta name="twitter:description" content="The Problem Let’s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You’re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You’re vary of GDPR policies and would rather not to have access to any personal data if you don’t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you’re paying for.">
 
 
   
   
   <meta itemprop="name" content="Securing server APIs for mobile apps without user registration">
-  <meta itemprop="description" content="The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
-You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for.">
+  <meta itemprop="description" content="The Problem Let’s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You’re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You’re vary of GDPR policies and would rather not to have access to any personal data if you don’t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you’re paying for.">
   <meta itemprop="datePublished" content="2023-11-28T11:30:23+02:00">
   <meta itemprop="dateModified" content="2023-11-28T11:30:23+02:00">
   <meta itemprop="wordCount" content="766">
@@ -138,8 +147,7 @@ You&rsquo;re just serving some content, and there is no obvious benefit for you 
 <h2 id="the-solution">The Solution</h2>
 <p>So, you still need <em>some</em> form of registration. But instead of users, you could <strong>register a device</strong> running your app. But how do you make sure that it&rsquo;s <em>your app</em> that is asking to register, and not something else? With something unique to your app: <strong>push notifications</strong>.</p>
 <blockquote>
-<p><strong>Disclaimer</strong>: there are no bullet-proof solutions, and neither it&rsquo;s this one. However, it&rsquo;s good enough to keep those less tech-savvy and less motivated at bay, while enabling you to apply different security strategies just like for APIs with user authentication.</p>
-</blockquote>
+<p><strong>Disclaimer</strong>: there are no bullet-proof solutions, and neither it&rsquo;s this one. However, it&rsquo;s good enough to keep those less tech-savvy and less motivated at bay, while enabling you to apply different security strategies just like for APIs with user authentication.</p></blockquote>
 <p>Without further ado, here is a full <a href="https://en.wikipedia.org/wiki/Sequence_diagram">sequence diagram</a> of the device registration workflow:</p>
 <figure><img src="/images/mobile_secure_en.png"
     alt="Device registration worflow"><figcaption>

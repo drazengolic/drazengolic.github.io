@@ -14,11 +14,15 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/projects/</guid>
-      <description>Projects Active ▷ My Number Game A simple web game that is similar in spirit to Countdown Numbers, but modeled after one of the games in the popular TV show Slagalica on Radio Television of Serbia. The game makes heavy use of the kombinat library, compiled to WASM via TinyGo.
-English Serbian
-▷ Kombinat Generic combinatorial functions and generators for producing combinations, permutations, multiset permutations and variations from elements in a slice of any type in Go language.</description>
+      <description>Projects Active ▷ gitodo Gitodo is a to-do and time tracking CLI/TUI tool that allows creating to-dos per git branch and use them in commit messages. It can also track time spent on (feature) branch. Recorded data can be viewed with the report command, or exported as JSON so that it could be easily fed to external systems with automation scripts.
+GitHub Docs
+▷ My Number Game A simple web game that is similar in spirit to Countdown Numbers, but modeled after one of the games in the popular TV show Slagalica on Radio Television of Serbia. The game makes heavy use of the kombinat library, compiled to WASM via TinyGo.
+</description>
       <content:encoded><![CDATA[<h1 id="projects">Projects</h1>
 <h2 id="active">Active</h2>
+<h3 id="-gitodo">▷ gitodo</h3>
+<p>Gitodo is a to-do and time tracking CLI/TUI tool that allows creating to-dos per git branch and use them in commit messages. It can also track time spent on (feature) branch. Recorded data can be viewed with the report command, or exported as JSON so that it could be easily fed to external systems with automation scripts.</p>
+<p><a href="https://github.com/drazengolic/gitodo">GitHub</a> <a href="https://www.drazengolic.com/gitodo/">Docs</a></p>
 <h3 id="-my-number-game">▷ My Number Game</h3>
 <p>A simple web game that is similar in spirit to Countdown Numbers, but modeled after one of the games in the popular TV show <em>Slagalica</em> on Radio Television of Serbia. The game makes heavy use of the <strong>kombinat</strong> library, compiled to WASM via TinyGo.</p>
 <p><a href="https://mynumber.drazengolic.com">English</a> <a href="https://mojbroj.drazengolic.com">Serbian</a></p>
@@ -30,17 +34,16 @@ English Serbian
 <h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
 <p>A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies. <a href="https://www.drazengolic.com/qr4doc/">View project details</a></p>
 <blockquote>
-<p><strong>Note:</strong> this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</p>
-</blockquote>
+<p><strong>Note:</strong> this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</p></blockquote>
 <h3 id="-salesforce-based-payment-processing-application-2019---2020">▷ Salesforce-based payment processing application (2019 - 2020)</h3>
 <p>An application that enabled Salesforce users to take order payments from customers on-site or online, by utilizing <a href="https://www.adyen.com/">Adyen</a> payment platform&rsquo;s <a href="https://docs.adyen.com/point-of-sale/design-your-integration/choose-your-architecture/cloud/">cloud-enabled</a> POS terminals and other forms of payment, such as online payments (supported 3-D Secure 1 &amp; 2), Apple Pay, and telephone orders. A record of a successful transaction was saved to Salesforce as a part of the paid order, with an option to issue a refund by this same app. POS payment section has displayed messages from the payment terminals in real-time.</p>
 <p>More than 90% of payment transactions to the company were processed by this application for a period of at least two years, with several millions of EUR worth in total.</p>
 <p>Tech stack: .NET Core, SignalR, Redis, Bash, Ubuntu. Some clients for the app&rsquo;s API-s were done in PHP.</p>
 <p><em>Company: Famille Carabello-Baum SAS (Château de Pommard) / Vivant Inc</em></p>
 <div style="column-count: 3;">
-  <a href="/images/payapp/1.jpg"><img alt="Choose payment method" src="/images/payapp/1.jpg"></a>
-<a href="/images/payapp/2.jpg"><img alt="Chose POS terminal" src="/images/payapp/2.jpg"></a>
-<a href="/images/payapp/3.jpg"><img alt="POS screen" src="/images/payapp/3.jpg"></a>
+  <a href="/images/payapp/1.jpg"><img src="/images/payapp/1.jpg" alt="Choose payment method"></a>
+<a href="/images/payapp/2.jpg"><img src="/images/payapp/2.jpg" alt="Chose POS terminal"></a>
+<a href="/images/payapp/3.jpg"><img src="/images/payapp/3.jpg" alt="POS screen"></a>
 </div>
 
 
@@ -76,13 +79,15 @@ English Serbian
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/sr/projects/</guid>
-      <description>Пројекти Активни ▷ Игра Мој Број Онлајн игра моделована по игри из популарне ТВ Слагалице са Радио Телевизије Србије. Игра интензивно користи kombinat библиотеку и компајлирана је у WASM помоћу TinyGo компајлера.
-Српски Енглески
-▷ Kombinat Генеричке комбинаторне функције и генератори за генерисање комбинација, пермутација са и без понављања, као и варијација са понављањем од елемената из слајсова било којег типа у Го језику.
-GitHub Pkg Reference
-Претходни радови Неки важнији пројекти које сам протеклих година реализовао самостално, или са врло мало помоћи.</description>
+      <description>Пројекти Активни ▷ gitodo Gitodo је командна апликација којом је могуће додати ставке које је потребно урадити на некој ”git” грани и искористити их у ”commit” порукама. Такође се може мјерити вријеме проведено на некој грани. Извјештај о уписаним подацима може се добити report командом, или добити у JSON формату како би се могао искористити у аутоматизацији слања података у екстерне системе.
+GitHub Документација
+▷ Игра Мој Број Онлајн игра моделована по игри из популарне ТВ Слагалице са Радио Телевизије Србије. Игра интензивно користи kombinat библиотеку и компајлирана је у WASM помоћу TinyGo компајлера.
+</description>
       <content:encoded><![CDATA[<h1 id="пројекти">Пројекти</h1>
 <h2 id="активни">Активни</h2>
+<h3 id="-gitodo">▷ gitodo</h3>
+<p>Gitodo је командна апликација којом је могуће додати ставке које је потребно урадити на некој ”git” грани и искористити их у ”commit” порукама. Такође се може мјерити вријеме проведено на некој грани. Извјештај о уписаним подацима може се добити report командом, или добити у JSON формату како би се могао искористити у аутоматизацији слања података у екстерне системе.</p>
+<p><a href="https://github.com/drazengolic/gitodo">GitHub</a> <a href="https://www.drazengolic.com/gitodo/">Документација</a></p>
 <h3 id="-игра-мој-број">▷ Игра Мој Број</h3>
 <p>Онлајн игра моделована по игри из популарне ТВ Слагалице са Радио Телевизије Србије. Игра интензивно користи <strong>kombinat</strong> библиотеку и компајлирана је у WASM помоћу TinyGo компајлера.</p>
 <p><a href="https://mojbroj.drazengolic.com">Српски</a> <a href="https://mynumber.drazengolic.com">Енглески</a></p>
@@ -94,17 +99,16 @@ GitHub Pkg Reference
 <h3 id="-qr4doc-2022---2023">▷ QR4DOC (2022 - 2023)</h3>
 <p>Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, оригинално намијењен за полисе осигурања. <a href="https://www.drazengolic.com/sr/qr4doc/">Види детаље пројекта</a></p>
 <blockquote>
-<p><strong>Напомена:</strong> у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље, молио бих да ме контактира.</p>
-</blockquote>
+<p><strong>Напомена:</strong> у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље, молио бих да ме контактира.</p></blockquote>
 <h3 id="-апликација-за-наплату-интегрисана-са-salesforce-системом-2019---2020">▷ Апликација за наплату интегрисана са Salesforce системом (2019 - 2020)</h3>
 <p>Апликација која омогућује корисницима Salesforce система да наплаћују наруџбе на лицу мјеста или путем интернета, користећи <a href="https://www.adyen.com/">Adyen</a> систем за плаћање и њихове ПОС терминале <a href="https://docs.adyen.com/point-of-sale/design-your-integration/choose-your-architecture/cloud/">у облаку</a>, као и друге видове плаћања, попут онлајн плаћања (подржани 3-D Secure 1 и 2), Apple Pay, или телефонских наруџби. Запис о успјешној трансакцији се сачувао као дио наруџбе која је плаћена, а коју је било могуће и рефундирати помоћу ове исте апликације. Сегмент за ПОС плаћање је приказивао поруке са ПОС терминала у реалном времену.</p>
 <p>Више од 90% платног промета компаније је ишло преко ове апликације у периоду од најмање двије године, са укупном вриједношћу од неколико милиона евра.</p>
 <p>Технологије: .NET Core, SignalR, Redis, Bash, Ubuntu. Неке апликације писане као клијент API-ја ове апликације су писане у PHP-у.</p>
 <p><em>Компанија: Famille Carabello-Baum SAS (Château de Pommard) / Vivant Inc</em></p>
 <div style="column-count: 3;">
-  <a href="/images/payapp/1.jpg"><img alt="Choose payment method" src="/images/payapp/1.jpg"></a>
-<a href="/images/payapp/2.jpg"><img alt="Chose POS terminal" src="/images/payapp/2.jpg"></a>
-<a href="/images/payapp/3.jpg"><img alt="POS screen" src="/images/payapp/3.jpg"></a>
+  <a href="/images/payapp/1.jpg"><img src="/images/payapp/1.jpg" alt="Choose payment method"></a>
+<a href="/images/payapp/2.jpg"><img src="/images/payapp/2.jpg" alt="Chose POS terminal"></a>
+<a href="/images/payapp/3.jpg"><img src="/images/payapp/3.jpg" alt="POS screen"></a>
 </div>
 
 
@@ -140,9 +144,10 @@ GitHub Pkg Reference
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/hire-me/</guid>
-      <description>Hire me I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp;amp; management.
+      <description>Hire me I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp; management.
 A non-exhaustive list of technologies I can use to deliver working solutions:
-Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreSQL, MySQL, Redis Frameworks and cloud services: any (I read documentation!) Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.</description>
+Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreSQL, MySQL, Redis Frameworks and cloud services: any (I read documentation!) Cutting the operating costs and addressing performance bottlenecks are the tasks that I enjoy the most.
+</description>
       <content:encoded><![CDATA[<h1 id="hire-me">Hire me</h1>
 <p>I can offer consulting services in the following areas: software development, solution design, business process automation, software product engineering &amp; management.</p>
 <p>A non-exhaustive list of technologies I can use to deliver working solutions:</p>
@@ -220,7 +225,8 @@ Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreS
       <guid>https://www.drazengolic.com/sr/hire-me/</guid>
       <description>Ангажуј ме Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.
 Непотпуна листа технологија у којима могу да доставим функционална рјешења:
-Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript Базе података: PostgreSQL, MySQL, Redis ”Фрејмворци” и сервиси у ”облаку”: било који (јер читам документацију) Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.</description>
+Програмски језици: PHP, Go, Elixir, C#, Java, JavaScript Базе података: PostgreSQL, MySQL, Redis ”Фрејмворци” и сервиси у ”облаку”: било који (јер читам документацију) Смањење оперативних трошкова, као и оптимизација перформанси система су задаци који ми придају највише задовољства.
+</description>
       <content:encoded><![CDATA[<h1 id="ангажуј-ме">Ангажуј ме</h1>
 <p>Могу да понудим консултантске услуге из сљедећих области: развој софтвера, дизајн рјешења, аутоматизација пословних процеса, инжињеринг и менаџмент софтверских производа.</p>
 <p>Непотпуна листа технологија у којима могу да доставим функционална рјешења:</p>
@@ -291,35 +297,80 @@ Programming languages: PHP, Go, Elixir, C#, Java, JavaScript Databases: PostgreS
     </item>
     
     <item>
+      <title>Committing upfront</title>
+      <link>https://www.drazengolic.com/blog/committing-upfront/</link>
+      <pubDate>Tue, 08 Apr 2025 22:19:28 +0200</pubDate>
+      <author>Drazen Golic</author>
+      <guid>https://www.drazengolic.com/blog/committing-upfront/</guid>
+      <description>Introduction You might be working in a feature factory. Or you&rsquo;re a consultant that has to juggle multiple projects at once. Just when you&rsquo;re in the middle of doing something important, something else suddenly needs immediate attention. And once you&rsquo;re back, you have no clue what you&rsquo;ve been up to - the context switching has screwed you up once again. Couple of those in a short timeframe, and you start questioning the life itself. (by you I mean me)
+</description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>You might be working in a <a href="https://medium.com/@johnpcutler/12-signs-youre-working-in-a-feature-factory-44a5b938d6a2">feature factory</a>. Or you&rsquo;re a consultant that has to juggle multiple projects at once. Just when you&rsquo;re in the middle of doing something important, something else suddenly needs immediate attention. And once you&rsquo;re back, you have no clue what you&rsquo;ve been up to - the <a href="https://simpleprogrammer.com/context-switching/">context switching</a> has screwed you up once again. Couple of those in a short timeframe, and you start questioning the life itself. (by <em>you</em> I mean <em>me</em>)</p>
+<p>And what you&rsquo;ve been doing was a no easy task - you were adding features to the worst codebase that you&rsquo;ve ever seen. Many moving parts, many things to keep in your head. As if getting into it <em>once</em> wasn&rsquo;t big enough of a curse, you have to do it multiple times <em>a day</em>. But you&rsquo;re a professional and an adult, so you <strong>will</strong> deliver.</p>
+<p>You&rsquo;re also expected to provide a detailed changelist of the things you did, so that they could be reviewed easier.</p>
+<h2 id="now-where-was-i">&ldquo;Now where was I&hellip;&rdquo;&quot;</h2>
+<p>Every time you get back to what you&rsquo;ve been doing, you have to go through the most of the code changes made previously, so you&rsquo;d get the idea where the things are standing. And if you write your changelist after the coding is done, you&rsquo;ll have to go through the changes once again in order to provide some meaningful list of descriptions.</p>
+<p>Wouldn&rsquo;t it be more helpful if at least some of those descriptions were already there every time you get back to the task?</p>
+<h2 id="tlc---think-it-log-it-change-it">TLC - Think it, Log it, Change it</h2>
+<p>It ain&rsquo;t a method if it doesn&rsquo;t have an acronym, amirite?</p>
+<p>Thinking upfront isn&rsquo;t an easy thing, especially when there&rsquo;s a lot to do, or you aren&rsquo;t sure where to start. Jumping right into coding makes you feel that you aren&rsquo;t procrastinating on the work, but it&rsquo;s easy to lose focus once you realize that you&rsquo;ve taken on too many things at once and now have to manage contexts within contexts in your head. This is a state of mind where shattering of a thougth process with a benign question over Slack can feel so irritating that you could just punch the other person right in their stupid face if they happened to be sitting right next to you (or that&rsquo;s just me again lol).</p>
+<p>Giving some thought upfront and writing down your next steps will help you to maintain focus. But it&rsquo;s easy to forget about writing things down, or to neglect the value of doing it. So it&rsquo;s a discipline that has to be learned and maintained. An &ldquo;acquired taste&rdquo; so to speak. And you don&rsquo;t need to get things right the first time you write them down. You&rsquo;re free to change the text as you progress, nothing was carved in stone (or in a commit message).</p>
+<p>As a bonus, your notes will be waiting for you to skim trough them when you get back to the task after a while, like a to-do list. And chances are, they&rsquo;ll be much shorter and concise compared to going trough the code all over again.</p>
+<h2 id="but-its-a-chore">But it&rsquo;s a chore</h2>
+<p>Unless you&rsquo;re really organized and maintain your notes in a clean and accessible way, finding and then editing a correct to-do list could become a chore, especially if you need to do it quickly. This is where the general purpose (usually web based) to-do software falls short. There are also CLI apps, but they are also general purposed most of the time, and may not be easy to use.</p>
+<p>Maintaining a text file or a spreadsheet per project, split into sections that represent feature branches, is probably the easiest way to put this into practice, though it&rsquo;s not ideal if you&rsquo;d like to get some more insight into the work done.</p>
+<p>I&rsquo;ve took all of the above into account when I&rsquo;ve decided to create <a href="https://github.com/drazengolic/gitodo">gitodo</a> as a dedicated tool to help me maintain my focus at work.</p>
+<h2 id="gitodo">gitodo?</h2>
+<p>I know, I know, yet another to-do list app&hellip; And to make things worse, I used it as an excuse to finally put Go and SQLite into practice.</p>
+<p>But it does address some unique concerns that I wasn&rsquo;t able to address with the text files or existing to-do apps:</p>
+<ul>
+<li>I want to be able to retrieve my to-do list for my feature branch anywhere within the git repository without having to type a lot, or having to scroll trough a document in another window</li>
+<li>No special tags or queries, just a dumb list that is easy to manipulate via TUI screen</li>
+<li>Nothing beats a proper editor for editing text (well, obviously), so it has to invoke an editor when items have to be added or edited rather than me creating some crippled version of nano (vim users may find this rather appealing). It should use the same one that is configured for git</li>
+<li>I also want to be able to use my completed items when crafting a commit message. It should also take into account of what was already committed, so it doesn&rsquo;t offer the same items again</li>
+<li>Stash management. Ability to link a stash to a to-do item as a form of &ldquo;checkpoint&rdquo;</li>
+<li>I&rsquo;d also like to see a report on what I&rsquo;ve been working on recently, so I could quickly glance over it when interrupted with a (daily) meeting. Or have some way to automatically export that data and push it somewhere else</li>
+<li>Time tracking was not a necessity, but I thought it would be a neat feature to add, especially if you&rsquo;re billing per hour</li>
+<li>Zero config files. All necessary information is obtained from git and the environment.</li>
+<li>Also no files stored in git repositories, though this might be reconsidered later</li>
+<li>Opinionated and minimal, no hundreds of features configured with yaml</li>
+</ul>
+<p>If you like the idea, head over to <a href="https://www.drazengolic.com/gitodo/">the docs</a> and give it a spin. Unfortunately, you&rsquo;ll need Go and GCC to build it, as it&rsquo;s not officially packaged for any platform yet. I still consider it as a proof-of-concept, though it&rsquo;s perfectly usable and mostly feature complete at this point (I use it at work btw). It&rsquo;s free and open source.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>If you&rsquo;re struggling with context switching or with maintaining focus, give some &ldquo;committing upfront&rdquo; in the form of a to-do list a try, and see if it makes a difference. I&rsquo;ll be honest and say that I haven&rsquo;t developed my discipline around it yet, since I&rsquo;m not practicing it for every task I have to do, especially if I&rsquo;m doing things intended for mindless code monkeys. But once I do, thinking about things upfront and writing them down usually leads to more quality output.</p>
+<h2 id="ps">P.S.</h2>
+<p>There was a local meetup some time ago where a guy gave a talk about writing commit messages upfront for similar reasons
+discussed above. I wasn&rsquo;t aware of it, a friend of mine mentioned it to me recently. So this isn&rsquo;t anything new, just a bit different approach. If I ever find out who it was, or find any posts/videos from it, I&rsquo;ll post them here.</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Roll your own methodology</title>
       <link>https://www.drazengolic.com/blog/roll-your-own-methodology/</link>
       <pubDate>Thu, 01 Aug 2024 23:04:16 +0200</pubDate>
       
       <guid>https://www.drazengolic.com/blog/roll-your-own-methodology/</guid>
-      <description>I am not teaching you anything. I just help you to explore yourself.
-&amp;ndash; Bruce Lee
+      <description> I am not teaching you anything. I just help you to explore yourself.
+&ndash; Bruce Lee
 Now what would be a better way to start a post than to quote a childhood hero who was a martial artist, an actor, but also a philosopher - Bruce Lee! (The old movies were common on TV while I was growing up)
-This is a continuation of my satirical post TDD - The Toilet-driven development, albeit in a less satirical manner.</description>
+This is a continuation of my satirical post TDD - The Toilet-driven development, albeit in a less satirical manner.
+</description>
       <content:encoded><![CDATA[<blockquote>
 <p>I am not teaching you anything. I just help you to explore yourself.</p>
-<p>&ndash; Bruce Lee</p>
-</blockquote>
+<p>&ndash; Bruce Lee</p></blockquote>
 <p>Now what would be a better way to start a post than to quote a childhood hero who was a martial artist, an actor, but also a philosopher - Bruce Lee! (The old movies were common on TV while I was growing up)</p>
 <p>This is a continuation of my satirical post <a href="https://www.drazengolic.com/blog/tdd/">TDD - The Toilet-driven development</a>, albeit in a less satirical manner.</p>
 <p>I&rsquo;ve mentioned in the post how there is no right methodology to build software (especially those under the <em>Agile</em> umbrella), because they&rsquo;re being sold context-free. It&rsquo;s the context that decides whether you&rsquo;ll have success with a certain practice, but no one really knows the exact context under which a certain methodology was born (or if it&rsquo;s simply someone&rsquo;s thoughts on what <em>should</em> work).</p>
 <p>Building software is a lot like a martial art. The more you practice it, the more you get better at it. That&rsquo;s right, <em>practicing</em>. Not watching some youtubers, hanging out on streams, meetups, or even reading some stupid blogs like this one. Building stuff, even if it&rsquo;s something really stupid or completely useless.</p>
 <blockquote>
-<p>Practice makes perfect. After a long time of practicing, our work will become natural, skillfull, swift, and steady.</p>
-</blockquote>
+<p>Practice makes perfect. After a long time of practicing, our work will become natural, skillfull, swift, and steady.</p></blockquote>
 <p>The term <em>martial art</em> has it&rsquo;s roots in Latin, meaning &ldquo;arts of Mars&rdquo;. And we know that Mars was a Roman god of war. Coincidentally, Erik Meijer famously <a href="https://youtu.be/2u0sNRO-QKQ">compared</a> writing software with fighting a war. And it is a fight with almost everything - fighting the language constructs, the legacy codes, design patterns out of place, web frameworks that are trying hard to be the lid for every pot, hard deadlines, &ldquo;quick changes&rdquo;, acute insufficiency of important details written down, emergency bugs, people&rsquo;s opinions, your own motivation&hellip; the list goes on. It can be quite frustrating, but it&rsquo;s the frustration that helps you learn what works and what doesn&rsquo;t in a given situation. That&rsquo;s context.</p>
 <blockquote>
-<p>Without frustration you will not discover that you might be able to do something on your own. We grow through conflict.</p>
-</blockquote>
+<p>Without frustration you will not discover that you might be able to do something on your own. We grow through conflict.</p></blockquote>
 <p>The waterfall software methodology was perceived as too rigid, and the Agile movement was born as something that was supposed to be better at &ldquo;responding to change&rdquo;. But what did we get? A set of recipes consisted of questionable practices, from coding to management, that somehow should transform an organisation into a software production powerhouse. And if you fail while doing it, you &ldquo;didn&rsquo;t do it properly&rdquo;, or you have &ldquo;skill issues&rdquo;. And if you change something to accomodate to your use case, then that&rsquo;s &ldquo;not the real method X&rdquo;. What is it, then? I should remind you that there are numerous books on Scrum, which was originally a 15-page pamphlet!</p>
 <p>And what do I suggest instead?</p>
 <blockquote>
-<p>Absorb what is useful, discard what is not, add what is uniquely your own.</p>
-</blockquote>
+<p>Absorb what is useful, discard what is not, add what is uniquely your own.</p></blockquote>
 <p>Rinse, repeat, and do not fear of failure.</p>
 <p>There are only three important things about any piece of software:</p>
 <ol>
@@ -329,8 +380,7 @@ This is a continuation of my satirical post TDD - The Toilet-driven development,
 </ol>
 <p>How will you get there is not really that important, as long as you care enough to actually get there. And as I suggested many times, there is no recipe that could be followed mindlessly while expecting a successful outcome every time. It takes something that everyone desperately tries to avoid - a bit of effort.</p>
 <blockquote>
-<p>Only the self-sufficient stand alone - most people follow the crowd and imitate.</p>
-</blockquote>
+<p>Only the self-sufficient stand alone - most people follow the crowd and imitate.</p></blockquote>
 <p>The idea to roll your own methodology probably sounds intimidating. It could raise questions like: Where do I start? Do I have room for errors, enough time to try out things? If you&rsquo;ve experienced enough frustration with the existing stuff, you&rsquo;ll probably have an idea or two what to do differently. While I can&rsquo;t give any specific instructions, I could point out some things that frustrate <em>me in particular</em>, and maybe you&rsquo;ll be able to pick up a couple of things from there.</p>
 <p>Here are some of the things I find frustrating with the existing methodologies, in no particular order:</p>
 <p><strong>Form without substance</strong></p>
@@ -357,16 +407,11 @@ This is a continuation of my satirical post TDD - The Toilet-driven development,
 <p>With all being said, what&rsquo;s next? Well, until there are enough brave souls to speak up and change the status quo, me, and a lot of other people like me, will continue reporting on daily meetings what they did, what they&rsquo;ll do and if they have any blockers.</p>
 <p>Maybe I&rsquo;ll apply this advice myself one day. Maybe you&rsquo;ll do it too, dear reader. But I don&rsquo;t expect this to ever become <em>a thing</em>. Why? Because it&rsquo;s common sense. There are no certificates for common sense. There are no expensive two-week education sessions for common sense. There&rsquo;s no branding value to exploit in common sense. So it&rsquo;s just us fighting with our frustrations. But:</p>
 <blockquote>
-<p>To hell with circumstances; I create opportunities.</p>
-</blockquote>
+<p>To hell with circumstances; I create opportunities.</p></blockquote>
 <p>Thanks for reading!</p>
 <p><em>All quotes in the text are by Bruce Lee.</em></p>
-
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/nzQWYHHqvIw?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/nzQWYHHqvIw?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
     </div>
 
 ]]></content:encoded>
@@ -379,13 +424,13 @@ This is a continuation of my satirical post TDD - The Toilet-driven development,
       
       <guid>https://www.drazengolic.com/blog/tdd/</guid>
       <description>Warning: profanity ahead!
-An opinion is like an asshole. Everyone has one. &amp;ndash; A modern proverb
-It feels a bit strange to write anything remotely related to my gastrointestinal tract on a blog (and I really hope no one is genuinely interested in such topics), but there&amp;rsquo;s something funny related to it that will serve as a base of this post: some of my best solutions to hard problems were concieved while I was in the loo.</description>
+An opinion is like an asshole. Everyone has one. &ndash; A modern proverb
+It feels a bit strange to write anything remotely related to my gastrointestinal tract on a blog (and I really hope no one is genuinely interested in such topics), but there&rsquo;s something funny related to it that will serve as a base of this post: some of my best solutions to hard problems were concieved while I was in the loo. I shit you not (pun intended)!
+</description>
       <content:encoded><![CDATA[<p><strong>Warning: profanity ahead!</strong></p>
 <blockquote>
 <p>An opinion is like an asshole. Everyone has one.
-&ndash; A modern proverb</p>
-</blockquote>
+&ndash; A modern proverb</p></blockquote>
 <p>It feels a bit strange to write anything remotely related to my gastrointestinal tract on a blog (and I really hope no one is genuinely interested in such topics), but there&rsquo;s something funny related to it that will serve as a base of this post: some of my best solutions to hard problems were concieved while I was in the loo. I shit you not (pun intended)!</p>
 <p>I don&rsquo;t know was it some kind of epiphany, or simply having some quiet time alone to think, but it worked many times, unintentionally. It happend so often that even a CEO of a certain company I was working for noticed it - once when we were discussing some really hard problem at the office (like we did many times before), he turned to me and, to my surprise, half-jokingly said: &ldquo;why don&rsquo;t you go into the loo and come back with a solution?&rdquo;. For better or worse, this is a true story. (And no, this doesn&rsquo;t mean I&rsquo;m spending way too much time over there at work btw)</p>
 <p>So you could say I have a <em>methodology</em> that worked for <em>me</em> on many occasions. It would be selfish to keep it to myself, wouldn&rsquo;t it? If it works for me, it must work for everyone else, amirite? Time for enlightening the world, earn some big $$$!</p>
@@ -409,15 +454,15 @@ It feels a bit strange to write anything remotely related to my gastrointestinal
       <pubDate>Mon, 11 Mar 2024 16:40:23 +0200</pubDate>
       
       <guid>https://www.drazengolic.com/blog/keep-a-project-glossary/</guid>
-      <description>Introduction &amp;ldquo;A wise one writes it down, a foolish one memorizes it.&amp;rdquo; (sr. &amp;ldquo;паметан пише, будала памти&amp;rdquo;) &amp;ndash; A Serbian proverb
-Let&amp;rsquo;s admit it - the biggest enemy of a software project&amp;rsquo;s success is ambiguity. Ambiguity of requirements (am I solving the right problem?), ambiguity of the system design (am I changing things in the right place?), ambiguity in code abstractions (wtf does this thing do?) etc. Anything you can do to reduce ambiguity can only help a project in the long run.</description>
+      <description>Introduction &ldquo;A wise one writes it down, a foolish one memorizes it.&rdquo; (sr. &ldquo;паметан пише, будала памти&rdquo;) &ndash; A Serbian proverb
+Let&rsquo;s admit it - the biggest enemy of a software project&rsquo;s success is ambiguity. Ambiguity of requirements (am I solving the right problem?), ambiguity of the system design (am I changing things in the right place?), ambiguity in code abstractions (wtf does this thing do?) etc. Anything you can do to reduce ambiguity can only help a project in the long run.
+</description>
       <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
 <blockquote>
 <p>&ldquo;A wise one writes it down, a foolish one memorizes it.&rdquo; (sr. &ldquo;паметан пише, будала памти&rdquo;)
-&ndash; A Serbian proverb</p>
-</blockquote>
+&ndash; A Serbian proverb</p></blockquote>
 <p>Let&rsquo;s admit it - the biggest enemy of a software project&rsquo;s success is ambiguity. Ambiguity of requirements (<em>am I solving the right problem?</em>), ambiguity of the system design (<em>am I changing things in the right place?</em>), ambiguity in code abstractions (<em>wtf does this thing do?</em>) etc. Anything you can do to reduce ambiguity can only help a project in the long run.</p>
-<p>Humans have a very <a href="https://evidencebased.education/how-limited-is-working-memory-capacity/">limited</a> working memory. Less things we have to keep in our memory, higher the chance we&rsquo;ll make the right decision. And what we can&rsquo;t keep in memory, it should be only a search away, without the need for breaking ours, or anyone else&rsquo;s <a href="https://en.wikipedia.org/wiki/Flow_(psychology)">flow</a>.</p>
+<p>Humans have a very <a href="https://evidencebased.education/how-limited-is-working-memory-capacity/">limited</a> working memory. Less things we have to keep in our memory, higher the chance we&rsquo;ll make the right decision. And what we can&rsquo;t keep in memory, it should be only a search away, without the need for breaking ours, or anyone else&rsquo;s <a href="https://en.wikipedia.org/wiki/Flow_%28psychology%29">flow</a>.</p>
 <p>The trouble is, with Agile methodologies becoming the default, documenting things is rarely a priority. There&rsquo;s no place you can go and quickly learn what you need. Or there is, but it isn&rsquo;t up to date, or it&rsquo;s scattered among dozens of Slack channels, private chats, Miro boards and whatnot. Important information lives in people&rsquo;s heads. If you don&rsquo;t understand something, the first thing you&rsquo;ll do is to find out who knows what you need, and then go ahead and ask that person. A new hire comes and does the same things like you. Wasted time just keeps adding up. Also, people leave companies, and important information leaves with them, hurting the project (at least until someone else learns the same information in the same way, which means more wasted time).</p>
 <p>Most developers don&rsquo;t like writing technical documentation, and it seems that project/product managers don&rsquo;t like writing project documentation either. They just focus on writing user stories, meeting OKR-s and etc., none of which contributes in having an overall picture on what is being solved, how and why. What can make things even worse is when those managers get promoted from another role, not because they have demonstrated a vast domain knowledge or managerial qualities, but because of belief that they&rsquo;ll perform better than in their current role.</p>
 <p>With a domain knowledge taken so lightly, no wonder why wrong features get developed, same thing gets done multiple times, solutions get overengineered and many other problems. Also, arguing with someone for hours about something just to figure out that you have a completely different interpretation of what that something means is because there is no single source of truth about that something. All of this drives disinterest into project&rsquo;s success and an employee burn-out.</p>
@@ -426,12 +471,8 @@ Let&amp;rsquo;s admit it - the biggest enemy of a software project&amp;rsquo;s s
 <p>A glossary of terms could correspond to the ubiquitous language described in the <a href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain-Driven Design</a>, that is, a list of unambiguous terms shared by domain experts, users, and developers (note that I&rsquo;m not advocating DDD here, it&rsquo;s just that having a common language is universally a good idea).</p>
 <p>This is not a novel idea, it&rsquo;s just forgotten or simply ignored.</p>
 <p>Here&rsquo;s <a href="https://en.wikipedia.org/wiki/Rich_Hickey">Rich Hickey</a>, one of my favorite people in this industry, explaining why having a project glossary (I recommend the entire video though):</p>
-
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/c5QF2HjHLSE?start=519?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/c5QF2HjHLSE?start=519?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
     </div>
 
 <p>Or, see <a href="https://delatbabel.medium.com/what-is-a-project-glossary-a49e71f5a8e2">here</a> and <a href="https://www.visual-paradigm.com/learning/handbooks/software-design-handbook/project-glossary.jsp">here</a> what makes a project glossary.</p>
@@ -465,8 +506,9 @@ Let&amp;rsquo;s admit it - the biggest enemy of a software project&amp;rsquo;s s
       <pubDate>Tue, 28 Nov 2023 11:30:23 +0200</pubDate>
       
       <guid>https://www.drazengolic.com/blog/secure-mobile-api/</guid>
-      <description>The Problem Let&amp;rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
-You&amp;rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&amp;rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&amp;rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&amp;rsquo;re paying for.</description>
+      <description>The Problem Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:
+You&rsquo;re just serving some content, and there is no obvious benefit for you or the users from registering You could turn down many users from using the app by asking them to register Creating the social login or login/registration workflow with emails is tedious You&rsquo;re vary of GDPR policies and would rather not to have access to any personal data if you don&rsquo;t need to Yet, you still want to make your APIs exclusive to your app in order to prevent misuse of your data and the resources that you&rsquo;re paying for.
+</description>
       <content:encoded><![CDATA[<h2 id="the-problem">The Problem</h2>
 <p>Let&rsquo;s suppose you have to create an API for your mobile app, and the app must be fully functional without asking the users to register (first). This could be for various reasons, for example:</p>
 <ul>
@@ -486,8 +528,7 @@ You&amp;rsquo;re just serving some content, and there is no obvious benefit for 
 <h2 id="the-solution">The Solution</h2>
 <p>So, you still need <em>some</em> form of registration. But instead of users, you could <strong>register a device</strong> running your app. But how do you make sure that it&rsquo;s <em>your app</em> that is asking to register, and not something else? With something unique to your app: <strong>push notifications</strong>.</p>
 <blockquote>
-<p><strong>Disclaimer</strong>: there are no bullet-proof solutions, and neither it&rsquo;s this one. However, it&rsquo;s good enough to keep those less tech-savvy and less motivated at bay, while enabling you to apply different security strategies just like for APIs with user authentication.</p>
-</blockquote>
+<p><strong>Disclaimer</strong>: there are no bullet-proof solutions, and neither it&rsquo;s this one. However, it&rsquo;s good enough to keep those less tech-savvy and less motivated at bay, while enabling you to apply different security strategies just like for APIs with user authentication.</p></blockquote>
 <p>Without further ado, here is a full <a href="https://en.wikipedia.org/wiki/Sequence_diagram">sequence diagram</a> of the device registration workflow:</p>
 <figure><img src="/images/mobile_secure_en.png"
     alt="Device registration worflow"><figcaption>
@@ -517,7 +558,8 @@ You&amp;rsquo;re just serving some content, and there is no obvious benefit for 
       
       <guid>https://www.drazengolic.com/sr/blog/secure-mobile-api/</guid>
       <description>Проблем Претпоставимо да је потребно креирати API сервис за мобилну апликацију, при чему апликација мора да буде потпуно функционална без тражења од корисника да се (првобитно) региструју. Разлога може да буде више, на примјер:
-Апликација само преузима неки садржај, и нема очигледне користи од регистрације ни за нас ни за кориснике Многе потенцијалне кориснике може да одбије захтјев за регистрацијом Креирање логовања преко социјалних мрежа или регистрације са имејлом и шифром је напорно Брину нас стриктни GDPR прописи и радије не би да имамо приступ приватним подацима ако за њима нема потребе Али, и даље желимо да наши API сервиси буду екслузивни за нашу апликацију, како би спријечили злоупотребу података, али и ресурса за које плаћамо.</description>
+Апликација само преузима неки садржај, и нема очигледне користи од регистрације ни за нас ни за кориснике Многе потенцијалне кориснике може да одбије захтјев за регистрацијом Креирање логовања преко социјалних мрежа или регистрације са имејлом и шифром је напорно Брину нас стриктни GDPR прописи и радије не би да имамо приступ приватним подацима ако за њима нема потребе Али, и даље желимо да наши API сервиси буду екслузивни за нашу апликацију, како би спријечили злоупотребу података, али и ресурса за које плаћамо.
+</description>
       <content:encoded><![CDATA[<h2 id="проблем">Проблем</h2>
 <p>Претпоставимо да је потребно креирати API сервис за мобилну апликацију, при чему апликација мора да буде потпуно функционална без тражења од корисника да се (првобитно) региструју. Разлога може да буде више, на примјер:</p>
 <ul>
@@ -537,8 +579,7 @@ You&amp;rsquo;re just serving some content, and there is no obvious benefit for 
 <h2 id="рјешење">Рјешење</h2>
 <p>Дакле, и даље нам је потребан <em>некакав</em> вид регистрације. Али, умјесто корисника, можемо да <strong>региструјемо уређај</strong>. Међутим, како ћемо да знамо да је управо <em>наша апликација</em> та која жели да се региструје, а не неко или нешто друго? Тако што ћемо да искористимо нешто што је јединствено за нашу апликацију, а то су <strong>пуш нотификације</strong>.</p>
 <blockquote>
-<p><strong>Одрицање од одговорности</strong>: не постоје рјешења која су непробојна, а самим тим ни ово није једно од њих. Међутим, довољно је добро да држи подаље оне који су мање технички спретни или мање мотивисани, а уједно и омогућује примјену сигурносних стратегија сличних онима гдје постоје регистровани корисници.</p>
-</blockquote>
+<p><strong>Одрицање од одговорности</strong>: не постоје рјешења која су непробојна, а самим тим ни ово није једно од њих. Међутим, довољно је добро да држи подаље оне који су мање технички спретни или мање мотивисани, а уједно и омогућује примјену сигурносних стратегија сличних онима гдје постоје регистровани корисници.</p></blockquote>
 <p>Без даљег дужења, слиједи потпуни <a href="https://en.wikipedia.org/wiki/Sequence_diagram">дијаграм секвенци</a> процеса регистрације уређаја:</p>
 <figure><img src="/images/mobile_secure_sr.png"
     alt="Процес регистрације уређаја"><figcaption>
@@ -568,7 +609,8 @@ You&amp;rsquo;re just serving some content, and there is no obvious benefit for 
       
       <guid>https://www.drazengolic.com/blog/json-response-postgres/</guid>
       <description>Introduction Anyone involved in web or back-end development had to create an API service at some point that outputs data from a database in a JSON format. A typical database-centric service does more or less 3 things:
-Query the data Transform it to the required format Send it over the wire Looks simple, right? But there is a lot more going on just to deliver some data stored in the database.</description>
+Query the data Transform it to the required format Send it over the wire Looks simple, right? But there is a lot more going on just to deliver some data stored in the database.
+</description>
       <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>Anyone involved in web or back-end development had to create an API service at some point that outputs data from a database in a JSON format. A typical database-centric service does more or less 3 things:</p>
 <ol>
@@ -721,9 +763,9 @@ Query the data Transform it to the required format Send it over the wire Looks s
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">folderGetHandler</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="c1">// fetch the db connection, query, and the folder id
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// fetch the db connection, query, and the folder id</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="nx">row</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">QueryRow</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">folderId</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl">
@@ -906,7 +948,8 @@ Query the data Transform it to the required format Send it over the wire Looks s
       
       <guid>https://www.drazengolic.com/sr/blog/json-response-postgres/</guid>
       <description>Увод Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:
-Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.</description>
+Шаље упит на базу и чита резултате Трансформише податке у тражени формат Враћа одговор Дјелује једноставно, зар не? Али ту се дешава много више ствари испод хаубе, само да би се доставили некакви подаци из базе.
+</description>
       <content:encoded><![CDATA[<h2 id="увод">Увод</h2>
 <p>Свако ко се бавио са веб или серверским развојем је у неком тренутку морао да направи API сервис који доставља податке из базе података у JSON формату по некој структури. Типичан овакав сервис ради више-мање 3 ствари:</p>
 <ol>
@@ -1059,9 +1102,9 @@ Query the data Transform it to the required format Send it over the wire Looks s
 
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">folderGetHandler</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="c1">// добавити конекцију на базу, упит и број фолдера
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// добавити конекцију на базу, упит и број фолдера</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="nx">row</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">QueryRow</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">folderId</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl">
@@ -1243,7 +1286,8 @@ Query the data Transform it to the required format Send it over the wire Looks s
       <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
       
       <guid>https://www.drazengolic.com/blog/text-search-postgres/</guid>
-      <description>Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow.</description>
+      <description>Introduction Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?
+</description>
       <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>Suppose you have a table with records that you want to be searchable by a textual attribute, such as name or title. You also need to sort those records in a certain way that is not necessarily linked to the name or title - for example, you want to display the most recent records, or the most popular ones, first. After a certain period, the table has grown in size and search has become very slow, so you need to speed it up somehow. What are your options?</p>
 <p>What follows are some of the SQL performance optimization techniques, with accent on avoiding the sort operation as being potentially <a href="https://use-the-index-luke.com/sql/sorting-grouping">expensive operation</a>.</p>
@@ -1434,8 +1478,7 @@ Query the data Transform it to the required format Send it over the wire Looks s
          Index Cond: ((name)::text ~~* ((&#39;%&#39;::text || $1) || &#39;%&#39;::text))
          Order By: (rating &lt;-&gt; &#39;50000&#39;::bigint)</code></pre><p>Value <strong>50000</strong> here is the value equal or larger than the maximum value of the <strong>rating</strong> column in the table, so that results are retrieved in an descending order. What is important to notice here is that the distance operator <strong><em>needs a constant</em></strong>. If you try to use a subquery instead of value 50000, index-enabled sorting will not trigger, and a <code>Sort</code> operation will show up in the execution plan! This means that you should have this value collected beforehand, if you&rsquo;d like to use the search in this way.</p>
 <blockquote>
-<p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p>
-</blockquote>
+<p><strong>Note</strong>: be wary of using <em>bigint</em> type with this approach, as there seems to be a bug if you try to use an overly large value as a constant, which could mess up the search results. I even <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">asked a question</a> on Stack Overflow about this, but there doesn&rsquo;t seem to be an answer.</p></blockquote>
 <h3 id="caveats-1">Caveats</h3>
 <p>This way of indexing suffers from the same problem as the prefix/postfix search. Lesser the popularity, bigger the search time. Unfortunately, it&rsquo;s performance cannot be improved further with a covering index. GiST index does support covering, but not all operator classes will trigger the index-only scan. And it seems that it won&rsquo;t trigger in this very use-case.</p>
 <h2 id="conclusion">Conclusion</h2>
@@ -1454,7 +1497,8 @@ Query the data Transform it to the required format Send it over the wire Looks s
       <pubDate>Fri, 16 Jul 2021 23:33:12 +0200</pubDate>
       
       <guid>https://www.drazengolic.com/sr/blog/text-search-postgres/</guid>
-      <description>Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?</description>
+      <description>Увод Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?
+</description>
       <content:encoded><![CDATA[<h2 id="увод">Увод</h2>
 <p>Претпоставимо да имамо табелу са уписима коју желимо да претражујемо по неком текстуалном атрибуту, као што је име или наслов. Такође желимо да сортирамо те уписе на начин који није нужно повезан ни са именом ни називом - на примјер, желимо да прво прикажемо најновије уписе, или оне најпопуларније. Након неког времена, број уписа у табели се повећао, претрага постаје све спорија, и морамо некако да је убрзамо. Какве су нам опције на располагању?</p>
 <p>У наредним редовима видјећемо неке од техника оптимизације SQL перформанси, са акцентом на избјегавању операције сортирања као потенцијално <a href="https://use-the-index-luke.com/sql/sorting-grouping">скупе операције</a>.</p>
@@ -1645,8 +1689,7 @@ Query the data Transform it to the required format Send it over the wire Looks s
          Index Cond: ((name)::text ~~* ((&#39;%&#39;::text || $1) || &#39;%&#39;::text))
          Order By: (rating &lt;-&gt; &#39;50000&#39;::bigint)</code></pre><p>Вриједност <strong>50000</strong> овде је вриједност већа или једнака максималној вриједности из <strong>rating</strong> колоне, како би резултати били добијени у опадајућем редослиједу. Оно што је важно напоменути овде је да за оператор дистанце <strong><em>потребна константа</em></strong>. Ако покушамо да вриједност 50000 добијемо преко угњежденог упита, сортирање помоћу индекса неће бити активирано, и операција <code>Sort</code> ће да се појави у плану извршавања! То значи да ова вриједност мора да буде претходно прикупљена, у случају да се претрага обавља на овај начин.</p>
 <blockquote>
-<p><strong>Напомена</strong>: опрезно са кориштењем колона типа <em>bigint</em> са овим приступом, јер чини се да постоји грешка приликом кориштења високих вриједности за константу, која може да поремети редослијед резултата. Чак сам <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">поставио питање</a> на Stack Overflow на ову тему, али чини се да нема одговора.</p>
-</blockquote>
+<p><strong>Напомена</strong>: опрезно са кориштењем колона типа <em>bigint</em> са овим приступом, јер чини се да постоји грешка приликом кориштења високих вриједности за константу, која може да поремети редослијед резултата. Чак сам <a href="https://stackoverflow.com/questions/67116247/strange-sorting-behavior-with-bigint-column-via-gist-index-in-postgresql">поставио питање</a> на Stack Overflow на ову тему, али чини се да нема одговора.</p></blockquote>
 <h3 id="недостаци-1">Недостаци</h3>
 <p>Овај начин индексирања пати од истих проблема као и префиксна/постиксна претрага. Што је мања оцјена, дуже је вријеме претраге. Нажалост, не може даље да се побољша кориштењем покривајућег индекса. GiST индекс подржава покривајуће индексирање, али скенирање самог индекса неће бити активирано за све класе оператора, што се чини да је овде случај.</p>
 <h2 id="закључак">Закључак</h2>
@@ -1661,54 +1704,14 @@ Query the data Transform it to the required format Send it over the wire Looks s
     
     <item>
       <title>QR4DOC</title>
-      <link>https://www.drazengolic.com/sr/qr4doc/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.drazengolic.com/sr/qr4doc/</guid>
-      <description>QR4DOC Напомена: у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље на било који начин, молио бих да ме контактира.
-Опис Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, примарно намијењен за полисе осигурања.
-Сервис генерише јединствени линк који се затим угради у документ у виду QR кода.</description>
-      <content:encoded><![CDATA[<h1 id="qr4doc">QR4DOC</h1>
-<p><em><strong>Напомена:</strong> у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље на било који начин, молио бих да ме контактира.</em></p>
-<h2 id="опис">Опис</h2>
-<p>Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, примарно намијењен за полисе осигурања.</p>
-<p>Сервис генерише јединствени линк који се затим угради у документ у виду QR кода. Скенирањем кода и отварањем линка биће приказан резиме документа (свих његових верзија) како би се <strong>визуелно упоредио</strong> са важним елементима из документа, као метод утврђивања да ли је документ <strong>фалсификат</strong> или је <strong>застарио</strong>. Приказ такође може да садржи неке екстерне линкове везане за документ (попут линка за плаћање, контакта и сл.), а могуће је и претплатити се на обавјештења о новим верзијама или о промјени статуса, уколико је статус додјељен документу.</p>
-<h2 id="технички-детаљи">Технички детаљи</h2>
-<p>Примарни сервис:</p>
-<ul>
-<li>Тзв. вишестанарска (по издавачу документа), вишејезична апликација која садржи веб кориснички интерфејс и JSON API, станарство је засновано на комбинацији засебних PostgreSQL шема са станарским кључем</li>
-<li>Креирање издавача и њихова ограничења у кориштењу (зависно од нивоа претплате, ручно се подешава), глобална ограничења кориштења и обраде захтјева, креирање и пријављивање корисника, креирање картотека и докумената (документи могу само да се додају), маскирање детаља докумената, форма за притужбе посјетилаца, основна статистика о посјетиоцима, web push нотификације</li>
-<li>QR и DataMatrix кодови за генерисане јединствене линкове</li>
-<li>Развијено у технологијама <a href="https://elixir-lang.org/">Elixir</a> + <a href="https://www.phoenixframework.org/">Phoenix LiveView</a> + <a href="https://tailwindcss.com/">Tailwind</a> + хакови, објављено као systemd сервис на Ubuntu машини иза <a href="https://caddyserver.com/">Caddy</a> прокси сервера, blue-green објављивање преко специјалних bash скрипти (извршни програм се компајлира локално)</li>
-<li>Преводи на: Енглески, Српски (ћирилица), Босански, Хрватски</li>
-</ul>
-<p>Секундарни (нетестирани) сервис:</p>
-<ul>
-<li>API за мобилну апликацију са посебним <a href="https://www.drazengolic.com/sr/blog/secure-mobile-api/">системом за ауторизацију</a> преко јавних кључева, претплаћивање на push нотификације и њихова достава путем <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> или Huawei PushKit</li>
-<li>Развијен у Go језику, са крајњим циљем да се сва функционалност пребаци из примарног сервиса у овај, ради побољшања портабилности и дугорочне одрживости апликације.</li>
-</ul>
-<p>Мобилна апликација је планирана, али није развијена.</p>
-<h2 id="неке-слике-екрана">Неке слике екрана</h2>
-<div style="column-count: 2;">
-  <a href="/images/qr4doc/1.png"><img alt="Приказ документа" src="/images/qr4doc/1.png"></a>
-<a href="/images/qr4doc/2.png"><img alt="Почетни екран" src="/images/qr4doc/2.png"></a>
-<a href="/images/qr4doc/3.png"><img alt="Претрага докумената" src="/images/qr4doc/3.png"></a>
-<a href="/images/qr4doc/4.png"><img alt="Обрада докумената" src="/images/qr4doc/4.png"></a>
-</div>
-
-
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>QR4DOC</title>
       <link>https://www.drazengolic.com/qr4doc/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://www.drazengolic.com/qr4doc/</guid>
-      <description>QR4DOC Note: this project is in search for funding, or it&amp;rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.
+      <description>QR4DOC Note: this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.
 Description A short-lived SaaS developed for validation, supplemental information, and notification on change for printed documents, originally intended for insurance policies.
-It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&amp;rsquo;s versions) for a visual comparison of important document elements as a method of checking if the print is a fraud copy or obsolete.</description>
+It generates a unique link that gets embedded in the document in the form of a QR code. Scanning the code and opening the link will display a document summary (for all it&rsquo;s versions) for a visual comparison of important document elements as a method of checking if the print is a fraud copy or obsolete. The page can also contain multiple web links (think Linktree) relevant for the document, and visitors can subscribe for notifications on new document versions, or the change of it&rsquo;s status if it has any.
+</description>
       <content:encoded><![CDATA[<h1 id="qr4doc">QR4DOC</h1>
 <p><em><strong>Note:</strong> this project is in search for funding, or it&rsquo;s source code is for sale. If you are interested in pushing this project forward, please do reach out to me.</em></p>
 <h2 id="description">Description</h2>
@@ -1731,10 +1734,52 @@ It generates a unique link that gets embedded in the document in the form of a Q
 <p>Mobile client app was planned, but not developed.</p>
 <h2 id="some-screenshots">Some screenshots</h2>
 <div style="column-count: 2;">
-  <a href="/images/qr4doc/1.png"><img alt="Document view" src="/images/qr4doc/1.png"></a>
-<a href="/images/qr4doc/2.png"><img alt="Home screen" src="/images/qr4doc/2.png"></a>
-<a href="/images/qr4doc/3.png"><img alt="Document search" src="/images/qr4doc/3.png"></a>
-<a href="/images/qr4doc/4.png"><img alt="Document edit" src="/images/qr4doc/4.png"></a>
+  <a href="/images/qr4doc/1.png"><img src="/images/qr4doc/1.png" alt="Document view"></a>
+<a href="/images/qr4doc/2.png"><img src="/images/qr4doc/2.png" alt="Home screen"></a>
+<a href="/images/qr4doc/3.png"><img src="/images/qr4doc/3.png" alt="Document search"></a>
+<a href="/images/qr4doc/4.png"><img src="/images/qr4doc/4.png" alt="Document edit"></a>
+</div>
+
+
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>QR4DOC</title>
+      <link>https://www.drazengolic.com/sr/qr4doc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.drazengolic.com/sr/qr4doc/</guid>
+      <description>QR4DOC Напомена: у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље на било који начин, молио бих да ме контактира.
+Опис Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, примарно намијењен за полисе осигурања.
+Сервис генерише јединствени линк који се затим угради у документ у виду QR кода. Скенирањем кода и отварањем линка биће приказан резиме документа (свих његових верзија) како би се визуелно упоредио са важним елементима из документа, као метод утврђивања да ли је документ фалсификат или је застарио. Приказ такође може да садржи неке екстерне линкове везане за документ (попут линка за плаћање, контакта и сл.), а могуће је и претплатити се на обавјештења о новим верзијама или о промјени статуса, уколико је статус додјељен документу.
+</description>
+      <content:encoded><![CDATA[<h1 id="qr4doc">QR4DOC</h1>
+<p><em><strong>Напомена:</strong> у потрази сам за даљим финансирањем развоја овог пројекта, а могуће је и откупити постојећи изворни код. Уколико има неко заинтересован да гура пројекат даље на било који начин, молио бих да ме контактира.</em></p>
+<h2 id="опис">Опис</h2>
+<p>Кратко постојећи SaaS производ развијен за валидацију, допунске информације, као и нотификације о озмјенама за штампане документе, примарно намијењен за полисе осигурања.</p>
+<p>Сервис генерише јединствени линк који се затим угради у документ у виду QR кода. Скенирањем кода и отварањем линка биће приказан резиме документа (свих његових верзија) како би се <strong>визуелно упоредио</strong> са важним елементима из документа, као метод утврђивања да ли је документ <strong>фалсификат</strong> или је <strong>застарио</strong>. Приказ такође може да садржи неке екстерне линкове везане за документ (попут линка за плаћање, контакта и сл.), а могуће је и претплатити се на обавјештења о новим верзијама или о промјени статуса, уколико је статус додјељен документу.</p>
+<h2 id="технички-детаљи">Технички детаљи</h2>
+<p>Примарни сервис:</p>
+<ul>
+<li>Тзв. вишестанарска (по издавачу документа), вишејезична апликација која садржи веб кориснички интерфејс и JSON API, станарство је засновано на комбинацији засебних PostgreSQL шема са станарским кључем</li>
+<li>Креирање издавача и њихова ограничења у кориштењу (зависно од нивоа претплате, ручно се подешава), глобална ограничења кориштења и обраде захтјева, креирање и пријављивање корисника, креирање картотека и докумената (документи могу само да се додају), маскирање детаља докумената, форма за притужбе посјетилаца, основна статистика о посјетиоцима, web push нотификације</li>
+<li>QR и DataMatrix кодови за генерисане јединствене линкове</li>
+<li>Развијено у технологијама <a href="https://elixir-lang.org/">Elixir</a> + <a href="https://www.phoenixframework.org/">Phoenix LiveView</a> + <a href="https://tailwindcss.com/">Tailwind</a> + хакови, објављено као systemd сервис на Ubuntu машини иза <a href="https://caddyserver.com/">Caddy</a> прокси сервера, blue-green објављивање преко специјалних bash скрипти (извршни програм се компајлира локално)</li>
+<li>Преводи на: Енглески, Српски (ћирилица), Босански, Хрватски</li>
+</ul>
+<p>Секундарни (нетестирани) сервис:</p>
+<ul>
+<li>API за мобилну апликацију са посебним <a href="https://www.drazengolic.com/sr/blog/secure-mobile-api/">системом за ауторизацију</a> преко јавних кључева, претплаћивање на push нотификације и њихова достава путем <a href="https://firebase.google.com/docs/cloud-messaging/">FCM</a> или Huawei PushKit</li>
+<li>Развијен у Go језику, са крајњим циљем да се сва функционалност пребаци из примарног сервиса у овај, ради побољшања портабилности и дугорочне одрживости апликације.</li>
+</ul>
+<p>Мобилна апликација је планирана, али није развијена.</p>
+<h2 id="неке-слике-екрана">Неке слике екрана</h2>
+<div style="column-count: 2;">
+  <a href="/images/qr4doc/1.png"><img src="/images/qr4doc/1.png" alt="Приказ документа"></a>
+<a href="/images/qr4doc/2.png"><img src="/images/qr4doc/2.png" alt="Почетни екран"></a>
+<a href="/images/qr4doc/3.png"><img src="/images/qr4doc/3.png" alt="Претрага докумената"></a>
+<a href="/images/qr4doc/4.png"><img src="/images/qr4doc/4.png" alt="Обрада докумената"></a>
 </div>
 
 
